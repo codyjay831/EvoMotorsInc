@@ -1,6 +1,6 @@
 # Firebase App Hosting — Deploy & GitHub Auto-Deploy
 
-This project is set up for **Firebase App Hosting** with GitHub. Pushing to `main` triggers a build and deploy after you connect the repo in the Firebase Console.
+This project uses **Firebase App Hosting only** (no legacy Firebase Hosting, no `firebase.json`). Pushing to `main` triggers a build and deploy after you connect the repo in the Firebase Console.
 
 ## 1. One-time setup
 
