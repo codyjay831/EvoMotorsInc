@@ -1,0 +1,21 @@
+# Firebase App Hosting — Evo Motors Next.js app
+# See: https://firebase.google.com/docs/app-hosting/configure
+#
+# Build/run: App Hosting auto-detects Next.js (next build / next start).
+# Env: Set in Firebase Console (Backend → Settings → Environment) or here.
+# Secrets: Use Firebase Console or Cloud Secret Manager; reference in env with secret: name.
+
+# Optional: override Cloud Run defaults (defaults are fine for most apps)
+# runConfig:
+#   minInstances: 0
+#   maxInstances: 100
+#   memoryMiB: 512
+#   cpu: 1
+
+# Optional: env vars (non-secret). Prefer Firebase Console for production values.
+# Console values override these. Use NEXT_PUBLIC_* for client-side in Next.js.
+# env:
+#   - variable: NEXT_PUBLIC_SITE_URL
+#     value: https://evomotorsinc.com
+#   - variable: NEXT_PUBLIC_DEALER_SLUG
+#     value: evo-motors
