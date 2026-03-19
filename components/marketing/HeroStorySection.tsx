@@ -134,7 +134,8 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             />
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/40" />
-          <div className="relative z-10 flex h-full flex-col justify-start px-5 pb-24 pt-28">
+          {/* Headline + text at top */}
+          <div className="relative z-10 flex flex-col justify-start px-5 pt-24 pb-32">
             <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/55">{STORY_BEATS[0].eyebrow}</p>
             <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-white">
               {STORY_BEATS[0].headline}
@@ -142,27 +143,17 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             <p className="mt-4 max-w-[26ch] text-base leading-snug text-white/80">
               {STORY_BEATS[0].subtext}
             </p>
-            <div className="mt-10 flex flex-col gap-3">
+          </div>
+          {/* Mobile only: single primary CTA pinned to bottom */}
+          <div className="absolute bottom-6 left-0 z-10 w-full px-6">
+            <div className="bg-black/30 backdrop-blur rounded-xl px-4 py-3">
               <Link
                 href="/inventory"
-                className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] evo-focus-ring"
+                className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring"
               >
                 Browse Inventory
               </Link>
-              <Link
-                href="/contact?intent=approval"
-                className="inline-flex h-11 w-full items-center justify-center rounded-lg border border-white/25 bg-white/5 px-5 text-sm font-medium text-white backdrop-blur-sm evo-focus-ring"
-              >
-                Get Approved
-              </Link>
             </div>
-            <button
-              type="button"
-              onClick={() => document.getElementById(INVENTORY_SECTION_ID)?.scrollIntoView({ behavior: "smooth" })}
-              className="mt-8 text-sm font-medium text-white/60 hover:text-primary/90 transition-colors duration-200 evo-focus-ring rounded-md py-1"
-            >
-              See Inventory ↓
-            </button>
           </div>
         </div>
 
