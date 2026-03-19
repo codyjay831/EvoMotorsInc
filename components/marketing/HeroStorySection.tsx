@@ -107,18 +107,19 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
     >
       {/* Mobile: text-first cinematic layout — optimized for phones */}
       <div className="relative md:hidden">
-        <div className="relative min-h-[100dvh] w-full overflow-hidden">
+        <div className="relative h-screen w-full overflow-hidden">
+          {/* Mobile Image */}
           <Image
-            src="/hero/tesla-hero.png"
-            alt=""
+            src="/hero/hero-mobile.png"
+            alt="Electric vehicle"
             fill
+            priority
             sizes="100vw"
-            className="object-cover object-[28%_50%]"
+            className="object-cover object-bottom md:hidden"
           />
-          {/* Stronger dark overlay for mobile readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/90" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
-          <div className="relative z-10 flex min-h-[100dvh] flex-col justify-end px-5 pb-24 pt-28">
+          {/* Mobile overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/40 md:hidden" />
+          <div className="relative z-10 flex h-screen flex-col justify-start px-5 pb-24 pt-28">
             <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/55">{STORY_BEATS[0].eyebrow}</p>
             <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-white">
               {STORY_BEATS[0].headline}
@@ -159,24 +160,20 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
       <div ref={containerRef} className="relative hidden h-[520vh] md:block">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <motion.div className="absolute inset-0" style={{ scale: imageScale, y: imageY }}>
+            {/* Desktop Image */}
             <Image
               src="/hero/tesla-hero.png"
-              alt="Tesla electric vehicle"
+              alt="Electric vehicle"
               fill
+              priority
               sizes="100vw"
               className="object-cover object-right"
-              priority
             />
           </motion.div>
 
+          {/* Desktop overlay (keep lighter) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" aria-hidden />
           <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden>
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 35%, transparent 65%, rgba(0,0,0,0.25) 100%)",
-              }}
-            />
             <div className="absolute inset-0" style={{ boxShadow: "inset 0 0 18vmin 2vmin rgba(0,0,0,0.35)" }} />
             <div
               className="absolute inset-0 opacity-30"
