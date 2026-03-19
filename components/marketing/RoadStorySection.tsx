@@ -64,29 +64,19 @@ export function RoadStorySection({ className }: RoadStorySectionProps) {
       className={cn("relative w-full", className)}
       aria-label="Road story"
     >
-      {/* Mobile */}
+      {/* Mobile: static content only — no sticky/parallax, no full-bleed road hero */}
       <div className="relative md:hidden">
-        <div className="relative h-[100dvh] min-h-[560px] w-full overflow-hidden">
-          <Image
-            src="/hero/road-hero2.png"
-            alt="Road ahead"
-            fill
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/45 via-black/25 to-black/55" />
-          <div className="relative z-10 flex h-full flex-col justify-end px-6 pb-12 pt-20">
-            <h2 className={cn(HEADLINE_LG, "text-3xl")}>{ROAD_BEATS[0].headline}</h2>
-            <p className="mt-3 text-base text-white/80">{ROAD_BEATS[0].subtext}</p>
-            <div className="mt-10 space-y-8">
-              <div>
-                <h2 className={cn(HEADLINE_MD, "text-xl")}>{ROAD_BEATS[1].headline}</h2>
-                <p className="mt-2 text-base text-white/80">{ROAD_BEATS[1].subtext}</p>
-              </div>
-              <div>
-                <p className={cn("text-lg text-white/90", HEADLINE_MD)}>{ROAD_BEATS[2].headline}</p>
-              </div>
+        <div className="bg-muted/30 px-5 py-14 sm:px-6 sm:py-16">
+          <div className="mx-auto max-w-xl space-y-10">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight text-foreground">{ROAD_BEATS[0].headline}</h2>
+              <p className="mt-3 text-base text-muted-foreground">{ROAD_BEATS[0].subtext}</p>
             </div>
+            <div>
+              <h2 className="text-xl font-semibold tracking-tight text-foreground">{ROAD_BEATS[1].headline}</h2>
+              <p className="mt-2 text-base text-muted-foreground">{ROAD_BEATS[1].subtext}</p>
+            </div>
+            <p className="text-lg font-semibold tracking-tight text-foreground">{ROAD_BEATS[2].headline}</p>
           </div>
         </div>
       </div>

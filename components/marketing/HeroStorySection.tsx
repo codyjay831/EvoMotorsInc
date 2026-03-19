@@ -39,13 +39,23 @@ const STORY_BEATS: StoryBeat[] = [
   },
 ];
 
+const INVENTORY_SECTION_ID = "inventory";
+
 export function HeroStorySection({ className }: HeroStorySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const mobileHeroRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
+
+  // Mobile-only: subtle hero image parallax (image moves up ~60px as user scrolls through hero)
+  const { scrollYProgress: mobileHeroProgress } = useScroll({
+    target: mobileHeroRef,
+    offset: ["start start", "end start"],
+  });
+  const mobileImageY = useTransform(mobileHeroProgress, [0, 1], [30, -30]);
 
   // Hero exit threshold: after this, hero stays at 0 and never re-enters
   const HERO_EXIT = 0.17;
@@ -105,27 +115,32 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
       className={cn("relative w-full", className)}
       aria-label="Hero story"
     >
-      {/* Mobile: text-first cinematic layout — optimized for phones */}
+      {/* Mobile: primary hero only, then static value blocks — no scroll storytelling */}
       <div className="relative md:hidden">
-        <div className="relative h-screen w-full overflow-hidden">
-          {/* Mobile Image */}
-          <Image
-            src="/hero/hero-mobile.png"
-            alt="Electric vehicle"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-bottom md:hidden"
-          />
-          {/* Mobile overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/40 md:hidden" />
-          <div className="relative z-10 flex h-screen flex-col justify-start px-5 pb-24 pt-28">
+        {/* 1. Primary hero: one screen, hero-mobile.png; image has subtle scroll parallax only */}
+        <div ref={mobileHeroRef} className="relative h-screen w-full overflow-hidden">
+          <motion.div
+            className="absolute inset-0"
+            style={{ y: mobileImageY }}
+            aria-hidden
+          >
+            <Image
+              src="/hero/hero-mobile.png"
+              alt="Electric vehicle"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-bottom"
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/40" />
+          <div className="relative z-10 flex h-full flex-col justify-start px-5 pb-24 pt-28">
             <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/55">{STORY_BEATS[0].eyebrow}</p>
             <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-white">
               {STORY_BEATS[0].headline}
             </h1>
             <p className="mt-4 max-w-[26ch] text-base leading-snug text-white/80">
-              We make EV buying and home charging simple.
+              {STORY_BEATS[0].subtext}
             </p>
             <div className="mt-10 flex flex-col gap-3">
               <Link
@@ -141,17 +156,28 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
                 Get Approved
               </Link>
             </div>
-            <div className="mt-16 space-y-10">
-              {STORY_BEATS.slice(1).map((beat) => (
-                <div key={beat.headline}>
-                  <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-white/50">{beat.eyebrow}</p>
-                  <h2 className="mt-2 text-lg font-semibold leading-tight tracking-tight text-white">
-                    {beat.headline}
-                  </h2>
-                  <p className="mt-2 max-w-[32ch] text-sm leading-relaxed text-white/75">{beat.subtext}</p>
-                </div>
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={() => document.getElementById(INVENTORY_SECTION_ID)?.scrollIntoView({ behavior: "smooth" })}
+              className="mt-8 text-sm font-medium text-white/60 hover:text-primary/90 transition-colors duration-200 evo-focus-ring rounded-md py-1"
+            >
+              See Inventory ↓
+            </button>
+          </div>
+        </div>
+
+        {/* 2. Static value blocks: normal vertical flow, no sticky/overlap */}
+        <div className="bg-background px-5 py-14 sm:px-6 sm:py-16">
+          <div className="mx-auto max-w-xl space-y-12">
+            {STORY_BEATS.slice(1, 4).map((beat) => (
+              <div key={beat.headline}>
+                <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">{beat.eyebrow}</p>
+                <h2 className="mt-2 text-lg font-semibold leading-tight tracking-tight text-foreground">
+                  {beat.headline}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{beat.subtext}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

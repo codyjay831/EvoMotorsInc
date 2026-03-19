@@ -20,6 +20,7 @@ export function HomeFeaturedVehicles({
 
   return (
     <section
+      id="inventory"
       className={cn(
         "evo-content-width relative rounded-2xl sm:rounded-3xl",
         "py-16 sm:py-20 lg:py-24 px-6 sm:px-8 lg:px-10",

@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 const loginButtonClass =
   "inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-transparent bg-primary px-4 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring";
 
+/** Main nav links (no Home — logo/brand links to home). */
 const NAV_LINKS = [
   { href: "/inventory", label: "Inventory" },
   { href: "/about", label: "About" },
@@ -32,12 +33,13 @@ export function Header() {
           : "sticky border-b border-border bg-background/95"
       )}
     >
-      <div className="mx-auto h-20 w-full max-w-[1400px] px-5 sm:px-6 md:px-8 lg:px-10">
-        {/* Mobile: brand left, hamburger right — simple and premium */}
-        <div className="flex h-full items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:gap-4">
+      <div className="mx-auto h-20 w-full max-w-[1400px] px-6 sm:px-8 md:px-10 lg:px-12">
+        {/* 3-zone layout: Left (brand) | Center (nav) | Right (Login / hamburger) */}
+        <div className="flex h-full w-full items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 md:items-center">
+          {/* Left: logo + EVO MOTORS */}
           <Link
             href="/"
-            className="flex w-fit shrink-0 items-center gap-2 transition-opacity hover:opacity-90 evo-focus-ring rounded-md"
+            className="flex w-fit shrink-0 items-center gap-2.5 transition-opacity hover:opacity-90 evo-focus-ring rounded-md"
             aria-label="Evo Motors home"
           >
             <Image
@@ -58,9 +60,9 @@ export function Header() {
             </span>
           </Link>
 
-          {/* Center: main nav (desktop only) */}
+          {/* Center: Inventory, About, Contact, Request Vehicle */}
           <nav
-            className="hidden items-center justify-center gap-8 lg:gap-10 md:flex"
+            className="hidden items-center justify-center md:flex md:gap-8"
             aria-label="Main navigation"
           >
             {NAV_LINKS.map(({ href, label }) => {
@@ -70,10 +72,10 @@ export function Header() {
                   key={href}
                   href={href}
                   className={cn(
-                    "evo-body-sm rounded-md px-2 py-1.5 font-medium no-underline transition-colors duration-200 evo-focus-ring",
+                    "evo-body-sm rounded-md px-2.5 py-2 font-medium no-underline transition-colors duration-200 evo-focus-ring",
                     isActive
                       ? "text-primary bg-primary/10"
-                      : "text-foreground/90 hover:text-foreground hover:bg-white/5"
+                      : "text-foreground/90 hover:text-foreground hover:bg-muted/30"
                   )}
                 >
                   {label}
@@ -82,8 +84,8 @@ export function Header() {
             })}
           </nav>
 
-          {/* Right: Login (desktop) / Hamburger (mobile) */}
-          <div className="flex items-center justify-end gap-2">
+          {/* Right: single Login (desktop) / Hamburger (mobile) */}
+          <div className="flex items-center justify-end gap-1">
             <a
               href={buildLoginUrl()}
               target="_blank"
@@ -95,7 +97,7 @@ export function Header() {
             </a>
             <button
               type="button"
-              className="inline-flex size-11 items-center justify-center rounded-lg text-foreground hover:bg-white/10 transition-colors duration-200 evo-focus-ring md:hidden -mr-1"
+              className="inline-flex size-11 items-center justify-center rounded-lg text-foreground hover:bg-muted/30 transition-colors duration-200 evo-focus-ring md:hidden"
               onClick={() => setMobileOpen((o) => !o)}
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav"
@@ -116,10 +118,10 @@ export function Header() {
         aria-hidden={!mobileOpen}
       >
         <nav
-          className="evo-content-width py-4"
+          className="mx-auto max-w-[1400px] px-6 py-5 sm:px-8"
           aria-label="Mobile navigation"
         >
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-0.5">
             {NAV_LINKS.map(({ href, label }) => {
               const isActive = pathname.startsWith(href);
               return (
@@ -128,10 +130,10 @@ export function Header() {
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "block rounded-md px-4 py-3 text-sm font-medium no-underline transition-colors duration-200 evo-focus-ring",
+                      "block rounded-lg px-4 py-3 text-sm font-medium no-underline transition-colors duration-200 evo-focus-ring",
                       isActive
                         ? "text-primary bg-primary/10"
-                        : "text-foreground hover:bg-muted"
+                        : "text-foreground hover:bg-muted/50"
                     )}
                   >
                     {label}
