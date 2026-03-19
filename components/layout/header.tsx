@@ -1,19 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Logo } from "./logo";
-import { SiteContainer } from "./site-container";
 import { buildLoginUrl } from "@/lib/auth-bridge";
 import { cn } from "@/lib/utils";
 
 const loginButtonClass =
-  "inline-flex h-7 shrink-0 items-center justify-center rounded-lg border border-transparent bg-primary px-2.5 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring";
+  "inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-transparent bg-primary px-4 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring";
 
 const NAV_LINKS = [
-  { href: "/", label: "Home" },
   { href: "/inventory", label: "Inventory" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
@@ -34,28 +32,48 @@ export function Header() {
           : "sticky border-b border-border bg-background/95"
       )}
     >
-      <SiteContainer>
-        <div className="flex h-14 items-center justify-between gap-6 sm:h-16">
-          <Logo size="sm" className="shrink-0" />
+      <div className="mx-auto h-20 w-full max-w-[1400px] px-5 sm:px-6 md:px-8 lg:px-10">
+        {/* Mobile: brand left, hamburger right — simple and premium */}
+        <div className="flex h-full items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:gap-4">
+          <Link
+            href="/"
+            className="flex w-fit shrink-0 items-center gap-2 transition-opacity hover:opacity-90 evo-focus-ring rounded-md"
+            aria-label="Evo Motors home"
+          >
+            <Image
+              src="/branding/logo.png"
+              alt=""
+              width={36}
+              height={36}
+              className="object-contain"
+              priority
+            />
+            <span
+              className={cn(
+                "uppercase font-semibold tracking-wide",
+                isHome ? "text-white/90" : "text-foreground"
+              )}
+            >
+              EVO MOTORS
+            </span>
+          </Link>
 
+          {/* Center: main nav (desktop only) */}
           <nav
-            className="hidden items-center gap-1 md:flex"
+            className="hidden items-center justify-center gap-8 lg:gap-10 md:flex"
             aria-label="Main navigation"
           >
             {NAV_LINKS.map(({ href, label }) => {
-              const isActive =
-                href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(href);
+              const isActive = pathname.startsWith(href);
               return (
                 <Link
                   key={href}
                   href={href}
                   className={cn(
-                    "evo-body-sm rounded-md px-3 py-2 font-medium no-underline transition-colors duration-200 evo-focus-ring",
+                    "evo-body-sm rounded-md px-2 py-1.5 font-medium no-underline transition-colors duration-200 evo-focus-ring",
                     isActive
                       ? "text-primary bg-primary/10"
-                      : "text-foreground hover:bg-muted hover:text-foreground"
+                      : "text-foreground/90 hover:text-foreground hover:bg-white/5"
                   )}
                 >
                   {label}
@@ -64,38 +82,30 @@ export function Header() {
             })}
           </nav>
 
-          <div className="hidden items-center gap-2 md:flex">
+          {/* Right: Login (desktop) / Hamburger (mobile) */}
+          <div className="flex items-center justify-end gap-2">
             <a
               href={buildLoginUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="evo-body-sm text-muted-foreground hover:text-foreground transition-colors duration-200 evo-focus-ring rounded-md"
+              className={cn(loginButtonClass, "hidden md:inline-flex")}
               aria-label="Secure account login"
             >
               Login
             </a>
-            <a
-              href={buildLoginUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={loginButtonClass}
+            <button
+              type="button"
+              className="inline-flex size-11 items-center justify-center rounded-lg text-foreground hover:bg-white/10 transition-colors duration-200 evo-focus-ring md:hidden -mr-1"
+              onClick={() => setMobileOpen((o) => !o)}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav"
+              aria-label="Toggle menu"
             >
-              Login
-            </a>
+              {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
           </div>
-
-          <button
-            type="button"
-            className="inline-flex size-10 items-center justify-center rounded-md text-foreground hover:bg-muted transition-colors duration-200 evo-focus-ring md:hidden"
-            onClick={() => setMobileOpen((o) => !o)}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-nav"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
         </div>
-      </SiteContainer>
+      </div>
 
       <div
         id="mobile-nav"
@@ -111,8 +121,7 @@ export function Header() {
         >
           <ul className="flex flex-col gap-1">
             {NAV_LINKS.map(({ href, label }) => {
-              const isActive =
-                href === "/" ? pathname === "/" : pathname.startsWith(href);
+              const isActive = pathname.startsWith(href);
               return (
                 <li key={href}>
                   <Link
@@ -131,21 +140,12 @@ export function Header() {
               );
             })}
           </ul>
-          <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
+          <div className="mt-4 border-t border-border pt-4">
             <a
               href={buildLoginUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="evo-body-sm text-center text-muted-foreground hover:text-foreground"
-              onClick={() => setMobileOpen(false)}
-            >
-              Customer Portal
-            </a>
-            <a
-              href={buildLoginUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(loginButtonClass, "h-8")}
+              className={cn(loginButtonClass, "inline-flex h-10 w-full justify-center")}
               onClick={() => setMobileOpen(false)}
             >
               Login

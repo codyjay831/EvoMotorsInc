@@ -5,20 +5,22 @@ import { cn } from "@/lib/utils";
 
 type LogoProps = {
   className?: string;
-  /** Hide text and show only mark */
+  /** Hide text and show only mark (use in nav when logo includes brand name) */
   markOnly?: boolean;
-  /** Size preset for the image */
-  size?: "sm" | "md" | "lg";
+  /** Size preset for the image; use "nav" for header (32–40px) */
+  size?: "sm" | "md" | "lg" | "nav";
 };
 
 const sizeMap = { sm: 28, md: 36, lg: 44 };
+/** Nav bar logo height (32–40px) */
+const NAV_LOGO_HEIGHT = 36;
 
 export function Logo({
   className,
   markOnly = false,
   size = "md",
 }: LogoProps) {
-  const px = sizeMap[size];
+  const px = size === "nav" ? NAV_LOGO_HEIGHT : sizeMap[size];
   return (
     <Link
       href="/"
@@ -33,7 +35,7 @@ export function Logo({
         alt=""
         width={px}
         height={px}
-        className="shrink-0 object-contain"
+        className="shrink-0 object-contain object-left"
         priority
         unoptimized
       />

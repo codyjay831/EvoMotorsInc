@@ -4,6 +4,6 @@
 export const SITE = {
   name: "Evo Motors",
   tagline: "Electric. Premium.",
-  /** Main logo path (from /public). Current asset: public/Evo Motors logos/logo.svg */
-  logoPath: "/Evo Motors logos/logo.svg",
+  /** Main logo path (from /public). */
+  logoPath: "/branding/logo.png",
 } as const;

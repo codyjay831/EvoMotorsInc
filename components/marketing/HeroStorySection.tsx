@@ -105,29 +105,49 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
       className={cn("relative w-full", className)}
       aria-label="Hero story"
     >
-      {/* Mobile: text-first cinematic layout */}
+      {/* Mobile: text-first cinematic layout — optimized for phones */}
       <div className="relative md:hidden">
-        <div className="relative h-[100dvh] min-h-[560px] w-full overflow-hidden">
-          <Image src="/hero/tesla-hero.png" alt="Tesla electric vehicle" fill sizes="100vw" className="object-cover object-right" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
-          <div className="relative z-10 flex h-full flex-col justify-end px-6 pb-12 pt-20">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-white/50">{STORY_BEATS[0].eyebrow}</p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">{STORY_BEATS[0].headline}</h1>
-            <p className="mt-2 text-base text-white/75">{STORY_BEATS[0].subtext}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/inventory" className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground evo-focus-ring">
+        <div className="relative min-h-[100dvh] w-full overflow-hidden">
+          <Image
+            src="/hero/tesla-hero.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-[28%_50%]"
+          />
+          {/* Stronger dark overlay for mobile readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
+          <div className="relative z-10 flex min-h-[100dvh] flex-col justify-end px-5 pb-24 pt-28">
+            <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/55">{STORY_BEATS[0].eyebrow}</p>
+            <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-white">
+              {STORY_BEATS[0].headline}
+            </h1>
+            <p className="mt-4 max-w-[26ch] text-base leading-snug text-white/80">
+              We make EV buying and home charging simple.
+            </p>
+            <div className="mt-10 flex flex-col gap-3">
+              <Link
+                href="/inventory"
+                className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] evo-focus-ring"
+              >
                 Browse Inventory
               </Link>
-              <Link href="/contact?intent=approval" className="inline-flex h-10 items-center justify-center rounded-lg border border-white/20 px-5 text-sm font-medium text-white evo-focus-ring">
+              <Link
+                href="/contact?intent=approval"
+                className="inline-flex h-11 w-full items-center justify-center rounded-lg border border-white/25 bg-white/5 px-5 text-sm font-medium text-white backdrop-blur-sm evo-focus-ring"
+              >
                 Get Approved
               </Link>
             </div>
-            <div className="mt-10 space-y-6">
+            <div className="mt-16 space-y-10">
               {STORY_BEATS.slice(1).map((beat) => (
                 <div key={beat.headline}>
-                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/50">{beat.eyebrow}</p>
-                  <h2 className="mt-1 text-xl font-semibold text-white">{beat.headline}</h2>
-                  <p className="mt-1 text-sm text-white/70">{beat.subtext}</p>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-white/50">{beat.eyebrow}</p>
+                  <h2 className="mt-2 text-lg font-semibold leading-tight tracking-tight text-white">
+                    {beat.headline}
+                  </h2>
+                  <p className="mt-2 max-w-[32ch] text-sm leading-relaxed text-white/75">{beat.subtext}</p>
                 </div>
               ))}
             </div>
