@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { requestVehicleFormSchema, type RequestVehicleFormValues } from "@/lib/validations/lead";
 import { submitVehicleRequest } from "@/lib/api";
+import { toNumberOrUndefined } from "@/lib/utils/numbers";
 import {
   LeadFormField,
   LeadFormInput,
@@ -58,10 +59,10 @@ export function RequestVehicleForm({ className }: RequestVehicleFormProps) {
         preferredContact: data.preferredContact,
         make: data.make,
         model: data.model,
-        yearMin: data.yearMin,
-        yearMax: data.yearMax,
-        maxMileage: data.maxMileage,
-        budgetMax: data.budgetMax,
+        yearMin: toNumberOrUndefined(data.yearMin),
+        yearMax: toNumberOrUndefined(data.yearMax),
+        maxMileage: toNumberOrUndefined(data.maxMileage),
+        budgetMax: toNumberOrUndefined(data.budgetMax),
         colorPreferences: data.colorPreferences,
         desiredFeatures: data.desiredFeatures,
         timeline: data.timeline,

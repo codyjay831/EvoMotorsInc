@@ -1,3 +1,4 @@
+import { toNumberOrUndefined } from "@/lib/utils/numbers";
 import { useMockData } from "./config";
 import { ApiError } from "./errors";
 import type {
@@ -81,7 +82,26 @@ export async function submitVehicleRequest(
   if (useMockData) {
     return Promise.resolve({ ok: true, message: "Request submitted." });
   }
-  const out = await postLocalLead({ type: "vehicle_request", ...payload });
+  const {
+    yearMin,
+    yearMax,
+    maxMileage,
+    budgetMax,
+    ...rest
+  } = payload;
+  const body: Record<string, unknown> = {
+    type: "vehicle_request",
+    ...rest,
+  };
+  const yMin = toNumberOrUndefined(yearMin);
+  const yMax = toNumberOrUndefined(yearMax);
+  const mileage = toNumberOrUndefined(maxMileage);
+  const budget = toNumberOrUndefined(budgetMax);
+  if (yMin !== undefined) body.yearMin = yMin;
+  if (yMax !== undefined) body.yearMax = yMax;
+  if (mileage !== undefined) body.maxMileage = mileage;
+  if (budget !== undefined) body.budgetMax = budget;
+  const out = await postLocalLead(body);
   return { ok: out.ok, message: out.message };
 }
 
@@ -101,6 +121,7 @@ export async function initiateReservation(
       depositAmountCents: 50000,
     });
   }
+  const hold = toNumberOrUndefined(payload.holdMinutes);
   const res = await postLocalLead({
     type: "inquiry",
     firstName: payload.firstName,
@@ -109,7 +130,7 @@ export async function initiateReservation(
     phone: payload.phone,
     message: "Vehicle reservation request",
     vehicleId: payload.vehicleId,
-    holdMinutes: payload.holdMinutes,
+    ...(hold !== undefined ? { holdMinutes: hold } : {}),
     source: "reserve-flow",
   });
   if (!res.ok) {
