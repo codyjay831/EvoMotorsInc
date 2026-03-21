@@ -16,16 +16,22 @@ const BASE = `/dealers/${DEALER}`;
 
 /**
  * Featured / hero vehicles for homepage.
+ * Uses the public catalog (newest items); no dedicated /featured API in Vehiclix.
  */
 export async function getFeaturedVehicles(limit = 4): Promise<VehicleSummary[]> {
   if (useMockData) {
     return Promise.resolve(mockVehiclesSummary.slice(0, limit));
   }
-  const res = await request<{ vehicles: VehicleSummary[] }>(
-    `${BASE}/featured`,
-    { params: { limit } }
-  );
-  return res.vehicles ?? [];
+  const catalogLimit = Math.max(6, limit);
+  const raw = await request<unknown>("/api/v1/public/catalog", {
+    params: {
+      dealerSlug: apiConfig.dealerSlug,
+      page: 1,
+      limit: catalogLimit,
+    },
+  });
+  const inv = mapVehiclixCatalogToInventoryResponse(raw, 1, catalogLimit);
+  return inv.vehicles.slice(0, limit);
 }
 
 /**
@@ -90,21 +96,123 @@ export async function getInventory(
       limit,
     };
   }
+  const page = filters.page ?? 1;
+  const limit = filters.limit ?? 12;
   const params: Record<string, string | number | undefined> = {
-    page: filters.page ?? 1,
-    limit: filters.limit ?? 12,
+    dealerSlug: apiConfig.dealerSlug,
+    page,
+    limit,
     ...(filters.search && { search: filters.search }),
     ...(filters.make && { make: filters.make }),
-    ...(filters.model && { model: filters.model }),
-    ...(filters.yearMin != null && { yearMin: filters.yearMin }),
-    ...(filters.yearMax != null && { yearMax: filters.yearMax }),
-    ...(filters.priceMin != null && { priceMin: filters.priceMin }),
-    ...(filters.priceMax != null && { priceMax: filters.priceMax }),
-    ...(filters.condition && { condition: filters.condition }),
-    ...(filters.rangeMin != null && { rangeMin: filters.rangeMin }),
+    ...(filters.yearMin != null && { minYear: filters.yearMin }),
+    ...(filters.priceMax != null && { maxPrice: filters.priceMax }),
     ...(filters.sort && { sort: filters.sort }),
   };
-  return request<InventoryResponse>(`${BASE}/inventory`, { params });
+  const raw = await request<unknown>("/api/v1/public/catalog", { params });
+  return mapVehiclixCatalogToInventoryResponse(raw, page, limit);
+}
+
+function asRecordInv(v: unknown): Record<string, unknown> | null {
+  return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : null;
+}
+
+function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
+  const v = asRecordInv(raw);
+  if (!v) return null;
+  const id = v.id ?? v.vehicleId;
+  if (id == null || id === "") return null;
+  const year = Number(v.year ?? v.modelYear);
+  if (!Number.isFinite(year)) return null;
+  const make = String(v.make ?? "");
+  const model = String(v.model ?? "");
+  if (!make || !model) return null;
+
+  const price =
+    typeof v.price === "number"
+      ? v.price
+      : v.price != null
+        ? Number(v.price)
+        : undefined;
+  const mileage =
+    typeof v.mileage === "number"
+      ? v.mileage
+      : v.mileage != null
+        ? Number(v.mileage)
+        : undefined;
+
+  const imageUrls = Array.isArray(v.imageUrls)
+    ? v.imageUrls.filter((u): u is string => typeof u === "string")
+    : undefined;
+  const firstImage =
+    typeof v.imageUrl === "string"
+      ? v.imageUrl
+      : typeof v.primaryImageUrl === "string"
+        ? v.primaryImageUrl
+        : imageUrls?.[0];
+
+  const conditionRaw = v.condition;
+  const condition =
+    conditionRaw === "new" || conditionRaw === "used" || conditionRaw === "certified"
+      ? conditionRaw
+      : undefined;
+
+  return {
+    id: String(id),
+    stockNumber: typeof v.stockNumber === "string" ? v.stockNumber : undefined,
+    year,
+    make,
+    model,
+    trim: typeof v.trim === "string" ? v.trim : undefined,
+    displayName: typeof v.displayName === "string" ? v.displayName : undefined,
+    price: price !== undefined && Number.isFinite(price) ? price : undefined,
+    priceDisplay: typeof v.priceDisplay === "string" ? v.priceDisplay : undefined,
+    mileage: mileage !== undefined && Number.isFinite(mileage) ? mileage : undefined,
+    mileageDisplay: typeof v.mileageDisplay === "string" ? v.mileageDisplay : undefined,
+    exteriorColor: typeof v.exteriorColor === "string" ? v.exteriorColor : undefined,
+    interiorColor: typeof v.interiorColor === "string" ? v.interiorColor : undefined,
+    imageUrl: firstImage,
+    imageUrls,
+    rangeMiles:
+      v.rangeMiles != null && Number.isFinite(Number(v.rangeMiles)) ? Number(v.rangeMiles) : undefined,
+    fuelType: typeof v.fuelType === "string" ? v.fuelType : undefined,
+    condition,
+    vin: typeof v.vin === "string" ? v.vin : undefined,
+    listedAt: typeof v.listedAt === "string" ? v.listedAt : undefined,
+  };
+}
+
+function mapVehiclixCatalogToInventoryResponse(
+  raw: unknown,
+  fallbackPage: number,
+  fallbackLimit: number
+): InventoryResponse {
+  const top = asRecordInv(raw);
+  const data = top?.data;
+  const inner = asRecordInv(data) ?? top;
+
+  let items: unknown[] = [];
+  if (Array.isArray(raw)) items = raw;
+  else if (inner && Array.isArray(inner.vehicles)) items = inner.vehicles;
+  else if (inner && Array.isArray(inner.items)) items = inner.items;
+  else if (inner && Array.isArray(inner.results)) items = inner.results;
+  else if (inner && Array.isArray(inner.catalog)) items = inner.catalog;
+
+  const total = Number(
+    inner?.total ?? inner?.totalCount ?? inner?.count ?? top?.total ?? items.length
+  );
+  const page = Number(inner?.page ?? inner?.currentPage ?? top?.page ?? fallbackPage);
+  const limit = Number(inner?.limit ?? inner?.pageSize ?? top?.limit ?? fallbackLimit);
+
+  const vehicles = items
+    .map(mapCatalogItemToVehicleSummary)
+    .filter((x): x is VehicleSummary => x != null);
+
+  return {
+    vehicles,
+    total: Number.isFinite(total) ? total : vehicles.length,
+    page: Number.isFinite(page) ? page : fallbackPage,
+    limit: Number.isFinite(limit) ? limit : fallbackLimit,
+  };
 }
 
 /**

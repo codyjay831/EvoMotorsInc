@@ -1,5 +1,5 @@
-import { apiConfig, useMockData } from "./config";
-import { request } from "./client";
+import { useMockData } from "./config";
+import { ApiError } from "./errors";
 import type {
   InquiryPayload,
   ContactPayload,
@@ -8,8 +8,29 @@ import type {
   ReserveResponse,
 } from "./types";
 
-const DEALER = apiConfig.dealerSlug;
-const BASE = `/dealers/${DEALER}`;
+async function postLocalLead(
+  body: Record<string, unknown>
+): Promise<{ ok: boolean; message?: string; status: number }> {
+  const res = await fetch("/api/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  let data: { ok?: boolean; message?: string } = {};
+  try {
+    data = (await res.json()) as { ok?: boolean; message?: string };
+  } catch {
+    data = {};
+  }
+  if (!res.ok) {
+    return {
+      ok: false,
+      message: data.message ?? `Request failed (${res.status})`,
+      status: res.status,
+    };
+  }
+  return { ok: data.ok !== false, message: data.message, status: res.status };
+}
 
 /**
  * Submit a general inquiry.
@@ -18,10 +39,17 @@ export async function submitInquiry(payload: InquiryPayload): Promise<{ ok: bool
   if (useMockData) {
     return Promise.resolve({ ok: true, message: "Thank you. We'll be in touch." });
   }
-  return request(`${BASE}/inquiry`, {
-    method: "POST",
-    body: JSON.stringify(payload),
+  const out = await postLocalLead({
+    type: "inquiry",
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    email: payload.email,
+    phone: payload.phone,
+    message: payload.message,
+    source: payload.source,
+    metadata: payload.metadata,
   });
+  return { ok: out.ok, message: out.message };
 }
 
 /**
@@ -31,10 +59,17 @@ export async function submitContact(payload: ContactPayload): Promise<{ ok: bool
   if (useMockData) {
     return Promise.resolve({ ok: true, message: "Message received." });
   }
-  return request(`${BASE}/contact`, {
-    method: "POST",
-    body: JSON.stringify(payload),
+  const out = await postLocalLead({
+    type: "contact",
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    email: payload.email,
+    phone: payload.phone,
+    message: payload.message,
+    subject: payload.subject,
+    source: "contact-page",
   });
+  return { ok: out.ok, message: out.message };
 }
 
 /**
@@ -46,10 +81,8 @@ export async function submitVehicleRequest(
   if (useMockData) {
     return Promise.resolve({ ok: true, message: "Request submitted." });
   }
-  return request(`${BASE}/request-vehicle`, {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  const out = await postLocalLead({ type: "vehicle_request", ...payload });
+  return { ok: out.ok, message: out.message };
 }
 
 /**
@@ -68,8 +101,25 @@ export async function initiateReservation(
       depositAmountCents: 50000,
     });
   }
-  return request<ReserveResponse>(`${BASE}/reserve`, {
-    method: "POST",
-    body: JSON.stringify(payload),
+  const res = await postLocalLead({
+    type: "inquiry",
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    email: payload.email,
+    phone: payload.phone,
+    message: "Vehicle reservation request",
+    vehicleId: payload.vehicleId,
+    holdMinutes: payload.holdMinutes,
+    source: "reserve-flow",
   });
+  if (!res.ok) {
+    throw new ApiError(res.message ?? "Request failed", res.status);
+  }
+  return {
+    status: "pending",
+    expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+    message: "Reservation request received. We'll contact you shortly to confirm.",
+    depositAmountDisplay: "$500",
+    depositAmountCents: 50000,
+  };
 }
