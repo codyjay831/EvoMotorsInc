@@ -1,6 +1,2 @@
-export {
-  HeroStorySection,
-  HeroStoryMobileHero,
-  HeroStoryMobileTrustBlocks,
-} from "./HeroStorySection";
+export { HeroStorySection } from "./HeroStorySection";
 export { RoadStorySection } from "./RoadStorySection";
