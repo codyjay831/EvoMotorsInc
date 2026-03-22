@@ -15,7 +15,7 @@ export function RoadSection({ className }: RoadSectionProps) {
       aria-label="Road ahead"
     >
       <Image
-        src="/hero/road-hero.png"
+        src="/hero/road-hero2.1.webp"
         alt="Road ahead"
         fill
         className="object-cover"
