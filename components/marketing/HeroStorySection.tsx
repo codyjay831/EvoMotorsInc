@@ -125,7 +125,7 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             aria-hidden
           >
             <Image
-              src="/hero/hero-mobile.png"
+              src="/hero/hero-mobile1.webp"
               alt="Electric vehicle"
               fill
               priority
