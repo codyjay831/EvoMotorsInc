@@ -41,6 +41,14 @@ const STORY_BEATS: StoryBeat[] = [
 
 const INVENTORY_SECTION_ID = "inventory";
 
+/**
+ * Brightness debugging (mobile hero only). Restart dev server after changing `.env.local`.
+ * - `isolate` — image only, no overlays/motion/picture (matches STEP 1).
+ * - `isolate-unoptimized` — same + `unoptimized` on Image (STEP 3 pipeline check).
+ */
+const HERO_MOBILE_DIAGNOSTIC =
+  process.env.NEXT_PUBLIC_HERO_MOBILE_DIAGNOSTIC ?? "";
+
 export function HeroStorySection({ className }: HeroStorySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mobileHeroRef = useRef<HTMLDivElement>(null);
@@ -117,45 +125,77 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
     >
       {/* Mobile: primary hero only, then static value blocks — no scroll storytelling */}
       <div className="relative md:hidden">
-        {/* 1. Primary hero: one screen, hero-mobile.png; image has subtle scroll parallax only */}
-        <div ref={mobileHeroRef} className="relative h-screen w-full overflow-hidden">
-          <motion.div
-            className="absolute inset-0"
-            style={{ y: mobileImageY }}
-            aria-hidden
-          >
+        {HERO_MOBILE_DIAGNOSTIC === "isolate" ||
+        HERO_MOBILE_DIAGNOSTIC === "isolate-unoptimized" ? (
+          /* STEP 1 / 3: isolate mobile hero — compare to source file in an image viewer */
+          <div ref={mobileHeroRef} className="relative h-screen w-full">
             <Image
               src="/hero/hero-mobile1.webp"
-              alt="Electric vehicle"
+              alt="test"
               fill
+              className="object-cover"
               priority
               sizes="100vw"
-              className="object-cover object-bottom"
+              unoptimized={HERO_MOBILE_DIAGNOSTIC === "isolate-unoptimized"}
             />
-          </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/40" />
-          {/* Headline + text at top */}
-          <div className="relative z-10 flex flex-col justify-start px-5 pt-24 pb-32">
-            <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/55">{STORY_BEATS[0].eyebrow}</p>
-            <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-white">
-              {STORY_BEATS[0].headline}
-            </h1>
-            <p className="mt-4 max-w-[26ch] text-base leading-snug text-white/80">
-              {STORY_BEATS[0].subtext}
-            </p>
           </div>
-          {/* Mobile only: single primary CTA pinned to bottom */}
-          <div className="absolute bottom-6 left-0 z-10 w-full px-6">
-            <div className="bg-black/30 backdrop-blur rounded-xl px-4 py-3">
-              <Link
-                href="/inventory"
-                className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring"
+        ) : (
+          <>
+            {/* 1. Primary hero: one screen; image has subtle scroll parallax only */}
+            <div
+              ref={mobileHeroRef}
+              className="relative h-screen w-full overflow-hidden"
+            >
+              <motion.div
+                className="absolute inset-0"
+                style={{ y: mobileImageY }}
+                aria-hidden
               >
-                Browse Inventory
-              </Link>
+                <picture className="relative block h-full min-h-full w-full">
+                  <source
+                    media="(max-width: 768px)"
+                    srcSet="/hero/hero-mobile2.webp"
+                    type="image/webp"
+                  />
+                  <Image
+                    src="/hero/hero-mobile2.webp"
+                    alt="Electric vehicle"
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="object-cover object-bottom brightness-110 md:brightness-100"
+                  />
+                </picture>
+              </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/25" />
+              <div
+                className="absolute inset-0 bg-black/10 md:bg-black/10"
+                aria-hidden
+              />
+              {/* Headline + text at top */}
+              <div className="relative z-10 flex flex-col justify-start px-5 pt-24 pb-32">
+                <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/55">{STORY_BEATS[0].eyebrow}</p>
+                <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-white">
+                  {STORY_BEATS[0].headline}
+                </h1>
+                <p className="mt-4 max-w-[26ch] text-base leading-snug text-white/80">
+                  {STORY_BEATS[0].subtext}
+                </p>
+              </div>
+              {/* Mobile only: single primary CTA pinned to bottom */}
+              <div className="absolute bottom-6 left-0 z-10 w-full px-6">
+                <div className="bg-black/30 backdrop-blur rounded-xl px-4 py-3">
+                  <Link
+                    href="/inventory"
+                    className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring"
+                  >
+                    Browse Inventory
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
 
         {/* 2. Static value blocks: normal vertical flow, no sticky/overlap */}
         <div className="bg-background px-5 py-14 sm:px-6 sm:py-16">
