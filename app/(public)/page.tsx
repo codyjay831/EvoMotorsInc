@@ -5,7 +5,12 @@ import {
   HomeCtaBand,
   HomeContactSummary,
 } from "@/components/home";
-import { HeroStorySection, RoadStorySection } from "@/components/marketing";
+import {
+  HeroStoryMobileHero,
+  HeroStoryMobileTrustBlocks,
+  HeroStorySection,
+  RoadStorySection,
+} from "@/components/marketing";
 import { getDealer, getFeaturedVehicles } from "@/lib/api";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 
@@ -29,23 +34,39 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroStorySection />
+      <div className="flex flex-col">
+        <div className="hidden md:order-1 md:block">
+          <HeroStorySection />
+        </div>
 
-      <RoadStorySection />
+        <div className="order-1 md:hidden">
+          <HeroStoryMobileHero />
+        </div>
 
-      <SiteContainer>
-        <Section spacing="default">
-          <HomeFeaturedVehicles dealer={dealer} vehicles={featuredVehicles} />
-        </Section>
+        <div className="order-2 md:order-3">
+          <SiteContainer>
+            <Section spacing="default">
+              <HomeFeaturedVehicles dealer={dealer} vehicles={featuredVehicles} />
+            </Section>
+          </SiteContainer>
+        </div>
 
-        <Section spacing="default">
-          <HomeCtaBand />
-        </Section>
+        <div className="order-3 md:hidden">
+          <HeroStoryMobileTrustBlocks />
+        </div>
 
-        <Section spacing="default">
-          <HomeContactSummary dealer={dealer} />
-        </Section>
-      </SiteContainer>
+        <RoadStorySection className="order-4 md:order-2" />
+
+        <SiteContainer className="order-5 md:order-4">
+          <Section spacing="default">
+            <HomeCtaBand />
+          </Section>
+
+          <Section spacing="default">
+            <HomeContactSummary dealer={dealer} />
+          </Section>
+        </SiteContainer>
+      </div>
     </>
   );
 }

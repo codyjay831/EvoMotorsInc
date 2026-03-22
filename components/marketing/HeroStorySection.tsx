@@ -39,8 +39,6 @@ const STORY_BEATS: StoryBeat[] = [
   },
 ];
 
-const INVENTORY_SECTION_ID = "inventory";
-
 /**
  * Brightness debugging (mobile hero only). Restart dev server after changing `.env.local`.
  * - `isolate` — image only, no overlays/motion/picture (matches STEP 1).
@@ -49,21 +47,137 @@ const INVENTORY_SECTION_ID = "inventory";
 const HERO_MOBILE_DIAGNOSTIC =
   process.env.NEXT_PUBLIC_HERO_MOBILE_DIAGNOSTIC ?? "";
 
-export function HeroStorySection({ className }: HeroStorySectionProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+type HeroStoryMobileHeroProps = {
+  className?: string;
+};
+
+/** Mobile full-viewport hero only (desktop uses {@link HeroStorySection}). */
+export function HeroStoryMobileHero({ className }: HeroStoryMobileHeroProps) {
   const mobileHeroRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Mobile-only: subtle hero image parallax (image moves up ~60px as user scrolls through hero)
   const { scrollYProgress: mobileHeroProgress } = useScroll({
     target: mobileHeroRef,
     offset: ["start start", "end start"],
   });
   const mobileImageY = useTransform(mobileHeroProgress, [0, 1], [30, -30]);
+
+  return (
+    <div className={cn("relative w-full md:hidden", className)}>
+      {HERO_MOBILE_DIAGNOSTIC === "isolate" ||
+      HERO_MOBILE_DIAGNOSTIC === "isolate-unoptimized" ? (
+        <div ref={mobileHeroRef} className="relative h-screen w-full">
+          <Image
+            src="/hero/hero-mobile1.webp"
+            alt="test"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+            unoptimized={HERO_MOBILE_DIAGNOSTIC === "isolate-unoptimized"}
+          />
+        </div>
+      ) : (
+        <div
+          ref={mobileHeroRef}
+          className="relative h-screen w-full overflow-hidden"
+        >
+          <motion.div
+            className="absolute inset-0"
+            style={{ y: mobileImageY }}
+            aria-hidden
+          >
+            <picture className="relative block h-full min-h-full w-full">
+              <source
+                media="(max-width: 768px)"
+                srcSet="/hero/hero-mobile2.webp"
+                type="image/webp"
+              />
+              <Image
+                src="/hero/hero-mobile2.webp"
+                alt="Electric vehicle"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-bottom brightness-110 md:brightness-100"
+              />
+            </picture>
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/25" />
+          <div
+            className="absolute inset-0 bg-black/10 md:bg-black/10"
+            aria-hidden
+          />
+          <div className="relative z-10 flex min-h-screen flex-col px-5 pt-24 pb-10">
+            <div className="max-w-md">
+              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/55">
+                {STORY_BEATS[0].eyebrow}
+              </p>
+              <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-white">
+                {STORY_BEATS[0].headline}
+              </h1>
+              <p className="mt-4 max-w-[26ch] text-base leading-snug text-white/80">
+                {STORY_BEATS[0].subtext}
+              </p>
+              <div className="mt-8 w-full">
+                <div className="rounded-xl bg-black/30 px-4 py-3 backdrop-blur">
+                  <Link
+                    href="/inventory"
+                    className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring"
+                  >
+                    Browse Inventory
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type HeroStoryMobileTrustBlocksProps = {
+  className?: string;
+};
+
+/** Mobile-only static story beats (CURATED / EXPERTISE / YOUR LIFE). */
+export function HeroStoryMobileTrustBlocks({
+  className,
+}: HeroStoryMobileTrustBlocksProps) {
+  return (
+    <div
+      className={cn(
+        "bg-background px-5 py-14 sm:px-6 sm:py-16 md:hidden",
+        className
+      )}
+    >
+      <div className="mx-auto max-w-xl space-y-12">
+        {STORY_BEATS.slice(1, 4).map((beat) => (
+          <div key={beat.headline}>
+            <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+              {beat.eyebrow}
+            </p>
+            <h2 className="mt-2 text-lg font-semibold leading-tight tracking-tight text-foreground">
+              {beat.headline}
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              {beat.subtext}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Desktop pinned scroll hero only. */
+export function HeroStorySection({ className }: HeroStorySectionProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
 
   // Hero exit threshold: after this, hero stays at 0 and never re-enters
   const HERO_EXIT = 0.17;
@@ -120,104 +234,12 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
 
   return (
     <section
-      className={cn("relative w-full", className)}
+      className={cn("relative hidden w-full md:block", className)}
       aria-label="Hero story"
     >
-      {/* Mobile: primary hero only, then static value blocks — no scroll storytelling */}
-      <div className="relative md:hidden">
-        {HERO_MOBILE_DIAGNOSTIC === "isolate" ||
-        HERO_MOBILE_DIAGNOSTIC === "isolate-unoptimized" ? (
-          /* STEP 1 / 3: isolate mobile hero — compare to source file in an image viewer */
-          <div ref={mobileHeroRef} className="relative h-screen w-full">
-            <Image
-              src="/hero/hero-mobile1.webp"
-              alt="test"
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-              unoptimized={HERO_MOBILE_DIAGNOSTIC === "isolate-unoptimized"}
-            />
-          </div>
-        ) : (
-          <>
-            {/* 1. Primary hero: one screen; image has subtle scroll parallax only */}
-            <div
-              ref={mobileHeroRef}
-              className="relative h-screen w-full overflow-hidden"
-            >
-              <motion.div
-                className="absolute inset-0"
-                style={{ y: mobileImageY }}
-                aria-hidden
-              >
-                <picture className="relative block h-full min-h-full w-full">
-                  <source
-                    media="(max-width: 768px)"
-                    srcSet="/hero/hero-mobile2.webp"
-                    type="image/webp"
-                  />
-                  <Image
-                    src="/hero/hero-mobile2.webp"
-                    alt="Electric vehicle"
-                    fill
-                    priority
-                    sizes="100vw"
-                    className="object-cover object-bottom brightness-110 md:brightness-100"
-                  />
-                </picture>
-              </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/25" />
-              <div
-                className="absolute inset-0 bg-black/10 md:bg-black/10"
-                aria-hidden
-              />
-              {/* Headline + text at top */}
-              <div className="relative z-10 flex flex-col justify-start px-5 pt-24 pb-32">
-                <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/55">{STORY_BEATS[0].eyebrow}</p>
-                <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-white">
-                  {STORY_BEATS[0].headline}
-                </h1>
-                <p className="mt-4 max-w-[26ch] text-base leading-snug text-white/80">
-                  {STORY_BEATS[0].subtext}
-                </p>
-              </div>
-              {/* Mobile only: single primary CTA pinned to bottom */}
-              <div className="absolute bottom-6 left-0 z-10 w-full px-6">
-                <div className="bg-black/30 backdrop-blur rounded-xl px-4 py-3">
-                  <Link
-                    href="/inventory"
-                    className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring"
-                  >
-                    Browse Inventory
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* 2. Static value blocks: normal vertical flow, no sticky/overlap */}
-        <div className="bg-background px-5 py-14 sm:px-6 sm:py-16">
-          <div className="mx-auto max-w-xl space-y-12">
-            {STORY_BEATS.slice(1, 4).map((beat) => (
-              <div key={beat.headline}>
-                <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">{beat.eyebrow}</p>
-                <h2 className="mt-2 text-lg font-semibold leading-tight tracking-tight text-foreground">
-                  {beat.headline}
-                </h2>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{beat.subtext}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Desktop: clean full-screen pinned — taller scroll for dwell time */}
-      <div ref={containerRef} className="relative hidden h-[520vh] md:block">
+      <div ref={containerRef} className="relative h-[520vh] w-full">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <motion.div className="absolute inset-0" style={{ scale: imageScale, y: imageY }}>
-            {/* Desktop Image */}
             <Image
               src="/hero/tesla-hero1.webp"
               alt="Electric vehicle"
@@ -228,7 +250,6 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             />
           </motion.div>
 
-          {/* Desktop overlay (keep lighter) */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" aria-hidden />
           <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden>
             <div className="absolute inset-0" style={{ boxShadow: "inset 0 0 18vmin 2vmin rgba(0,0,0,0.35)" }} />
@@ -259,7 +280,6 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             </Link>
           </motion.div>
 
-          {/* Step 1: headline, subtext — visible from top, scroll-controlled */}
           <motion.div
             className="absolute left-[8vw] top-1/2 z-10 w-[min(28rem,calc(100vw-16vw))] -translate-y-1/2 text-left"
             style={{ opacity: b1Opacity, y: b1Y }}
@@ -271,7 +291,6 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             </motion.p>
           </motion.div>
 
-          {/* Step 2: slightly lower, centered-left */}
           <motion.div
             className="absolute left-[10vw] top-[52%] z-10 w-[min(26rem,calc(100vw-20vw))] -translate-y-1/2 text-left"
             style={{ opacity: b2Opacity, y: b2Y }}
@@ -283,7 +302,6 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             </motion.p>
           </motion.div>
 
-          {/* Step 3: right aligned */}
           <motion.div
             className="absolute right-[8vw] top-1/2 z-10 w-[min(26rem,calc(100vw-16vw))] -translate-y-1/2 text-right"
             style={{ opacity: b3Opacity, y: b3Y }}
@@ -295,7 +313,6 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             </motion.p>
           </motion.div>
 
-          {/* Step 4: center, large, emotional */}
           <motion.div
             className="absolute left-1/2 top-1/2 z-10 w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 px-8 text-center"
             style={{ opacity: b4Opacity, y: b4Y }}
