@@ -179,7 +179,7 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
           <motion.div className="absolute inset-0" style={{ scale: imageScale, y: imageY }}>
             {/* Desktop Image */}
             <Image
-              src="/hero/tesla-hero.png"
+              src="/hero/tesla-hero1.webp"
               alt="Electric vehicle"
               fill
               priority
