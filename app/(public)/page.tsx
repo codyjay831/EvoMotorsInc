@@ -4,6 +4,7 @@ import {
   HomeFeaturedVehicles,
   HomeCtaBand,
   HomeContactSummary,
+  MobileHomeStickyInventoryCta,
 } from "@/components/home";
 import { HeroStorySection, RoadStorySection } from "@/components/marketing";
 import { getDealer, getFeaturedVehicles } from "@/lib/api";
@@ -46,6 +47,8 @@ export default async function HomePage() {
           <HomeContactSummary dealer={dealer} />
         </Section>
       </SiteContainer>
+
+      <MobileHomeStickyInventoryCta />
     </>
   );
 }
