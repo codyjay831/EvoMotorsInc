@@ -145,7 +145,9 @@ function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
       ? v.imageUrl
       : typeof v.primaryImageUrl === "string"
         ? v.primaryImageUrl
-        : imageUrls?.[0];
+        : typeof v.heroImage === "string"
+          ? v.heroImage
+          : imageUrls?.[0];
 
   const conditionRaw = v.condition;
   const condition =
@@ -175,6 +177,29 @@ function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
     condition,
     vin: typeof v.vin === "string" ? v.vin : undefined,
     listedAt: typeof v.listedAt === "string" ? v.listedAt : undefined,
+  };
+}
+
+function mapCatalogItemToVehicleDetail(raw: unknown): VehicleDetail | null {
+  const summary = mapCatalogItemToVehicleSummary(raw);
+  if (!summary) return null;
+  const v = asRecordInv(raw);
+  if (!v) return summary;
+
+  const stringArray = (x: unknown): string[] | undefined =>
+    Array.isArray(x) ? x.filter((i): i is string => typeof i === "string") : undefined;
+
+  return {
+    ...summary,
+    description: typeof v.description === "string" ? v.description : undefined,
+    features: stringArray(v.features),
+    options: stringArray(v.options),
+    drivetrain: typeof v.drivetrain === "string" ? v.drivetrain : undefined,
+    transmission: typeof v.transmission === "string" ? v.transmission : undefined,
+    engine: typeof v.engine === "string" ? v.engine : undefined,
+    battery: typeof v.battery === "string" ? v.battery : undefined,
+    notes: typeof v.notes === "string" ? v.notes : undefined,
+    updatedAt: typeof v.updatedAt === "string" ? v.updatedAt : undefined,
   };
 }
 
@@ -230,14 +255,33 @@ export async function getMakes(): Promise<string[]> {
 
 /**
  * Single vehicle detail by id (for VDP).
+ * Uses the public catalog API (same contract as the inventory list), filtered by id.
  */
 export async function getVehicle(id: string): Promise<VehicleDetail | null> {
   if (useMockData) {
     void id;
     return Promise.resolve(null);
   }
+  const trimmed = id.trim();
+  if (!trimmed) return null;
   try {
-    return await request<VehicleDetail>(`${BASE}/inventory/${id}`);
+    const raw = await request<unknown>("/api/v1/public/catalog", {
+      params: {
+        dealerSlug: apiConfig.dealerSlug,
+        id: trimmed,
+      },
+    });
+    const top = asRecordInv(raw);
+    const data = top?.data;
+    const inner = asRecordInv(data) ?? top;
+    let items: unknown[] = [];
+    if (Array.isArray(raw)) items = raw;
+    else if (inner && Array.isArray(inner.vehicles)) items = inner.vehicles;
+    else if (inner && Array.isArray(inner.items)) items = inner.items;
+    else if (inner && Array.isArray(inner.results)) items = inner.results;
+    else if (inner && Array.isArray(inner.catalog)) items = inner.catalog;
+    const first = items[0];
+    return mapCatalogItemToVehicleDetail(first);
   } catch {
     return null;
   }
