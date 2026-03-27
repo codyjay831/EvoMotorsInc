@@ -7,7 +7,7 @@ import {
   MobileHomeStickyInventoryCta,
 } from "@/components/home";
 import { HeroStorySection, RoadStorySection } from "@/components/marketing";
-import { getFeaturedVehicles } from "@/lib/api";
+import { getFeaturedVehicles, type VehicleSummary } from "@/lib/api";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 
 export const metadata: Metadata = {
@@ -23,7 +23,12 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const featuredVehicles = await getFeaturedVehicles(6);
+  let featuredVehicles: VehicleSummary[] = [];
+  try {
+    featuredVehicles = await getFeaturedVehicles(6);
+  } catch {
+    // Build-time / offline: Vehiclix may be unreachable during static prerender.
+  }
 
   return (
     <>

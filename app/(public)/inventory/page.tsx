@@ -10,7 +10,7 @@ import {
   InventoryCta,
 } from "@/components/inventory";
 import { getInventory, getMakes } from "@/lib/api";
-import type { InventoryFilters } from "@/lib/api";
+import type { InventoryFilters, InventoryResponse } from "@/lib/api";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 
 export const metadata: Metadata = {
@@ -85,10 +85,18 @@ export default async function InventoryPage({ searchParams }: PageProps) {
   const filters = searchParamsToFilters(params);
   const activeFilters = filtersToActiveSummary(params);
 
-  const [inventory, makes] = await Promise.all([
-    getInventory(filters),
-    getMakes(),
-  ]);
+  let inventory: InventoryResponse;
+  try {
+    inventory = await getInventory(filters);
+  } catch {
+    inventory = {
+      vehicles: [],
+      total: 0,
+      page: filters.page ?? 1,
+      limit: filters.limit ?? DEFAULT_LIMIT,
+    };
+  }
+  const makes = await getMakes();
 
   const hasResults = inventory.vehicles.length > 0;
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
