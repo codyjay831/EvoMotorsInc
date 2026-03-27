@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Section, PageHeader, DevPreviewBanner, SiteContainer } from "@/components/layout";
 import { SectionHeading, SurfaceCard, Badge } from "@/components/website";
 import {
@@ -15,6 +16,10 @@ export const metadata: Metadata = {
 };
 
 export default async function DataPreviewPage() {
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
+
   const [dealer, featured, inventory, vehicleDetail] = await Promise.all([
     getDealer(),
     getFeaturedVehicles(4),
