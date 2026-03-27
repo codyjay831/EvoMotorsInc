@@ -17,13 +17,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/request-vehicle`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
   ];
 
-  const { vehicles } = await getInventory({ page: 1, limit: 500 });
-  const vdpEntries: MetadataRoute.Sitemap = vehicles.map((v) => ({
-    url: `${base}/inventory/${v.id}`,
-    lastModified: v.listedAt ? new Date(v.listedAt) : new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.8,
-  }));
+  let vdpEntries: MetadataRoute.Sitemap = [];
+  try {
+    const { vehicles } = await getInventory({ page: 1, limit: 500 });
+    vdpEntries = vehicles.map((v) => ({
+      url: `${base}/inventory/${v.id}`,
+      lastModified: v.listedAt ? new Date(v.listedAt) : new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
+  } catch {
+    // Prerender/export (e.g. Firebase App Hosting) often cannot reach Vehiclix; keep static URLs only.
+  }
 
   return [...staticPages, ...vdpEntries];
 }
