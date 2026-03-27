@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { PUBLIC_BUSINESS_INFO } from "@/lib/public-business-info";
 
 const outlineButtonClass =
   "inline-flex h-10 shrink-0 items-center justify-center rounded-lg border border-border bg-transparent px-6 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted/80 hover:border-primary/30 evo-focus-ring";
@@ -22,12 +23,12 @@ export function InventoryEmptyState({
       )}
     >
       <h2 className="evo-section-heading text-foreground">
-        {hasActiveFilters ? "No matches" : "No vehicles yet"}
+        {hasActiveFilters ? "No matches" : PUBLIC_BUSINESS_INFO.inventoryEmptyHeading}
       </h2>
       <p className="evo-body text-muted-foreground mt-4">
         {hasActiveFilters
           ? "Try adjusting your filters or search to see more vehicles."
-          : "Check back soon or request a vehicle and we’ll help you find the right fit."}
+          : PUBLIC_BUSINESS_INFO.inventoryEmptyBody}
       </p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
         {hasActiveFilters && (
@@ -35,9 +36,18 @@ export function InventoryEmptyState({
             Clear filters
           </Link>
         )}
-        <Link href="/request-vehicle" className={outlineButtonClass}>
-          Request a vehicle
-        </Link>
+        {hasActiveFilters ? (
+          <Link href="/request-vehicle" className={outlineButtonClass}>
+            Request a vehicle
+          </Link>
+        ) : (
+          <a
+            href={`mailto:${PUBLIC_BUSINESS_INFO.email}`}
+            className={outlineButtonClass}
+          >
+            {PUBLIC_BUSINESS_INFO.email}
+          </a>
+        )}
       </div>
     </div>
   );

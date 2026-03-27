@@ -43,6 +43,8 @@ Follow the prompts (region, GitHub repo, live branch `main`, root `/`).
 - Set **production** env vars in **Firebase Console** → **App Hosting** → your backend → **Settings** → **Environment**.
 - Copy variable names from `.env.example` (e.g. `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_VEHICLIX_API_URL`). Do not commit `.env` or `.env.local`.
 - Optional: add non-secret defaults in `apphosting.yaml`; Console values override them.
+- `NEXT_PUBLIC_*` values are injected at build time. Any change to these values requires a new build/deploy to take effect.
+- Production integration values must point to live HTTPS domains only (no `localhost`, `127.0.0.1`, ngrok, or tunnel domains).
 
 ## 3. After setup
 

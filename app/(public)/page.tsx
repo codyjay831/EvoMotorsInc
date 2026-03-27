@@ -7,7 +7,7 @@ import {
   MobileHomeStickyInventoryCta,
 } from "@/components/home";
 import { HeroStorySection, RoadStorySection } from "@/components/marketing";
-import { getDealer, getFeaturedVehicles } from "@/lib/api";
+import { getFeaturedVehicles } from "@/lib/api";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 
 export const metadata: Metadata = {
@@ -23,10 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [dealer, featuredVehicles] = await Promise.all([
-    getDealer(),
-    getFeaturedVehicles(6),
-  ]);
+  const featuredVehicles = await getFeaturedVehicles(6);
 
   return (
     <>
@@ -36,7 +33,7 @@ export default async function HomePage() {
 
       <SiteContainer>
         <Section spacing="default">
-          <HomeFeaturedVehicles dealer={dealer} vehicles={featuredVehicles} />
+          <HomeFeaturedVehicles vehicles={featuredVehicles} />
         </Section>
 
         <Section spacing="default">
@@ -44,7 +41,7 @@ export default async function HomePage() {
         </Section>
 
         <Section spacing="default">
-          <HomeContactSummary dealer={dealer} />
+          <HomeContactSummary />
         </Section>
       </SiteContainer>
 

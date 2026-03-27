@@ -12,21 +12,64 @@
  * - NEXT_PUBLIC_DEALER_SLUG – Dealer identifier; can be appended to bridge URLs for context.
  */
 
-const APP_BASE =
-  process.env.NEXT_PUBLIC_VEHICLIX_APP_URL ??
-  process.env.NEXT_PUBLIC_LOGIN_APP_URL ??
-  "https://app.evomotorsinc.com";
+const isProduction = process.env.NODE_ENV === "production";
 
-const LOGIN_URL =
-  process.env.NEXT_PUBLIC_VEHICLIX_LOGIN_URL ?? `${APP_BASE}/login`;
-const REGISTER_URL =
-  process.env.NEXT_PUBLIC_VEHICLIX_REGISTER_URL ?? `${APP_BASE}/register`;
-const PORTAL_URL =
-  process.env.NEXT_PUBLIC_VEHICLIX_PORTAL_URL ?? `${APP_BASE}/portal`;
-const APP_URL = process.env.NEXT_PUBLIC_VEHICLIX_APP_URL ?? APP_BASE;
+function isDisallowedProductionHost(value: string): boolean {
+  try {
+    const { hostname } = new URL(value);
+    const normalized = hostname.toLowerCase();
+    return (
+      normalized === "localhost" ||
+      normalized === "127.0.0.1" ||
+      normalized === "0.0.0.0" ||
+      normalized === "::1" ||
+      normalized.endsWith(".local") ||
+      normalized.includes("ngrok") ||
+      normalized.includes("tunnel")
+    );
+  } catch {
+    return true;
+  }
+}
 
-const DEALER_SLUG =
-  process.env.NEXT_PUBLIC_DEALER_SLUG ?? "evo-motors";
+function resolveUrl(value: string | undefined, fallback: string, envName: string): string {
+  const raw = value?.trim() || fallback;
+  if (isProduction && isDisallowedProductionHost(raw)) {
+    throw new Error(
+      `Invalid ${envName} in production (${raw}). Local/dev tunnel hosts are not allowed.`
+    );
+  }
+  return raw;
+}
+
+const APP_BASE = resolveUrl(
+  process.env.NEXT_PUBLIC_VEHICLIX_APP_URL,
+  process.env.NEXT_PUBLIC_LOGIN_APP_URL?.trim() || "https://app.evomotorsinc.com",
+  "NEXT_PUBLIC_VEHICLIX_APP_URL"
+);
+
+const LOGIN_URL = resolveUrl(
+  process.env.NEXT_PUBLIC_VEHICLIX_LOGIN_URL,
+  `${APP_BASE}/login`,
+  "NEXT_PUBLIC_VEHICLIX_LOGIN_URL"
+);
+const REGISTER_URL = resolveUrl(
+  process.env.NEXT_PUBLIC_VEHICLIX_REGISTER_URL,
+  `${APP_BASE}/register`,
+  "NEXT_PUBLIC_VEHICLIX_REGISTER_URL"
+);
+const PORTAL_URL = resolveUrl(
+  process.env.NEXT_PUBLIC_VEHICLIX_PORTAL_URL,
+  `${APP_BASE}/portal`,
+  "NEXT_PUBLIC_VEHICLIX_PORTAL_URL"
+);
+const APP_URL = resolveUrl(
+  process.env.NEXT_PUBLIC_VEHICLIX_APP_URL,
+  APP_BASE,
+  "NEXT_PUBLIC_VEHICLIX_APP_URL"
+);
+
+const DEALER_SLUG = process.env.NEXT_PUBLIC_DEALER_SLUG?.trim() || "evo-motors";
 
 export const authBridgeConfig = {
   loginUrl: LOGIN_URL,

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Section, PageHeader } from "@/components/layout";
 import { ContactForm } from "@/components/forms";
-import { getDealer } from "@/lib/api";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import { PUBLIC_BUSINESS_INFO } from "@/lib/public-business-info";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -18,22 +18,7 @@ export const metadata: Metadata = {
   },
 };
 
-const FALLBACK = {
-  phone: "(555) 123-4567",
-  email: "hello@evomotorsinc.com",
-  city: "San Francisco",
-  region: "CA",
-};
-
-export default async function ContactPage() {
-  const dealer = await getDealer();
-  const contact = dealer.contact;
-  const phone = contact?.phone ?? FALLBACK.phone;
-  const email = contact?.email ?? FALLBACK.email;
-  const city = contact?.city ?? FALLBACK.city;
-  const region = contact?.region ?? FALLBACK.region;
-  const location = [city, region].filter(Boolean).join(", ") || null;
-
+export default function ContactPage() {
   return (
     <Section>
       <div className="evo-content-width space-y-12 lg:space-y-16">
@@ -46,36 +31,26 @@ export default async function ContactPage() {
           <div className="lg:col-span-2 space-y-6">
             <h2 className="evo-card-title text-foreground">Contact info</h2>
             <div className="rounded-xl border border-border bg-surface/50 p-6 space-y-4">
-              {phone && (
-                <a
-                  href={`tel:${phone.replace(/\D/g, "")}`}
-                  className="flex items-center gap-3 evo-body text-foreground no-underline transition-colors hover:text-primary"
-                >
-                  <span className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground shrink-0" aria-hidden>
-                    <Phone className="size-5" />
-                  </span>
-                  {phone}
-                </a>
-              )}
-              {email && (
-                <a
-                  href={`mailto:${email}`}
-                  className="flex items-center gap-3 evo-body text-foreground no-underline transition-colors hover:text-primary"
-                >
-                  <span className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground shrink-0" aria-hidden>
-                    <Mail className="size-5" />
-                  </span>
-                  {email}
-                </a>
-              )}
-              {location && (
-                <div className="flex items-center gap-3 evo-body text-muted-foreground">
-                  <span className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground shrink-0" aria-hidden>
-                    <MapPin className="size-5" />
-                  </span>
-                  {location}
+              <div className="evo-body text-foreground">{PUBLIC_BUSINESS_INFO.contactName}</div>
+              <a
+                href={`mailto:${PUBLIC_BUSINESS_INFO.email}`}
+                className="flex items-center gap-3 evo-body text-foreground no-underline transition-colors hover:text-primary"
+              >
+                <span className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground shrink-0" aria-hidden>
+                  <Mail className="size-5" />
+                </span>
+                {PUBLIC_BUSINESS_INFO.email}
+              </a>
+              <div className="flex items-start gap-3 evo-body text-muted-foreground">
+                <span className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground shrink-0" aria-hidden>
+                  <MapPin className="size-5" />
+                </span>
+                <div>
+                  <div>{PUBLIC_BUSINESS_INFO.addressLine1}</div>
+                  <div>{PUBLIC_BUSINESS_INFO.cityStateZip}</div>
+                  <div className="mt-1">{PUBLIC_BUSINESS_INFO.dealerLicenseDisplay}</div>
                 </div>
-              )}
+              </div>
             </div>
           </div>
           <div className="lg:col-span-3">

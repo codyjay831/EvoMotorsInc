@@ -65,7 +65,7 @@ export function ReservationForm({
         <LeadFormInput
           id="res-phone"
           type="tel"
-          placeholder="(555) 000-0000"
+          placeholder="Phone number"
           error={errors.phone?.message}
           {...register("phone")}
         />

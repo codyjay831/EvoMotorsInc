@@ -8,6 +8,7 @@
  */
 
 import { SITE } from "./site-config";
+import { PUBLIC_BUSINESS_INFO } from "./public-business-info";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
@@ -40,6 +41,10 @@ export const seoConfig = {
     name: SITE.name,
     tagline: SITE.tagline,
     url: SITE_URL,
+    email: PUBLIC_BUSINESS_INFO.email,
+    addressLine1: PUBLIC_BUSINESS_INFO.addressLine1,
+    cityStateZip: PUBLIC_BUSINESS_INFO.cityStateZip,
+    dealerLicenseDisplay: PUBLIC_BUSINESS_INFO.dealerLicenseDisplay,
     // logo: `${SITE_URL}${SITE.logoPath}`,
   },
 } as const;

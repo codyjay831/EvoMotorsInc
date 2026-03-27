@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { apiConfig } from "@/lib/api/config";
 
 function parseUpstreamMessage(status: number, text: string): string {
   if (!text.trim()) return `Request failed (${status})`;
@@ -19,16 +20,6 @@ function parseUpstreamMessage(status: number, text: string): string {
 }
 
 export async function POST(req: NextRequest) {
-  const API_BASE = process.env.NEXT_PUBLIC_VEHICLIX_API_URL;
-  const DEALER_SLUG = process.env.NEXT_PUBLIC_DEALER_SLUG || "evo-motors";
-
-  if (!API_BASE?.trim()) {
-    return Response.json(
-      { ok: false, message: "Lead service is not configured." },
-      { status: 503 }
-    );
-  }
-
   let body: unknown;
   try {
     body = await req.json();
@@ -36,8 +27,8 @@ export async function POST(req: NextRequest) {
     return Response.json({ ok: false, message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const base = API_BASE.replace(/\/$/, "");
-  const url = `${base}/api/v1/public/leads?dealerSlug=${encodeURIComponent(DEALER_SLUG)}`;
+  const base = apiConfig.baseUrl.replace(/\/$/, "");
+  const url = `${base}/api/v1/public/leads?dealerSlug=${encodeURIComponent(apiConfig.dealerSlug)}`;
 
   const upstream = await fetch(url, {
     method: "POST",

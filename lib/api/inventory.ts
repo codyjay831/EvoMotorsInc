@@ -1,9 +1,6 @@
 import { apiConfig, useMockData } from "./config";
 import { request } from "./client";
-import {
-  mockVehiclesSummary,
-  mockVehicleDetail,
-} from "./mocks/data";
+import { mockVehiclesSummary } from "./mocks/data";
 import type {
   VehicleSummary,
   VehicleDetail,
@@ -236,9 +233,8 @@ export async function getMakes(): Promise<string[]> {
  */
 export async function getVehicle(id: string): Promise<VehicleDetail | null> {
   if (useMockData) {
-    if (id === mockVehicleDetail.id) return Promise.resolve(mockVehicleDetail);
-    const found = mockVehiclesSummary.find((v) => v.id === id);
-    return found ? Promise.resolve({ ...found } as VehicleDetail) : Promise.resolve(null);
+    void id;
+    return Promise.resolve(null);
   }
   try {
     return await request<VehicleDetail>(`${BASE}/inventory/${id}`);

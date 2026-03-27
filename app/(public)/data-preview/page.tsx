@@ -31,10 +31,10 @@ export default async function DataPreviewPage() {
         <header>
           <PageHeader
             title="Data preview"
-            description="Inspection of API layer and types. Uses mock data when NEXT_PUBLIC_VEHICLIX_API_URL is unset."
+            description="Inspection of API layer and types. Uses fallback data mode when NEXT_PUBLIC_VEHICLIX_API_URL is unset."
           />
           <p className="evo-muted mt-2">
-            Mode: {useMockData ? "Mock data" : "Live API"}
+            Mode: {useMockData ? "Fallback data mode" : "Live API"}
           </p>
         </header>
 
@@ -102,7 +102,7 @@ export default async function DataPreviewPage() {
           </div>
         </section>
 
-        {/* One vehicle detail (VDP sample) */}
+        {/* One vehicle detail (VDP) */}
         <section className="space-y-4">
           <SectionHeading eyebrow="Vehicle detail (VDP)">Single vehicle</SectionHeading>
           {vehicleDetail ? (

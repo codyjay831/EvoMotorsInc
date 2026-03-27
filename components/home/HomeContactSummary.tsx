@@ -1,28 +1,13 @@
 import Link from "next/link";
-import type { Dealer } from "@/lib/api";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const FALLBACK = {
-  phone: "(555) 123-4567",
-  email: "hello@evomotorsinc.com",
-  city: "San Francisco",
-  region: "CA",
-};
+import { PUBLIC_BUSINESS_INFO } from "@/lib/public-business-info";
 
 type HomeContactSummaryProps = {
-  dealer: Dealer;
   className?: string;
 };
 
-export function HomeContactSummary({ dealer, className }: HomeContactSummaryProps) {
-  const contact = dealer.contact;
-  const phone = contact?.phone ?? FALLBACK.phone;
-  const email = contact?.email ?? FALLBACK.email;
-  const city = contact?.city ?? FALLBACK.city;
-  const region = contact?.region ?? FALLBACK.region;
-  const location = [city, region].filter(Boolean).join(", ") || null;
-
+export function HomeContactSummary({ className }: HomeContactSummaryProps) {
   return (
     <section
       className={cn("evo-content-width", className)}
@@ -31,36 +16,26 @@ export function HomeContactSummary({ dealer, className }: HomeContactSummaryProp
       <div className="rounded-xl border border-border bg-muted/30 py-8 px-6 sm:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div className="space-y-4">
-            {phone && (
-              <a
-                href={`tel:${phone.replace(/\D/g, "")}`}
-                className="flex items-center gap-3 evo-body text-foreground no-underline transition-colors duration-200 hover:text-primary evo-focus-ring rounded-md"
-              >
-                <span className="flex size-9 items-center justify-center rounded-lg bg-surface text-muted-foreground" aria-hidden>
-                  <Phone className="size-4" />
-                </span>
-                {phone}
-              </a>
-            )}
-            {email && (
-              <a
-                href={`mailto:${email}`}
-                className="flex items-center gap-3 evo-body text-foreground no-underline transition-colors duration-200 hover:text-primary evo-focus-ring rounded-md"
-              >
-                <span className="flex size-9 items-center justify-center rounded-lg bg-surface text-muted-foreground" aria-hidden>
-                  <Mail className="size-4" />
-                </span>
-                {email}
-              </a>
-            )}
-            {location && (
-              <div className="flex items-center gap-3 evo-body text-muted-foreground">
-                <span className="flex size-9 items-center justify-center rounded-lg bg-surface text-muted-foreground" aria-hidden>
-                  <MapPin className="size-4" />
-                </span>
-                {location}
+            <div className="evo-body text-foreground">{PUBLIC_BUSINESS_INFO.contactName}</div>
+            <a
+              href={`mailto:${PUBLIC_BUSINESS_INFO.email}`}
+              className="flex items-center gap-3 evo-body text-foreground no-underline transition-colors duration-200 hover:text-primary evo-focus-ring rounded-md"
+            >
+              <span className="flex size-9 items-center justify-center rounded-lg bg-surface text-muted-foreground" aria-hidden>
+                <Mail className="size-4" />
+              </span>
+              {PUBLIC_BUSINESS_INFO.email}
+            </a>
+            <div className="flex items-start gap-3 evo-body text-muted-foreground">
+              <span className="flex size-9 items-center justify-center rounded-lg bg-surface text-muted-foreground shrink-0" aria-hidden>
+                <MapPin className="size-4" />
+              </span>
+              <div>
+                <div>{PUBLIC_BUSINESS_INFO.addressLine1}</div>
+                <div>{PUBLIC_BUSINESS_INFO.cityStateZip}</div>
+                <div className="mt-1">{PUBLIC_BUSINESS_INFO.dealerLicenseDisplay}</div>
               </div>
-            )}
+            </div>
           </div>
           <Link
             href="/contact"

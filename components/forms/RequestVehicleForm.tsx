@@ -173,7 +173,7 @@ export function RequestVehicleForm({ className }: RequestVehicleFormProps) {
           <LeadFormInput
             id="req-phone"
             type="tel"
-            placeholder="(555) 000-0000"
+            placeholder="Phone number"
             error={errors.phone?.message}
             {...register("phone")}
           />

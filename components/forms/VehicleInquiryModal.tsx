@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { vehicleInquiryFormSchema, type VehicleInquiryFormValues } from "@/lib/validations/lead";
@@ -14,7 +14,6 @@ import {
   LeadFormError,
   LeadFormSubmit,
 } from "@/components/forms";
-import { cn } from "@/lib/utils";
 import type { VehicleSummary } from "@/lib/api";
 
 type VehicleInquiryModalProps = {
@@ -50,22 +49,26 @@ export function VehicleInquiryModal({
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  useEffect(() => {
-    if (!isOpen) return;
+  const handleClose = useCallback(() => {
     setStatus("idle");
     setErrorMessage("");
     reset();
+    onClose();
+  }, [onClose, reset]);
+
+  useEffect(() => {
+    if (!isOpen) return;
     setFocus("firstName");
-  }, [isOpen, reset, setFocus]);
+  }, [isOpen, setFocus]);
 
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") handleClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
+  }, [handleClose, isOpen]);
 
   const onSubmit = async (data: VehicleInquiryFormValues) => {
     setStatus("idle");
@@ -106,7 +109,7 @@ export function VehicleInquiryModal({
       <div
         className="absolute inset-0 bg-black/70 transition-opacity duration-200"
         aria-hidden
-        onClick={onClose}
+        onClick={handleClose}
       />
       <div
         className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-background shadow-xl transition-all duration-200"
@@ -121,7 +124,7 @@ export function VehicleInquiryModal({
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200 evo-focus-ring"
             aria-label="Close"
           >
@@ -140,7 +143,7 @@ export function VehicleInquiryModal({
               />
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 className="evo-body-sm mt-6 w-full rounded-lg border border-border py-2.5 font-medium text-foreground hover:bg-muted transition-colors duration-200 evo-focus-ring"
               >
                 Close
@@ -185,7 +188,7 @@ export function VehicleInquiryModal({
                 <LeadFormInput
                   id="inquiry-phone"
                   type="tel"
-                  placeholder="(555) 000-0000"
+                  placeholder="Phone number"
                   error={errors.phone?.message}
                   {...register("phone")}
                 />

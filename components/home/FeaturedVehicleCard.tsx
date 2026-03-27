@@ -5,14 +5,13 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import type { VehicleSummary } from "@/lib/api";
 import { Badge } from "@/components/website";
+import { Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const STAGGER_MS = 100;
 
-const PLACEHOLDER_IMAGE = "/placeholder-vehicle.svg";
-
-function getVehicleImageUrl(v: VehicleSummary): string {
-  return v.imageUrl ?? (v.imageUrls && v.imageUrls[0]) ?? PLACEHOLDER_IMAGE;
+function getVehicleImageUrl(v: VehicleSummary): string | null {
+  return v.imageUrl ?? (v.imageUrls && v.imageUrls[0]) ?? null;
 }
 
 function conditionLabel(condition: VehicleSummary["condition"]): string {
@@ -50,13 +49,19 @@ export function FeaturedVehicleCard({ vehicle, index }: FeaturedVehicleCardProps
       >
         {/* Image block: dominant visual */}
         <div className="relative h-[200px] sm:h-[220px] overflow-hidden bg-muted/30">
-          <Image
-            src={imageUrl}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-[350ms] ease-out group-hover:scale-[1.03]"
-          />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-[350ms] ease-out group-hover:scale-[1.03]"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-muted-foreground" aria-hidden>
+              <Zap className="size-12 opacity-40" />
+            </div>
+          )}
           {/* Dark gradient overlay for readability */}
           <div
             className="absolute inset-0 pointer-events-none"

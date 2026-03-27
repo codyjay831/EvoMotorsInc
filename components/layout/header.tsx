@@ -5,11 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { buildLoginUrl } from "@/lib/auth-bridge";
 import { cn } from "@/lib/utils";
-
-const loginButtonClass =
-  "inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-transparent bg-primary px-4 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring";
 
 /** Main nav links (no Home — logo/brand links to home). */
 const NAV_LINKS = [
@@ -34,7 +30,7 @@ export function Header() {
       )}
     >
       <div className="mx-auto h-20 w-full max-w-[1400px] px-6 sm:px-8 md:px-10 lg:px-12">
-        {/* 3-zone layout: Left (brand) | Center (nav) | Right (Login / hamburger) */}
+        {/* 3-zone layout: Left (brand) | Center (nav) | Right (mobile hamburger) */}
         <div className="flex h-full w-full items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 md:items-center">
           {/* Left: logo + EVO MOTORS */}
           <Link
@@ -84,17 +80,8 @@ export function Header() {
             })}
           </nav>
 
-          {/* Right: single Login (desktop) / Hamburger (mobile) */}
+          {/* Right: Hamburger (mobile only) */}
           <div className="flex items-center justify-end gap-1">
-            <a
-              href={buildLoginUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(loginButtonClass, "hidden md:inline-flex")}
-              aria-label="Secure account login"
-            >
-              Login
-            </a>
             <button
               type="button"
               className="inline-flex size-11 items-center justify-center rounded-lg text-foreground hover:bg-muted/30 transition-colors duration-200 evo-focus-ring md:hidden"
@@ -142,17 +129,6 @@ export function Header() {
               );
             })}
           </ul>
-          <div className="mt-4 border-t border-border pt-4">
-            <a
-              href={buildLoginUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(loginButtonClass, "inline-flex h-10 w-full justify-center")}
-              onClick={() => setMobileOpen(false)}
-            >
-              Login
-            </a>
-          </div>
         </nav>
       </div>
     </header>
