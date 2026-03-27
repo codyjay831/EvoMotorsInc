@@ -3,7 +3,7 @@
  * This project does NOT own authentication; Vehiclix owns login, sessions, and portal.
  *
  * Expected env vars (all optional; defaults allow the site to build and run):
- * - NEXT_PUBLIC_VEHICLIX_APP_URL – Base URL for Vehiclix app (e.g. https://app.evomotors.com).
+ * - NEXT_PUBLIC_VEHICLIX_APP_URL – Base URL for Vehiclix app (e.g. https://app.evomotorsinc.com).
  *   Used for login, register, portal, and app when specific URLs are not set.
  * - NEXT_PUBLIC_VEHICLIX_LOGIN_URL – Override for login page (default: APP_URL + "/login").
  * - NEXT_PUBLIC_VEHICLIX_REGISTER_URL – Override for registration (default: APP_URL + "/register").
@@ -15,7 +15,7 @@
 const APP_BASE =
   process.env.NEXT_PUBLIC_VEHICLIX_APP_URL ??
   process.env.NEXT_PUBLIC_LOGIN_APP_URL ??
-  "https://app.evomotors.com";
+  "https://app.evomotorsinc.com";
 
 const LOGIN_URL =
   process.env.NEXT_PUBLIC_VEHICLIX_LOGIN_URL ?? `${APP_BASE}/login`;

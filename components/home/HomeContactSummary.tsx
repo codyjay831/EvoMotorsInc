@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const FALLBACK = {
   phone: "(555) 123-4567",
-  email: "hello@evomotors.com",
+  email: "hello@evomotorsinc.com",
   city: "San Francisco",
   region: "CA",
 };

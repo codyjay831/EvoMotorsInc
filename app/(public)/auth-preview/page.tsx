@@ -8,6 +8,7 @@ import {
   buildPortalUrl,
   buildRegisterUrl,
 } from "@/lib/auth-bridge";
+import { fullUrl } from "@/lib/seo-config";
 
 export const metadata: Metadata = {
   title: "Auth bridge preview",
@@ -21,7 +22,7 @@ export default function AuthPreviewPage() {
   const appUrl = buildAppUrl();
 
   const withReturn = buildLoginUrl({
-    returnTo: "https://evomotors.com/inventory",
+    returnTo: fullUrl("/inventory"),
   });
 
   return (
