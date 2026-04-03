@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { getInventory } from "@/lib/api";
 import { fullUrl } from "@/lib/seo-config";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Sitemap for the public website. Includes static pages and vehicle detail pages
  * from the current data layer (mock or API). Structure is ready for real API-backed generation.

@@ -10,6 +10,8 @@ import { HeroStorySection, RoadStorySection } from "@/components/marketing";
 import { getFeaturedVehicles, type VehicleSummary } from "@/lib/api";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: { absolute: seoConfig.defaultTitle },
   description: seoConfig.defaultDescription,
