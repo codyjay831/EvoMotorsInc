@@ -36,6 +36,7 @@ export function VehicleSpecsSection({ vehicle, className }: VehicleSpecsSectionP
   if (vehicle.model) core.push({ label: "Model", value: vehicle.model });
   if (vehicle.trim) core.push({ label: "Trim", value: vehicle.trim });
   if (vehicle.condition) core.push({ label: "Condition", value: vehicle.condition });
+  if (vehicle.vin) core.push({ label: "VIN", value: vehicle.vin });
   if (vehicle.mileage != null) core.push({ label: "Mileage", value: vehicle.mileageDisplay ?? `${vehicle.mileage.toLocaleString()} mi` });
   if (vehicle.exteriorColor) core.push({ label: "Exterior", value: vehicle.exteriorColor });
   if (vehicle.interiorColor) core.push({ label: "Interior", value: vehicle.interiorColor });

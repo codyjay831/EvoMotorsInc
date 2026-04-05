@@ -174,6 +174,10 @@ function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
     rangeMiles:
       v.rangeMiles != null && Number.isFinite(Number(v.rangeMiles)) ? Number(v.rangeMiles) : undefined,
     fuelType: typeof v.fuelType === "string" ? v.fuelType : undefined,
+    pricingMode:
+      typeof v.pricingMode === "string"
+        ? (v.pricingMode as VehicleSummary["pricingMode"])
+        : undefined,
     condition,
     vin: typeof v.vin === "string" ? v.vin : undefined,
     listedAt: typeof v.listedAt === "string" ? v.listedAt : undefined,

@@ -9,6 +9,7 @@ import {
   getVehicle,
   useMockData,
 } from "@/lib/api";
+import { getPriceDisplay } from "@/lib/api/pricing";
 
 export const metadata: Metadata = {
   title: "Data preview",
@@ -80,16 +81,19 @@ export default async function DataPreviewPage() {
         <section className="space-y-4">
           <SectionHeading eyebrow="Featured">Featured vehicles</SectionHeading>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.map((v) => (
-              <SurfaceCard key={v.id} variant="glow" className="p-4">
-                <Badge variant="primary" className="mb-2">{v.condition ?? "—"}</Badge>
-                <p className="evo-card-title text-foreground">{v.displayName ?? `${v.year} ${v.make} ${v.model}`}</p>
-                <p className="evo-muted mt-1">{v.priceDisplay ?? "—"} · {v.mileageDisplay ?? "—"}</p>
-                {v.rangeMiles != null && (
-                  <p className="evo-muted text-xs mt-1">Range: {v.rangeMiles} mi</p>
-                )}
-              </SurfaceCard>
-            ))}
+            {featured.map((v) => {
+              const priceDisplay = getPriceDisplay(v);
+              return (
+                <SurfaceCard key={v.id} variant="glow" className="p-4">
+                  <Badge variant="primary" className="mb-2">{v.condition ?? "—"}</Badge>
+                  <p className="evo-card-title text-foreground">{v.displayName ?? `${v.year} ${v.make} ${v.model}`}</p>
+                  <p className="evo-muted mt-1">{priceDisplay || "—"} · {v.mileageDisplay ?? "—"}</p>
+                  {v.rangeMiles != null && (
+                    <p className="evo-muted text-xs mt-1">Range: {v.rangeMiles} mi</p>
+                  )}
+                </SurfaceCard>
+              );
+            })}
           </div>
         </section>
 
@@ -98,12 +102,15 @@ export default async function DataPreviewPage() {
           <SectionHeading eyebrow="Inventory">Inventory (first page)</SectionHeading>
           <p className="evo-muted">Total: {inventory.total} · Page {inventory.page}</p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {inventory.vehicles.map((v) => (
-              <SurfaceCard key={v.id} variant="muted" className="p-4">
-                <p className="evo-card-title text-foreground">{v.displayName ?? `${v.year} ${v.make} ${v.model}`}</p>
-                <p className="evo-muted mt-1">{v.stockNumber ?? v.id} · {v.priceDisplay ?? "—"}</p>
-              </SurfaceCard>
-            ))}
+            {inventory.vehicles.map((v) => {
+              const priceDisplay = getPriceDisplay(v);
+              return (
+                <SurfaceCard key={v.id} variant="muted" className="p-4">
+                  <p className="evo-card-title text-foreground">{v.displayName ?? `${v.year} ${v.make} ${v.model}`}</p>
+                  <p className="evo-muted mt-1">{v.stockNumber ?? v.id} · {priceDisplay || "—"}</p>
+                </SurfaceCard>
+              );
+            })}
           </div>
         </section>
 

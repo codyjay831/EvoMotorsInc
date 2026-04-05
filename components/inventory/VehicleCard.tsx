@@ -9,9 +9,21 @@ type VehicleCardProps = {
   className?: string;
 };
 
+import type { VehicleSummary } from "@/lib/api";
+import { getPriceDisplay } from "@/lib/api/pricing";
+import { SurfaceCard, Badge } from "@/components/website";
+import { Zap } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+type VehicleCardProps = {
+  vehicle: VehicleSummary;
+  className?: string;
+};
+
 export function VehicleCard({ vehicle, className }: VehicleCardProps) {
   const displayName = vehicle.displayName ?? `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const imageUrl = vehicle.imageUrl ?? vehicle.imageUrls?.[0];
+  const priceDisplay = getPriceDisplay(vehicle);
 
   return (
     <Link
@@ -48,10 +60,16 @@ export function VehicleCard({ vehicle, className }: VehicleCardProps) {
           <h3 className="evo-card-title text-foreground group-hover:text-primary transition-colors">
             {displayName}
           </h3>
-          <p className="evo-muted mt-2">
-            {vehicle.priceDisplay ?? "Price on request"}
-            {vehicle.mileageDisplay != null && ` · ${vehicle.mileageDisplay}`}
-          </p>
+          <div className="evo-muted mt-2">
+            {priceDisplay ? (
+              <p>
+                {priceDisplay}
+                {vehicle.mileageDisplay != null && ` · ${vehicle.mileageDisplay}`}
+              </p>
+            ) : (
+              <p>{vehicle.mileageDisplay ?? "—"}</p>
+            )}
+          </div>
           {vehicle.rangeMiles != null && (
             <p className="evo-muted mt-1 flex items-center gap-1.5 text-xs">
               <Zap className="size-3.5 text-primary" aria-hidden />

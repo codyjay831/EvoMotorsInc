@@ -90,6 +90,8 @@ export interface VehicleSummary {
   rangeMiles?: number;
   /** Fuel/energy type: Electric, etc. */
   fuelType?: string;
+  /** Pricing strategy. */
+  pricingMode?: "LIST_PRICE" | "PRICE_ON_REQUEST" | "CALL_FOR_PRICE" | "HIDE_PRICE";
   condition?: "new" | "used" | "certified";
   vin?: string;
   /** Listed at (ISO date). */

@@ -11,6 +11,7 @@ import {
   VehicleUnavailableState,
 } from "@/components/inventory";
 import { getVehicle } from "@/lib/api";
+import { getPriceDisplay } from "@/lib/api/pricing";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 import { VdpStructuredData } from "@/components/seo/vdp-structured-data";
 import type { VehicleDetail } from "@/lib/api";
@@ -28,7 +29,8 @@ function vdpTitle(v: VehicleDetail): string {
 function vdpDescription(v: VehicleDetail): string {
   const title = vdpTitle(v);
   const condition = v.condition ? ` ${v.condition}` : "";
-  const price = v.priceDisplay ? ` ${v.priceDisplay}` : "";
+  const priceDisplay = getPriceDisplay(v);
+  const price = priceDisplay ? ` ${priceDisplay}` : "";
   const range = v.rangeMiles ? ` ${v.rangeMiles} mi range.` : ".";
   return `${title}${condition}${price}.${range} Browse our EV inventory at ${seoConfig.siteName}.`;
 }

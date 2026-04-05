@@ -15,12 +15,29 @@ type VehiclePricingPanelProps = {
   className?: string;
 };
 
+import type { VehicleDetail } from "@/lib/api";
+import { getPriceDisplay } from "@/lib/api/pricing";
+import { Zap } from "lucide-react";
+import { VehicleInquiryButton } from "@/components/forms";
+import { cn } from "@/lib/utils";
+
+const glowButtonClass =
+  "inline-flex h-11 w-full items-center justify-center rounded-lg border border-transparent bg-primary px-6 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring";
+const outlineButtonClass =
+  "inline-flex h-11 w-full items-center justify-center rounded-lg border border-border bg-transparent px-6 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted/80 hover:border-primary/30 evo-focus-ring";
+
+type VehiclePricingPanelProps = {
+  vehicle: VehicleDetail;
+  vehicleId: string;
+  className?: string;
+};
+
 export function VehiclePricingPanel({
   vehicle,
   vehicleId,
   className,
 }: VehiclePricingPanelProps) {
-  const price = vehicle.priceDisplay ?? "Price on request";
+  const priceDisplay = getPriceDisplay(vehicle);
   const mileage = vehicle.mileageDisplay ?? "—";
   const range = vehicle.rangeMiles;
 
@@ -33,9 +50,11 @@ export function VehiclePricingPanel({
       )}
     >
       <div className="space-y-3">
-        <p className="evo-display text-2xl sm:text-3xl text-foreground tracking-tight">
-          {price}
-        </p>
+        {priceDisplay && (
+          <p className="evo-display text-2xl sm:text-3xl text-foreground tracking-tight">
+            {priceDisplay}
+          </p>
+        )}
         <div className="evo-body text-muted-foreground space-y-1">
           <p>{mileage}</p>
           {range != null && (

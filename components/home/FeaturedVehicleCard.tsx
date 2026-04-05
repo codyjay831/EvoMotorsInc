@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { VehicleSummary } from "@/lib/api";
+import { getPriceDisplay } from "@/lib/api/pricing";
 import { Badge } from "@/components/website";
 import { Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,7 @@ type FeaturedVehicleCardProps = {
 export function FeaturedVehicleCard({ vehicle, index }: FeaturedVehicleCardProps) {
   const imageUrl = getVehicleImageUrl(vehicle);
   const name = vehicle.displayName ?? `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+  const priceDisplay = getPriceDisplay(vehicle);
 
   return (
     <motion.div
@@ -89,8 +91,9 @@ export function FeaturedVehicleCard({ vehicle, index }: FeaturedVehicleCardProps
             {name}
           </h3>
           <p className="mt-3 text-sm text-muted-foreground">
-            {vehicle.priceDisplay ?? "Price on request"}
-            {vehicle.mileageDisplay != null && ` · ${vehicle.mileageDisplay}`}
+            {priceDisplay}
+            {priceDisplay && vehicle.mileageDisplay != null && ` · ${vehicle.mileageDisplay}`}
+            {!priceDisplay && vehicle.mileageDisplay}
           </p>
         </div>
       </Link>

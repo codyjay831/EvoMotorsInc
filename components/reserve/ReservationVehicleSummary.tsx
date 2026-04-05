@@ -11,6 +11,20 @@ type ReservationVehicleSummaryProps = {
   className?: string;
 };
 
+import Link from "next/link";
+import type { VehicleDetail } from "@/lib/api";
+import { getPriceDisplay } from "@/lib/api/pricing";
+import { Zap } from "lucide-react";
+import { Badge } from "@/components/website";
+import { SITE } from "@/lib/site-config";
+import { cn } from "@/lib/utils";
+
+type ReservationVehicleSummaryProps = {
+  vehicle: VehicleDetail;
+  vehicleId: string;
+  className?: string;
+};
+
 export function ReservationVehicleSummary({
   vehicle,
   vehicleId,
@@ -18,6 +32,7 @@ export function ReservationVehicleSummary({
 }: ReservationVehicleSummaryProps) {
   const displayName = vehicle.displayName ?? `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const imageUrl = vehicle.imageUrl ?? vehicle.imageUrls?.[0];
+  const priceDisplay = getPriceDisplay(vehicle);
 
   return (
     <div
@@ -48,10 +63,16 @@ export function ReservationVehicleSummary({
         <div className="flex flex-1 flex-col justify-center p-4 sm:p-5">
           <p className="evo-eyebrow text-primary">{SITE.name}</p>
           <h2 className="evo-card-title text-foreground mt-1">{displayName}</h2>
-          <p className="evo-body text-muted-foreground mt-2">
-            {vehicle.priceDisplay ?? "Price on request"}
-            {vehicle.mileageDisplay != null && ` · ${vehicle.mileageDisplay}`}
-          </p>
+          <div className="evo-body text-muted-foreground mt-2">
+            {priceDisplay ? (
+              <p>
+                {priceDisplay}
+                {vehicle.mileageDisplay != null && ` · ${vehicle.mileageDisplay}`}
+              </p>
+            ) : (
+              <p>{vehicle.mileageDisplay ?? "—"}</p>
+            )}
+          </div>
           {vehicle.rangeMiles != null && (
             <p className="evo-muted mt-1 flex items-center gap-1.5 text-xs">
               <Zap className="size-3.5 text-primary" aria-hidden />
