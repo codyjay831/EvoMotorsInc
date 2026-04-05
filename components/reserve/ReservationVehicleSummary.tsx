@@ -1,18 +1,5 @@
 import Link from "next/link";
 import type { VehicleDetail } from "@/lib/api";
-import { Zap } from "lucide-react";
-import { Badge } from "@/components/website";
-import { SITE } from "@/lib/site-config";
-import { cn } from "@/lib/utils";
-
-type ReservationVehicleSummaryProps = {
-  vehicle: VehicleDetail;
-  vehicleId: string;
-  className?: string;
-};
-
-import Link from "next/link";
-import type { VehicleDetail } from "@/lib/api";
 import { getPriceDisplay } from "@/lib/api/pricing";
 import { Zap } from "lucide-react";
 import { Badge } from "@/components/website";

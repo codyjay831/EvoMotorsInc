@@ -1,21 +1,5 @@
 import Link from "next/link";
 import type { VehicleDetail } from "@/lib/api";
-import { Zap } from "lucide-react";
-import { VehicleInquiryButton } from "@/components/forms";
-import { cn } from "@/lib/utils";
-
-const glowButtonClass =
-  "inline-flex h-11 w-full items-center justify-center rounded-lg border border-transparent bg-primary px-6 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring";
-const outlineButtonClass =
-  "inline-flex h-11 w-full items-center justify-center rounded-lg border border-border bg-transparent px-6 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted/80 hover:border-primary/30 evo-focus-ring";
-
-type VehiclePricingPanelProps = {
-  vehicle: VehicleDetail;
-  vehicleId: string;
-  className?: string;
-};
-
-import type { VehicleDetail } from "@/lib/api";
 import { getPriceDisplay } from "@/lib/api/pricing";
 import { Zap } from "lucide-react";
 import { VehicleInquiryButton } from "@/components/forms";

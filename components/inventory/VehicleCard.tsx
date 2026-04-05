@@ -1,15 +1,5 @@
 import Link from "next/link";
 import type { VehicleSummary } from "@/lib/api";
-import { SurfaceCard, Badge } from "@/components/website";
-import { Zap } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-type VehicleCardProps = {
-  vehicle: VehicleSummary;
-  className?: string;
-};
-
-import type { VehicleSummary } from "@/lib/api";
 import { getPriceDisplay } from "@/lib/api/pricing";
 import { SurfaceCard, Badge } from "@/components/website";
 import { Zap } from "lucide-react";
