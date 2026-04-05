@@ -130,6 +130,19 @@ function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
       : v.price != null
         ? Number(v.price)
         : undefined;
+  const isFinitePrice = price !== undefined && Number.isFinite(price);
+
+  const priceDisplay =
+    typeof v.priceDisplay === "string"
+      ? v.priceDisplay
+      : isFinitePrice
+        ? new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+          }).format(price!)
+        : undefined;
+
   const mileage =
     typeof v.mileage === "number"
       ? v.mileage
@@ -163,8 +176,8 @@ function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
     model,
     trim: typeof v.trim === "string" ? v.trim : undefined,
     displayName: typeof v.displayName === "string" ? v.displayName : undefined,
-    price: price !== undefined && Number.isFinite(price) ? price : undefined,
-    priceDisplay: typeof v.priceDisplay === "string" ? v.priceDisplay : undefined,
+    price: isFinitePrice ? price : undefined,
+    priceDisplay,
     mileage: mileage !== undefined && Number.isFinite(mileage) ? mileage : undefined,
     mileageDisplay: typeof v.mileageDisplay === "string" ? v.mileageDisplay : undefined,
     exteriorColor: typeof v.exteriorColor === "string" ? v.exteriorColor : undefined,
