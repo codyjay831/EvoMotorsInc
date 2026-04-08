@@ -2,11 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Dealer } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { RebatesCta } from "./RebatesCta";
 
 const glowButtonClass =
   "inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-transparent bg-primary px-5 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring";
-const outlineButtonClass =
-  "inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-border bg-transparent px-5 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted/80 hover:border-primary/30 evo-focus-ring";
 
 const HERO_BG = "#0a0a0a";
 /** Bump when you replace the hero image (same path) so caches load the new file. */
@@ -106,12 +105,7 @@ export function HomeHero({ dealer, className }: HomeHeroProps) {
             >
               Browse Inventory
             </Link>
-            <Link
-              href="/contact?intent=approval"
-              className={cn(outlineButtonClass, "min-w-[180px]")}
-            >
-              Get Approved
-            </Link>
+            <RebatesCta />
           </div>
         </div>
       </div>

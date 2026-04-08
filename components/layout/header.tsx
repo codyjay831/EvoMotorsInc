@@ -7,9 +7,8 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** Main nav links (logo/brand also links home). */
+/** Main nav links (logo/brand links home). */
 const NAV_LINKS = [
-  { href: "/", label: "Home" },
   { href: "/inventory", label: "Inventory" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
@@ -57,14 +56,13 @@ export function Header() {
             </span>
           </Link>
 
-          {/* Center: Home, Inventory, About, Contact, Request Vehicle */}
+          {/* Center: Inventory, About, Contact, Request Vehicle */}
           <nav
             className="hidden items-center justify-center md:flex md:gap-8"
             aria-label="Main navigation"
           >
             {NAV_LINKS.map(({ href, label }) => {
-              const isActive =
-                href === "/" ? pathname === "/" : pathname.startsWith(href);
+              const isActive = pathname.startsWith(href);
               return (
                 <Link
                   key={href}
@@ -112,8 +110,7 @@ export function Header() {
         >
           <ul className="flex flex-col gap-0.5">
             {NAV_LINKS.map(({ href, label }) => {
-              const isActive =
-                href === "/" ? pathname === "/" : pathname.startsWith(href);
+              const isActive = pathname.startsWith(href);
               return (
                 <li key={href}>
                   <Link

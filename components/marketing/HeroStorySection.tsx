@@ -4,7 +4,14 @@ import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { RebatesCta } from "@/components/home/RebatesCta";
 import { cn } from "@/lib/utils";
+
+const HERO_REBATES_TRIGGER_DESKTOP =
+  "inline-flex h-10 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-black/20 px-6 text-sm font-medium text-white backdrop-blur-sm transition-colors duration-200 hover:bg-black/35 hover:border-white/30 evo-focus-ring";
+
+const HERO_REBATES_TRIGGER_MOBILE =
+  "inline-flex h-12 w-full shrink-0 items-center justify-center rounded-lg border border-white/20 bg-black/20 px-5 text-sm font-medium text-white backdrop-blur-sm transition-colors duration-200 hover:bg-black/35 hover:border-white/30 evo-focus-ring";
 
 type HeroStorySectionProps = {
   className?: string;
@@ -179,13 +186,14 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
               </div>
               {/* Mobile: primary CTA pinned low; bottom-10 nudges up from bottom-6 for easier thumb reach */}
               <div className="absolute bottom-10 left-0 z-10 w-full px-6">
-                <div className="rounded-xl bg-black/30 px-4 py-3 backdrop-blur">
+                <div className="space-y-2 rounded-xl bg-black/30 px-4 py-3 backdrop-blur">
                   <Link
                     href="/inventory"
                     className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[0_0_20px_-2px_var(--glow-subtle)] transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_28px_-2px_var(--glow-subtle)] evo-focus-ring"
                   >
                     Browse Inventory
                   </Link>
+                  <RebatesCta triggerClassName={HERO_REBATES_TRIGGER_MOBILE} />
                 </div>
               </div>
             </div>
@@ -243,12 +251,7 @@ export function HeroStorySection({ className }: HeroStorySectionProps) {
             >
               Browse Inventory
             </Link>
-            <Link
-              href="/contact?intent=approval"
-              className="inline-flex h-10 items-center justify-center rounded-lg border border-white/20 bg-black/20 px-6 text-sm font-medium text-white backdrop-blur-sm evo-focus-ring"
-            >
-              Get Approved
-            </Link>
+            <RebatesCta triggerClassName={HERO_REBATES_TRIGGER_DESKTOP} />
           </motion.div>
 
           <motion.div
