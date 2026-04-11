@@ -120,7 +120,7 @@ export function EvChargingContent() {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent md:hidden" aria-hidden />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent hidden md:block" aria-hidden />
         
-        <SiteContainer className="relative z-10 flex min-h-[80svh] flex-col justify-end pb-12 pt-24 sm:min-h-[480px] sm:pb-20 lg:min-h-[600px] lg:py-28">
+        <SiteContainer className="relative z-10 flex min-h-[85svh] flex-col justify-center py-20 sm:min-h-[480px] sm:justify-end sm:pb-20 lg:min-h-[600px] lg:py-28">
           <div className="max-w-xl [text-shadow:_0_2px_16px_rgb(0_0_0_/_0.8)]">
             <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary drop-shadow-md sm:text-[11px]">
               Bay Area charging guidance
@@ -132,18 +132,18 @@ export function EvChargingContent() {
               Most driving is covered overnight at home. Public fast charging is
               for road trips—not daily stress.
             </p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
+            <div className="mt-10 flex flex-row gap-2 sm:gap-4">
               <a
                 href="#cost-calculator"
-                className="inline-flex h-12 items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground no-underline shadow-[0_0_20px_-5px_var(--glow-subtle)] transition-all hover:opacity-90 sm:h-11"
+                className="flex-1 inline-flex h-12 items-center justify-center rounded-lg bg-primary px-4 py-3 text-[13px] font-semibold text-primary-foreground no-underline shadow-[0_0_20px_-5px_var(--glow-subtle)] transition-all hover:opacity-90 sm:h-11 sm:px-6 sm:text-sm"
               >
-                Try the cost estimator
+                Cost estimator
               </a>
               <Link
                 href="/contact"
-                className="inline-flex h-12 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-medium text-white no-underline ring-1 ring-inset ring-white/20 backdrop-blur-md transition-colors hover:bg-white/[0.15] sm:h-11"
+                className="flex-1 inline-flex h-12 items-center justify-center rounded-lg bg-white/10 px-4 py-3 text-[13px] font-medium text-white no-underline ring-1 ring-inset ring-white/20 backdrop-blur-md transition-colors hover:bg-white/[0.15] sm:h-11 sm:px-6 sm:text-sm"
               >
-                Ask us before you buy
+                Ask a question
               </Link>
             </div>
           </div>
