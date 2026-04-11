@@ -97,6 +97,16 @@ export function EvChargingContent() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-white/[0.06]">
+        {/* Mobile Hero Image */}
+        <Image
+          src="/hero/Charging_Hero_Phone.webp"
+          alt="EV charging station"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center md:hidden"
+        />
+        {/* Desktop Hero Image */}
         <Image
           src="/hero/Charging_Hero.webp"
           alt="EV charging station"
@@ -104,7 +114,7 @@ export function EvChargingContent() {
           priority
           sizes="100vw"
           quality={90}
-          className="object-cover object-center"
+          className="object-cover object-center hidden md:block"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" aria-hidden />
         <SiteContainer className="relative z-10 flex min-h-[420px] items-end py-16 sm:min-h-[480px] sm:py-20 lg:min-h-[540px] lg:py-24">
