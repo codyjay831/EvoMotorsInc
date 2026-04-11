@@ -1,10 +1,13 @@
 import Link from "next/link";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { Section, SiteContainer } from "@/components/layout";
 import { ContactForm } from "@/components/forms";
 import {
   EvChargingCalculators,
   ChargingChecklistPrint,
 } from "@/components/ev-charging/ev-charging-calculators";
+import { LifestyleChargingGuide } from "@/components/ev-charging/lifestyle-charging-guide";
 import { cn } from "@/lib/utils";
 
 const external = {
@@ -17,11 +20,26 @@ const external = {
 } as const;
 
 function Prose({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("evo-body text-muted-foreground space-y-4 max-w-3xl", className)}>{children}</div>;
+  return (
+    <div
+      className={cn(
+        "max-w-2xl space-y-4 text-[0.9375rem] leading-[1.65] text-muted-foreground/90",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
 }
 
-function Subheading({ children }: { children: React.ReactNode }) {
-  return <h2 className="evo-section-heading text-foreground">{children}</h2>;
+function Subheading({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <h2 className={cn("evo-section-heading text-foreground", className)}>{children}</h2>;
 }
 
 function CardGrid({
@@ -46,35 +64,28 @@ function LevelCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-surface/60 p-5 flex flex-col gap-3">
+    <div className="flex flex-col gap-3 rounded-2xl bg-muted/10 p-5 ring-1 ring-inset ring-white/[0.05] transition-colors duration-200 hover:bg-muted/[0.14] sm:p-6">
       <div>
-        <p className="evo-eyebrow text-primary">{tag}</p>
-        <h3 className="evo-card-title text-foreground mt-1">{title}</h3>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/70">{tag}</p>
+        <h3 className="mt-2 text-base font-semibold tracking-tight text-foreground">{title}</h3>
       </div>
-      <div className="evo-body-sm text-muted-foreground space-y-2 flex-1">{children}</div>
-    </div>
-  );
-}
-
-function LifestyleCard({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="rounded-xl border border-border bg-muted/30 p-5">
-      <h3 className="evo-card-title text-foreground">{title}</h3>
-      <p className="evo-body-sm text-muted-foreground mt-2">{body}</p>
+      <div className="text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm flex-1">{children}</div>
     </div>
   );
 }
 
 function FaqItem({ q, children }: { q: string; children: React.ReactNode }) {
   return (
-    <details className="group rounded-xl border border-border bg-surface/40 open:bg-surface/60 transition-colors">
-      <summary className="evo-body-sm font-medium text-foreground cursor-pointer list-none px-4 py-3.5 flex items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
-        <span>{q}</span>
-        <span className="text-muted-foreground text-lg leading-none group-open:rotate-45 transition-transform" aria-hidden>
-          +
-        </span>
+    <details className="group rounded-xl bg-muted/10 ring-1 ring-inset ring-white/[0.05] transition-colors duration-200 open:bg-muted/[0.14] open:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-4 text-left text-[0.9375rem] font-medium leading-snug text-foreground sm:px-5 sm:py-[1.125rem] [&::-webkit-details-marker]:hidden">
+        <span className="min-w-0 pr-2">{q}</span>
+        <ChevronDown
+          className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-open:rotate-180"
+          strokeWidth={2}
+          aria-hidden
+        />
       </summary>
-      <div className="px-4 pb-4 evo-body-sm text-muted-foreground border-t border-border/60 pt-3">
+      <div className="border-t border-white/[0.06] px-4 pb-4 pt-3 text-[13px] leading-relaxed text-muted-foreground/90 sm:px-5 sm:text-sm">
         {children}
       </div>
     </details>
@@ -85,57 +96,83 @@ export function EvChargingContent() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary/10 via-background to-background">
-        <SiteContainer className="py-16 sm:py-20 lg:py-28">
-          <p className="evo-eyebrow text-primary">Bay Area charging guidance</p>
-          <h1 className="evo-display text-foreground mt-3 max-w-4xl">
-            Charging an EV is easier than people think
-          </h1>
-          <p className="evo-body text-muted-foreground mt-6 max-w-2xl text-lg">
-            Most driving is covered at home. Fast public charging is for trips and “I forgot” moments—not something
-            most owners stress about every day.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="#cost-calculator"
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground no-underline transition-opacity hover:opacity-90 evo-focus-ring"
-            >
-              Try the cost estimator
-            </a>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-5 py-2.5 text-sm font-medium text-foreground no-underline transition-colors hover:bg-muted/50 evo-focus-ring"
-            >
-              Ask us before you buy
-            </Link>
+      <section className="relative overflow-hidden border-b border-white/[0.06]">
+        <Image
+          src="/hero/Charging_Hero.webp"
+          alt="EV charging station"
+          fill
+          priority
+          sizes="100vw"
+          quality={90}
+          className="object-cover object-center"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" aria-hidden />
+        <SiteContainer className="relative z-10 flex min-h-[420px] items-end py-16 sm:min-h-[480px] sm:py-20 lg:min-h-[540px] lg:py-24">
+          <div className="max-w-xl [text-shadow:_0_1px_12px_rgb(0_0_0_/_0.5)]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-primary drop-shadow-sm">Bay Area charging guidance</p>
+            <h1 className="mt-3 text-3xl font-bold leading-[1.15] tracking-tight text-white sm:text-4xl md:text-5xl">
+              Charging an EV is easier&nbsp;than&nbsp;you&nbsp;think
+            </h1>
+            <p className="mt-4 max-w-md text-[0.9375rem] leading-relaxed text-white/85 sm:mt-5 sm:text-base">
+              Most driving is covered overnight at home. Public fast charging is
+              for road trips—not daily stress.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3 sm:mt-8">
+              <a
+                href="#cost-calculator"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground no-underline shadow-lg transition-opacity hover:opacity-90 evo-focus-ring"
+              >
+                Try the cost estimator
+              </a>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-lg bg-white/10 px-5 py-2.5 text-sm font-medium text-white no-underline ring-1 ring-inset ring-white/20 backdrop-blur-md transition-colors hover:bg-white/[0.15] evo-focus-ring"
+              >
+                Ask us before you buy
+              </Link>
+            </div>
           </div>
         </SiteContainer>
       </section>
 
-      <SiteContainer>
-        <Section spacing="tight">
-          <Subheading>Level 1, Level 2, and fast charging</Subheading>
-          <p className="evo-body text-muted-foreground mt-3 max-w-3xl">
-            Start with a simple picture: overnight at home vs. a quick stop on the highway. The U.S. Department of
-            Energy commonly cites about{" "}
-            <span className="text-foreground">5 miles of range per hour</span> on Level 1 (a regular 120V outlet).
-            Level 2 (240V) is the usual home upgrade and adds meaningfully more depending on your vehicle and
-            equipment. DC fast charging is what you use on road trips and for a fast top-up—not typically how people
-            charge at home.
+      <SiteContainer className="max-w-6xl">
+        <Section spacing="tight" className="pt-12 sm:pt-16 lg:pt-20 pb-14 sm:pb-16 lg:pb-20">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75">
+            Start here
           </p>
-          <CardGrid className="mt-8">
+          <CardGrid className="mt-6 max-w-5xl gap-3 sm:mt-8 sm:gap-4">
             <LevelCard title="Level 1" tag="120V outlet">
-              <p>Slow but simple. Best when daily miles are low and you can leave the car plugged in for many hours.</p>
+              <p>Normal household plug. Slowest and simplest—works when the car sits for long stretches.</p>
             </LevelCard>
             <LevelCard title="Level 2" tag="240V home">
-              <p>The everyday solution for most owners: plug in at night, wake up with plenty of range.</p>
+              <p>Typical home setup. Overnight plug-in; most daily driving never needs a public stop.</p>
             </LevelCard>
             <LevelCard title="DC fast" tag="Public">
-              <p>Quick sessions on the go. Handy for Tahoe weekends and long drives—usually pricier per kWh than home.</p>
+              <p>Road-trip and quick top-ups. Handy when you are far from home—often a higher per-kWh cost.</p>
             </LevelCard>
           </CardGrid>
-          <p className="evo-muted mt-6">
-            More detail:{" "}
+          <Subheading className="mt-8 max-w-xl text-2xl font-semibold tracking-tight sm:mt-10 sm:text-[1.75rem] sm:leading-tight">
+            Which one fits your lifestyle?
+          </Subheading>
+          <p className="mt-4 max-w-md text-[13px] leading-relaxed text-muted-foreground/90 sm:mt-5 sm:max-w-lg sm:text-[0.9375rem]">
+            Choose the situation closest to yours—we show one path at a time.
+          </p>
+          <LifestyleChargingGuide className="mt-8 sm:mt-10" />
+        </Section>
+
+        <Section spacing="tight" className="border-t border-white/[0.06] pt-12 sm:pt-14 lg:pt-16">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/65">Reference</p>
+          <Subheading className="mt-2 max-w-xl text-xl font-semibold tracking-tight text-foreground/95 sm:text-2xl">
+            The charging types behind the recommendations
+          </Subheading>
+          <p className="mt-4 max-w-xl text-[13px] leading-relaxed text-muted-foreground/90 sm:mt-5 sm:max-w-2xl sm:text-[0.9375rem]">
+            Quick labels for what you will hear in the showroom—home charging first, fast public charging when you are
+            on the move. The DOE commonly cites about{" "}
+            <span className="font-medium text-foreground/95">5 miles of range per hour</span> on a regular 120V outlet;
+            240V home charging is the usual upgrade; DC fast is for stops away from home.
+          </p>
+          <p className="mt-6 text-xs leading-relaxed text-muted-foreground/70">
+            Sources:{" "}
             <a href={external.doeHomeCharging} className="text-primary underline-offset-2 hover:underline" target="_blank" rel="noopener noreferrer">
               DOE — charging at home
             </a>
@@ -147,8 +184,8 @@ export function EvChargingContent() {
         </Section>
 
         <Section spacing="tight">
-          <Subheading>Which charging fits me?</Subheading>
-          <Prose className="mt-3">
+          <Subheading className="max-w-xl">Which charging fits me?</Subheading>
+          <Prose className="mt-4 sm:mt-5">
             <p>
               <strong className="text-foreground">Do I actually need anything installed at home?</strong> If you have
               a dedicated parking spot, a normal outlet you can reach safely, and modest daily miles, Level 1 might be
@@ -159,30 +196,8 @@ export function EvChargingContent() {
         </Section>
 
         <Section spacing="tight">
-          <Subheading>Which one fits your lifestyle?</Subheading>
-          <div className="grid gap-4 sm:grid-cols-2 mt-6">
-            <LifestyleCard
-              title="Apartment or shared parking"
-              body="Focus on where you can plug in reliably. If that is a 120V outlet you control, start there; if not, ask about building rules and shared Level 2. Public fast charging can fill gaps but costs more per mile than home."
-            />
-            <LifestyleCard
-              title="House with a garage or driveway"
-              body="Most owners add Level 2 once they know they are keeping the car. It is the calm default: come home, plug in, forget about it until morning."
-            />
-            <LifestyleCard
-              title="Long commute"
-              body="You will value faster overnight charging or a solid daytime top-up plan. Level 2 is usually the comfort upgrade."
-            />
-            <LifestyleCard
-              title="Short commute + errands"
-              body="You might live happily on Level 1 for a while. Still worth planning for Level 2 if your miles grow or you want headroom for cold weather and cabin heating."
-            />
-          </div>
-        </Section>
-
-        <Section spacing="tight">
-          <Subheading>Can my house handle it?</Subheading>
-          <Prose className="mt-3">
+          <Subheading className="max-w-2xl">Can my house handle it?</Subheading>
+          <Prose className="mt-4 sm:mt-5">
             <p>
               <strong className="text-foreground">Standard outlet vs 240V:</strong> Level 1 uses a normal household
               circuit; long-term use should be checked for circuit suitability (DOE). Level 2 equipment typically uses
@@ -202,8 +217,10 @@ export function EvChargingContent() {
         </Section>
 
         <Section spacing="tight">
-          <Subheading>PG&E rates: peak, off-peak, and why midnight matters</Subheading>
-          <Prose className="mt-3">
+          <Subheading className="max-w-2xl text-balance">
+            {"PG&E rates: peak, off-peak, and why midnight matters"}
+          </Subheading>
+          <Prose className="mt-4 sm:mt-5">
             <p>
               Many Bay Area homes are on time-of-use pricing: electricity costs more during peak hours (often late
               afternoon and evening) and less overnight (and on some EV plans, during lower-demand midday hours too).
@@ -218,7 +235,7 @@ export function EvChargingContent() {
               scheduling charging (or using a smart charger) can show up on your bill.
             </p>
           </Prose>
-          <ul className="mt-6 flex flex-col gap-2 evo-body-sm">
+          <ul className="mt-6 flex max-w-xl flex-col gap-2.5 text-[13px] leading-snug text-muted-foreground/90 sm:text-sm">
             <li>
               <a
                 href={external.pgeEvCalculator}
@@ -256,20 +273,20 @@ export function EvChargingContent() {
 
         <div id="cost-calculator" className="scroll-mt-28">
           <Section spacing="tight">
-            <Subheading>Monthly cost vs gas</Subheading>
-            <p className="evo-body text-muted-foreground mt-3 max-w-3xl">
+            <Subheading className="max-w-xl">Monthly cost vs gas</Subheading>
+            <p className="mt-4 max-w-xl text-[0.9375rem] leading-relaxed text-muted-foreground/90 sm:mt-5">
               Plug in rough miles, where you charge, and a PG&E-style rate assumption. This is a conversation starter—not
               tax or utility advice.
             </p>
-            <div className="mt-8">
+            <div className="mt-8 sm:mt-10">
               <EvChargingCalculators />
             </div>
           </Section>
         </div>
 
         <Section spacing="tight">
-          <Subheading>Road trips and public charging</Subheading>
-          <Prose className="mt-3">
+          <Subheading className="max-w-xl">Road trips and public charging</Subheading>
+          <Prose className="mt-4 sm:mt-5">
             <p>
               <strong className="text-foreground">“Can I drive to Tahoe?”</strong> For most modern EVs, yes—with a
               little planning on where to fast-charge along the route. Home charging still covers the bulk of yearly
@@ -289,8 +306,8 @@ export function EvChargingContent() {
         </Section>
 
         <Section spacing="tight">
-          <Subheading>What most owners actually do</Subheading>
-          <Prose className="mt-3">
+          <Subheading className="max-w-md">What most owners actually do</Subheading>
+          <Prose className="mt-4 sm:mt-5">
             <ul className="list-disc pl-5 space-y-2">
               <li>Plug in at home overnight (or whenever the car sits).</li>
               <li>Wake up with enough range for the day.</li>
@@ -301,8 +318,8 @@ export function EvChargingContent() {
         </Section>
 
         <Section spacing="tight">
-          <Subheading>Myths vs reality</Subheading>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Subheading className="max-w-md">Myths vs reality</Subheading>
+          <div className="mt-6 grid max-w-5xl gap-2.5 sm:grid-cols-2 sm:gap-3">
             {[
               { myth: "I need a fast charger at home.", truth: "Most people do not. Level 2 is the common home setup." },
               { myth: "I will definitely need a panel upgrade.", truth: "Sometimes yes—often no. An electrician tells you quickly." },
@@ -310,17 +327,24 @@ export function EvChargingContent() {
               { myth: "Off-peak does not matter.", truth: "On PG&E-style TOU plans it can matter a lot." },
               { myth: "Battery range vanishes overnight.", truth: "Real-world loss is nothing like the scary stories." },
             ].map((row) => (
-              <div key={row.myth} className="rounded-xl border border-border bg-muted/20 p-4">
-                <p className="evo-body-sm font-medium text-foreground">Myth: {row.myth}</p>
-                <p className="evo-body-sm text-muted-foreground mt-2">Reality: {row.truth}</p>
+              <div
+                key={row.myth}
+                className="rounded-xl bg-muted/10 p-4 ring-1 ring-inset ring-white/[0.04] sm:p-5"
+              >
+                <p className="text-[13px] font-medium leading-snug text-foreground sm:text-sm">
+                  Myth: {row.myth}
+                </p>
+                <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
+                  Reality: {row.truth}
+                </p>
               </div>
             ))}
           </div>
         </Section>
 
         <Section spacing="tight">
-          <Subheading>FAQ</Subheading>
-          <div className="mt-6 space-y-2 max-w-3xl">
+          <Subheading className="max-w-xs">FAQ</Subheading>
+          <div className="mt-6 max-w-2xl space-y-1.5">
             <FaqItem q="Is Level 1 ‘enough’ forever?">
               <p>
                 It can be enough for low miles and long plug-in windows. Many owners still move to Level 2 for speed
@@ -355,8 +379,8 @@ export function EvChargingContent() {
         </Section>
 
         <Section spacing="tight">
-          <Subheading>Installation: keep it practical</Subheading>
-          <Prose className="mt-3">
+          <Subheading className="max-w-lg">Installation: keep it practical</Subheading>
+          <Prose className="mt-4 sm:mt-5">
             <ul className="list-disc pl-5 space-y-2">
               <li>Wall-mounted EVSE vs 240V outlet—both are common; pick with your electrician.</li>
               <li>Indoor and outdoor installs both work when equipment is rated for the location.</li>
@@ -379,14 +403,14 @@ export function EvChargingContent() {
               We can connect you with a local installer when you are ready—ask us when you pick your vehicle.
             </p>
           </Prose>
-          <div className="mt-8 print:shadow-none">
+          <div className="mt-8 print:shadow-none sm:mt-10">
             <ChargingChecklistPrint />
           </div>
         </Section>
 
         <Section spacing="tight">
-          <Subheading>Utility and local incentives</Subheading>
-          <Prose className="mt-3">
+          <Subheading className="max-w-lg">Utility and local incentives</Subheading>
+          <Prose className="mt-4 sm:mt-5">
             <p>
               Programs change often. Watch for utility rebates on chargers, panel-upgrade incentives, income-qualified
               offers, and federal tax credits where they apply. We keep this section short on purpose—verify dates and
@@ -396,8 +420,10 @@ export function EvChargingContent() {
         </Section>
 
         <Section spacing="tight">
-          <Subheading>Bay Area guidance, from people who sell EVs every day</Subheading>
-          <Prose className="mt-3">
+          <Subheading className="max-w-2xl text-balance sm:text-pretty">
+            Bay Area guidance, from people who sell EVs every day
+          </Subheading>
+          <Prose className="mt-4 sm:mt-5">
             <p>
               We focus on PG&E-style examples because that is who most of our customers have at home. If your panel,
               rental rules, or commute are unusual,{" "}
@@ -405,10 +431,12 @@ export function EvChargingContent() {
               surprise you after delivery.
             </p>
           </Prose>
-          <div className="mt-8 grid gap-8 lg:grid-cols-2">
-            <div className="rounded-xl border border-border bg-surface/40 p-6 sm:p-8">
-              <h3 className="evo-card-title text-foreground">Need help figuring out home charging?</h3>
-              <p className="evo-body-sm text-muted-foreground mt-2">
+          <div className="mt-8 grid gap-6 lg:grid-cols-2 lg:gap-8">
+            <div className="rounded-2xl bg-muted/10 p-6 ring-1 ring-inset ring-white/[0.05] sm:p-8">
+              <h3 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">
+                Need help figuring out home charging?
+              </h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
                 Tell us your housing situation (house, condo, rent), approximate commute, and whether you already have
                 240V in the garage.
               </p>
@@ -422,9 +450,9 @@ export function EvChargingContent() {
                 />
               </div>
             </div>
-            <div className="flex flex-col justify-center rounded-xl border border-primary/20 bg-primary/5 p-6 sm:p-8">
-              <h3 className="evo-card-title text-foreground">Ready to pick a car?</h3>
-              <p className="evo-body-sm text-muted-foreground mt-2">
+            <div className="flex flex-col justify-center rounded-2xl bg-primary/[0.07] p-6 ring-1 ring-inset ring-primary/20 sm:p-8">
+              <h3 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">Ready to pick a car?</h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
                 Browse inventory or tell us what you are looking for—we will factor charging into the recommendation.
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
