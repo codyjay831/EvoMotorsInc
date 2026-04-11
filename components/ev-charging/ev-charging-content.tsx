@@ -96,7 +96,7 @@ export function EvChargingContent() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-white/[0.06]">
+      <section className="relative overflow-hidden border-b border-white/[0.06] bg-[#0a0a0a]">
         {/* Mobile Hero Image */}
         <Image
           src="/hero/Charging_Hero_Phone.webp"
@@ -104,7 +104,7 @@ export function EvChargingContent() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center md:hidden"
+          className="object-cover object-top md:hidden"
         />
         {/* Desktop Hero Image */}
         <Image
@@ -116,27 +116,32 @@ export function EvChargingContent() {
           quality={90}
           className="object-cover object-center hidden md:block"
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" aria-hidden />
-        <SiteContainer className="relative z-10 flex min-h-[420px] items-end py-16 sm:min-h-[480px] sm:py-20 lg:min-h-[540px] lg:py-24">
-          <div className="max-w-xl [text-shadow:_0_1px_12px_rgb(0_0_0_/_0.5)]">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-primary drop-shadow-sm">Bay Area charging guidance</p>
-            <h1 className="mt-3 text-3xl font-bold leading-[1.15] tracking-tight text-white sm:text-4xl md:text-5xl">
+        {/* Gradients for readability */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent md:hidden" aria-hidden />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent hidden md:block" aria-hidden />
+        
+        <SiteContainer className="relative z-10 flex min-h-[80svh] flex-col justify-end pb-12 pt-24 sm:min-h-[480px] sm:pb-20 lg:min-h-[600px] lg:py-28">
+          <div className="max-w-xl [text-shadow:_0_2px_16px_rgb(0_0_0_/_0.8)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary drop-shadow-md sm:text-[11px]">
+              Bay Area charging guidance
+            </p>
+            <h1 className="mt-4 text-[2.25rem] font-bold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-6xl">
               Charging an EV is easier&nbsp;than&nbsp;you&nbsp;think
             </h1>
-            <p className="mt-4 max-w-md text-[0.9375rem] leading-relaxed text-white/85 sm:mt-5 sm:text-base">
+            <p className="mt-5 max-w-md text-base leading-relaxed text-white/90 sm:text-lg">
               Most driving is covered overnight at home. Public fast charging is
               for road trips—not daily stress.
             </p>
-            <div className="mt-7 flex flex-wrap gap-3 sm:mt-8">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
               <a
                 href="#cost-calculator"
-                className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground no-underline shadow-lg transition-opacity hover:opacity-90 evo-focus-ring"
+                className="inline-flex h-12 items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground no-underline shadow-[0_0_20px_-5px_var(--glow-subtle)] transition-all hover:opacity-90 sm:h-11"
               >
                 Try the cost estimator
               </a>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-lg bg-white/10 px-5 py-2.5 text-sm font-medium text-white no-underline ring-1 ring-inset ring-white/20 backdrop-blur-md transition-colors hover:bg-white/[0.15] evo-focus-ring"
+                className="inline-flex h-12 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-medium text-white no-underline ring-1 ring-inset ring-white/20 backdrop-blur-md transition-colors hover:bg-white/[0.15] sm:h-11"
               >
                 Ask us before you buy
               </Link>
