@@ -34,6 +34,9 @@ const RATE_PRESETS: { id: string; label: string; perKwh: number; hint: string }[
 
 const PUBLIC_BLEND_PER_KWH = 0.52;
 
+const toolSurfaceClass =
+  "rounded-2xl bg-muted/10 p-6 ring-1 ring-inset ring-white/[0.05] sm:p-8";
+
 export function EvChargingCalculators({ className }: { className?: string }) {
   return (
     <div className={cn("grid gap-10 lg:grid-cols-2", className)}>
@@ -67,10 +70,10 @@ function MonthlyCostEstimator() {
   }, [milesMonth, iceMpg, gasPrice]);
 
   return (
-    <div className="rounded-xl border border-border bg-surface/50 p-6 sm:p-8 space-y-6">
+    <div className={cn(toolSurfaceClass, "space-y-6")}>
       <div>
-        <h2 className="evo-card-title text-foreground">Monthly cost vs gas</h2>
-        <p className="evo-body-sm text-muted-foreground mt-2">
+        <h2 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">Monthly cost vs gas</h2>
+        <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
           Rough estimate only—not a quote. Rates change; your real bill depends on your plan, season, and usage.
         </p>
       </div>
@@ -159,7 +162,7 @@ function MonthlyCostEstimator() {
         )}
 
         {!homeCharging && (
-          <p className="evo-body-sm text-muted-foreground rounded-lg border border-border bg-muted/30 px-3 py-2">
+          <p className="rounded-lg bg-background/40 px-3 py-2.5 text-[13px] leading-relaxed text-muted-foreground/90 ring-1 ring-inset ring-white/[0.05] sm:text-sm">
             Using a higher illustrative rate (~${PUBLIC_BLEND_PER_KWH.toFixed(2)}/kWh) for a public-charging-heavy
             mix. DC fast sessions are often more per kWh than home charging.
           </p>
@@ -191,14 +194,14 @@ function MonthlyCostEstimator() {
         </div>
       </div>
 
-      <div className="rounded-lg border border-primary/25 bg-primary/5 p-4 space-y-2">
-        <p className="evo-body-sm text-foreground">
+      <div className="space-y-2 rounded-xl bg-primary/[0.06] p-4 ring-1 ring-inset ring-primary/15 sm:p-5">
+        <p className="text-[13px] text-foreground sm:text-sm">
           <span className="font-medium">~{kwhMonth.toFixed(0)} kWh</span> / month at this driving level
         </p>
-        <p className="evo-body-sm text-foreground">
+        <p className="text-[13px] text-foreground sm:text-sm">
           <span className="font-medium">~${electricCost.toFixed(0)}</span> / month charging (illustrative)
         </p>
-        <p className="evo-body-sm text-muted-foreground">
+        <p className="text-[13px] text-muted-foreground/90 sm:text-sm">
           vs <span className="text-foreground font-medium">~${gasCost.toFixed(0)}</span> / month gas at {iceMpg}{" "}
           MPG and ${gasPrice.toFixed(2)}/gal
         </p>
@@ -218,10 +221,10 @@ function ChargingTimeEstimator() {
   const hours = milesToAdd > 0 && milesPerHour > 0 ? milesToAdd / milesPerHour : 0;
 
   return (
-    <div className="rounded-xl border border-border bg-surface/50 p-6 sm:p-8 space-y-6">
+    <div className={cn(toolSurfaceClass, "space-y-6")}>
       <div>
-        <h2 className="evo-card-title text-foreground">Charging time (rough)</h2>
-        <p className="evo-body-sm text-muted-foreground mt-2">
+        <h2 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">Charging time (rough)</h2>
+        <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
           Level 1 uses ~5 miles of range per hour as a common rule of thumb (U.S. DOE). Level 2 and DC vary a lot by
           car, charger, and battery state—treat this as a ballpark.
         </p>
@@ -270,8 +273,8 @@ function ChargingTimeEstimator() {
         )}
       </div>
 
-      <div className="rounded-lg border border-border bg-muted/30 p-4">
-        <p className="evo-body text-foreground">
+      <div className="rounded-xl bg-background/35 p-4 ring-1 ring-inset ring-white/[0.06] sm:p-5">
+        <p className="text-[0.9375rem] text-foreground sm:text-base">
           Ballpark time: <span className="font-semibold text-primary">{hours.toFixed(1)} hours</span>
         </p>
         <p className="evo-muted text-xs mt-1">
@@ -286,25 +289,25 @@ function ChargingTimeEstimator() {
 
 export function ChargingChecklistPrint({ className }: { className?: string }) {
   return (
-    <div className={cn("rounded-xl border border-border bg-surface/40 p-6 sm:p-8", className)}>
+    <div className={cn(toolSurfaceClass, className)}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="evo-card-title text-foreground">Installer-ready checklist</h2>
-          <p className="evo-body-sm text-muted-foreground mt-2 max-w-xl">
+          <h2 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">Installer-ready checklist</h2>
+          <p className="mt-2 max-w-xl text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
             Print or save this list for your electrician. It stays high-level on purpose.
           </p>
         </div>
         <button
           type="button"
           onClick={() => window.print()}
-          className="shrink-0 rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted evo-focus-ring"
+          className="shrink-0 rounded-lg bg-background/50 px-4 py-2.5 text-sm font-medium text-foreground ring-1 ring-inset ring-white/[0.08] transition-colors hover:bg-muted/40 evo-focus-ring"
         >
           Print checklist
         </button>
       </div>
       <ul
         id="charging-install-checklist"
-        className="mt-6 space-y-3 evo-body-sm text-muted-foreground list-disc pl-5 print:text-black"
+        className="mt-6 list-disc space-y-2.5 pl-5 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm print:text-black"
       >
         <li>Where will the charger or 240V outlet live (indoor wall, garage, carport, driveway)?</li>
         <li>Approximate distance from electrical panel to the parking spot</li>
