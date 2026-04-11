@@ -12,20 +12,20 @@
 #   memoryMiB: 512
 #   cpu: 1
 
-# Optional: env vars (non-secret). Prefer Firebase Console for production values.
-# Console values override these. Use NEXT_PUBLIC_* for client-side in Next.js.
-# env:
-#   - variable: NEXT_PUBLIC_SITE_URL
-#     value: https://evomotorsinc.com
-#   - variable: NEXT_PUBLIC_VEHICLIX_API_URL
-#     value: https://api.vehiclix.com
-#   - variable: NEXT_PUBLIC_DEALER_SLUG
-#     value: evo-motors
-#   - variable: NEXT_PUBLIC_VEHICLIX_APP_URL
-#     value: https://app.evomotorsinc.com
-#   - variable: NEXT_PUBLIC_VEHICLIX_LOGIN_URL
-#     value: https://app.evomotorsinc.com/login
-#   - variable: NEXT_PUBLIC_VEHICLIX_REGISTER_URL
-#     value: https://app.evomotorsinc.com/register
-#   - variable: NEXT_PUBLIC_VEHICLIX_PORTAL_URL
-#     value: https://app.evomotorsinc.com/portal
+# Non-secret defaults for App Hosting builds. Console → Environment overrides these.
+# Use NEXT_PUBLIC_* for client-side in Next.js (injected at build time).
+env:
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: https://evomotorsinc.com
+  - variable: NEXT_PUBLIC_VEHICLIX_API_URL
+    value: https://api.vehiclix.com
+  - variable: NEXT_PUBLIC_DEALER_SLUG
+    value: evo-motors
+  - variable: NEXT_PUBLIC_VEHICLIX_APP_URL
+    value: https://app.evomotorsinc.com
+  - variable: NEXT_PUBLIC_VEHICLIX_LOGIN_URL
+    value: https://app.evomotorsinc.com/login
+  - variable: NEXT_PUBLIC_VEHICLIX_REGISTER_URL
+    value: https://app.evomotorsinc.com/register
+  - variable: NEXT_PUBLIC_VEHICLIX_PORTAL_URL
+    value: https://app.evomotorsinc.com/portal

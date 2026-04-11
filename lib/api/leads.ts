@@ -68,7 +68,7 @@ export async function submitContact(payload: ContactPayload): Promise<{ ok: bool
     phone: payload.phone,
     message: payload.message,
     subject: payload.subject,
-    source: "contact-page",
+    source: payload.source ?? "contact-page",
   });
   return { ok: out.ok, message: out.message };
 }

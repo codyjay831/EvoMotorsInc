@@ -16,9 +16,23 @@ import {
 
 type ContactFormProps = {
   className?: string;
+  /** Passed through to leads API (default: contact-page). */
+  source?: string;
+  defaultMessage?: string;
+  messagePlaceholder?: string;
+  /** Prefix for input ids when multiple forms exist on the site. */
+  fieldIdPrefix?: string;
+  submitLabel?: string;
 };
 
-export function ContactForm({ className }: ContactFormProps) {
+export function ContactForm({
+  className,
+  source = "contact-page",
+  defaultMessage = "",
+  messagePlaceholder = "How can we help?",
+  fieldIdPrefix = "contact-",
+  submitLabel = "Send message",
+}: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -29,6 +43,7 @@ export function ContactForm({ className }: ContactFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
+    defaultValues: { message: defaultMessage },
   });
 
   const onSubmit = async (data: ContactFormValues) => {
@@ -41,7 +56,7 @@ export function ContactForm({ className }: ContactFormProps) {
         email: data.email,
         phone: data.phone || undefined,
         message: data.message,
-        source: "contact-page",
+        source,
       });
       if (res.ok) {
         setStatus("success");
@@ -76,51 +91,51 @@ export function ContactForm({ className }: ContactFormProps) {
         />
       )}
       <div className="grid gap-4 sm:grid-cols-2">
-        <LeadFormField label="First name" error={errors.firstName?.message} required id="contact-firstName">
+        <LeadFormField label="First name" error={errors.firstName?.message} required id={`${fieldIdPrefix}firstName`}>
           <LeadFormInput
-            id="contact-firstName"
+            id={`${fieldIdPrefix}firstName`}
             placeholder="First name"
             error={errors.firstName?.message}
             {...register("firstName")}
           />
         </LeadFormField>
-        <LeadFormField label="Last name" error={errors.lastName?.message} required id="contact-lastName">
+        <LeadFormField label="Last name" error={errors.lastName?.message} required id={`${fieldIdPrefix}lastName`}>
           <LeadFormInput
-            id="contact-lastName"
+            id={`${fieldIdPrefix}lastName`}
             placeholder="Last name"
             error={errors.lastName?.message}
             {...register("lastName")}
           />
         </LeadFormField>
       </div>
-      <LeadFormField label="Email" error={errors.email?.message} required id="contact-email" className="mt-4">
+      <LeadFormField label="Email" error={errors.email?.message} required id={`${fieldIdPrefix}email`} className="mt-4">
         <LeadFormInput
-          id="contact-email"
+          id={`${fieldIdPrefix}email`}
           type="email"
           placeholder="you@example.com"
           error={errors.email?.message}
           {...register("email")}
         />
       </LeadFormField>
-      <LeadFormField label="Phone" error={errors.phone?.message} id="contact-phone" className="mt-4">
+      <LeadFormField label="Phone" error={errors.phone?.message} id={`${fieldIdPrefix}phone`} className="mt-4">
         <LeadFormInput
-          id="contact-phone"
+          id={`${fieldIdPrefix}phone`}
           type="tel"
           placeholder="Phone number"
           error={errors.phone?.message}
           {...register("phone")}
         />
       </LeadFormField>
-      <LeadFormField label="Message" error={errors.message?.message} id="contact-message" className="mt-4">
+      <LeadFormField label="Message" error={errors.message?.message} id={`${fieldIdPrefix}message`} className="mt-4">
         <LeadFormTextarea
-          id="contact-message"
-          placeholder="How can we help?"
+          id={`${fieldIdPrefix}message`}
+          placeholder={messagePlaceholder}
           error={errors.message?.message}
           {...register("message")}
         />
       </LeadFormField>
       <div className="mt-6">
-        <LeadFormSubmit loading={isSubmitting}>Send message</LeadFormSubmit>
+        <LeadFormSubmit loading={isSubmitting}>{submitLabel}</LeadFormSubmit>
       </div>
     </form>
   );

@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/inventory", label: "Inventory" },
+  { href: "/ev-charging", label: "EV Charging" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
   { href: "/request-vehicle", label: "Request Vehicle" },
@@ -57,7 +58,7 @@ export function Header() {
             </span>
           </Link>
 
-          {/* Center: Home, Inventory, About, Contact, Request Vehicle */}
+          {/* Center: main nav */}
           <nav
             className="hidden items-center justify-center md:flex md:gap-8"
             aria-label="Main navigation"

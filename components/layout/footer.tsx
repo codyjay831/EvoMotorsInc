@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 const FOOTER_LINKS = [
   { href: "/", label: "Home" },
   { href: "/inventory", label: "Inventory" },
+  { href: "/ev-charging", label: "EV Charging" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
   { href: "/request-vehicle", label: "Request Vehicle" },
