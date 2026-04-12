@@ -19,6 +19,16 @@ function parseUpstreamMessage(status: number, text: string): string {
   return text.slice(0, 500);
 }
 
+/** Supports `https://api.example.com` or `https://api.example.com/api/v1/public` (see .env.example). */
+function buildPublicLeadsUrl(baseUrl: string, dealerSlug: string): string {
+  const base = baseUrl.replace(/\/$/, "");
+  const q = `dealerSlug=${encodeURIComponent(dealerSlug)}`;
+  if (base.endsWith("/api/v1/public")) {
+    return `${base}/leads?${q}`;
+  }
+  return `${base}/api/v1/public/leads?${q}`;
+}
+
 export async function POST(req: NextRequest) {
   let body: unknown;
   try {
@@ -27,16 +37,40 @@ export async function POST(req: NextRequest) {
     return Response.json({ ok: false, message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const base = apiConfig.baseUrl.replace(/\/$/, "");
-  const url = `${base}/api/v1/public/leads?dealerSlug=${encodeURIComponent(apiConfig.dealerSlug)}`;
+  const baseUrl = apiConfig.baseUrl.trim();
+  if (!baseUrl) {
+    return Response.json(
+      {
+        ok: false,
+        message:
+          "Storefront API URL is not configured. Set NEXT_PUBLIC_VEHICLIX_API_URL in .env.local (see .env.example), or leave it unset in development to use mock data for leads.",
+      },
+      { status: 503 }
+    );
+  }
 
-  const upstream = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  const url = buildPublicLeadsUrl(baseUrl, apiConfig.dealerSlug);
 
-  const text = await upstream.text();
+  let upstream: Response;
+  let text: string;
+  try {
+    upstream = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    text = await upstream.text();
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "Network error";
+    return Response.json(
+      {
+        ok: false,
+        message: `Could not reach the storefront API at ${url.split("?")[0]}. ${detail}`,
+      },
+      { status: 502 }
+    );
+  }
+
   if (!upstream.ok) {
     const message = parseUpstreamMessage(upstream.status, text);
     return Response.json({ ok: false, message }, { status: upstream.status });
