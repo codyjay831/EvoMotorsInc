@@ -27,7 +27,7 @@ const STORY_BEATS: StoryBeat[] = [
   {
     eyebrow: "EVO MOTORS",
     headline: "Electric. Without the guesswork.",
-    subtext: "From choosing the right EV to charging at home — we make it simple.",
+    subtext: "We help you choose the right EV and plan home charging in practical steps.",
   },
   {
     eyebrow: "CURATED",
@@ -37,12 +37,12 @@ const STORY_BEATS: StoryBeat[] = [
   {
     eyebrow: "EXPERTISE",
     headline: "No confusion. Just answers.",
-    subtext: "Range, charging, incentives — explained simply.",
+    subtext: "We explain range, charging, and incentives in plain language.",
   },
   {
     eyebrow: "YOUR LIFE",
     headline: "Built around your life.",
-    subtext: "From daily commutes to home charging — everything just works.",
+    subtext: "Daily driving and home charging fit together without friction.",
   },
 ];
 

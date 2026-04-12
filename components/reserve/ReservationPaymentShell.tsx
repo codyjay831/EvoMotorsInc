@@ -45,7 +45,7 @@ export function ReservationPaymentShell({
       {depositDisplay && !hasClientSecret && (
         <p className="evo-body-sm mt-4 text-foreground">
           Refundable deposit: <span className="font-semibold">{depositDisplay}</span>
-          <span className="evo-muted ml-1">—we&apos;ll send a secure link to complete payment.</span>
+          <span className="evo-muted ml-1">We&apos;ll send a secure link to complete payment.</span>
         </p>
       )}
       {hasClientSecret && (

@@ -7,7 +7,7 @@ import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 export const metadata: Metadata = {
   title: "Request a vehicle",
   description:
-    "Tell us what you're looking for—make, model, budget, timeline—and we'll help you find the right EV. No obligation.",
+    "Tell us what you want (make, model, budget, timeline) and we will help you find the right EV. No obligation.",
   alternates: { canonical: fullUrl("/request-vehicle") },
   openGraph: {
     title: "Request a vehicle | " + seoConfig.siteName,

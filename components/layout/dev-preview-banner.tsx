@@ -10,7 +10,7 @@ export function DevPreviewBanner() {
       aria-label="Development preview"
     >
       <p className="evo-body-sm font-medium text-amber-700 dark:text-amber-400">
-        Dev / QA only — not part of production. These routes are excluded from search indexing.
+        Dev / QA only; not part of production. These routes are excluded from search indexing.
       </p>
     </div>
   );

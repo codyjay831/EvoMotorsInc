@@ -30,7 +30,7 @@ export function RoadSection({ className }: RoadSectionProps) {
         </h2>
         <p className="mt-4 max-w-2xl text-white/70">
           From choosing the right vehicle to understanding range, charging, and
-          home setup — we make going electric simple.
+          home setup, we make going electric simple.
           <br />
           <br />
           Home charging installation through our partner company ensures your EV

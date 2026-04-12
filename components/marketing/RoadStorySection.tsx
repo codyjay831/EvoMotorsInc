@@ -16,12 +16,12 @@ const BODY = "text-lg text-white/85 md:text-xl";
 const ROAD_BEATS = [
   {
     headline: "Confidence for the road ahead",
-    subtext: "Everything you need to go electric — made simple.",
+    subtext: "Everything you need to go electric, kept simple.",
   },
   {
     headline: "Choosing an EV shouldn't feel complicated.",
     subtext:
-      "We guide you through range, charging, and real-world ownership — so you know exactly what to expect.",
+      "We guide you through range, charging, and real-world ownership so you know what to expect.",
   },
   {
     headline:

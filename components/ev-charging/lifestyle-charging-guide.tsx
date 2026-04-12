@@ -18,41 +18,41 @@ const SCENARIOS: LifestyleScenario[] = [
   {
     id: "apartment",
     title: "Apartment or shared parking",
-    summary: "Shared power—start with reliable access, not peak amperage.",
+    summary: "With shared power, start with reliable access, not peak amperage.",
     chargingFit:
-      "Level 1 works if you control a safe, dedicated outlet. Otherwise prioritize building Level 2, workplace charging, or a dependable public mix—fast charging fills gaps, not everyday life.",
+      "Level 1 works if you control a safe, dedicated outlet. Otherwise prioritize building Level 2, workplace charging, or a dependable public mix. Fast charging fills gaps, not everyday life.",
     dailyLife:
       "You plug in when the spot allows and lean on networks when you are out. Most of your savings still come from slower, cheaper kWh whenever you can get them.",
-    practicalNote: "Ask about EV policies and charger waitlists before you move or buy—rules beat specs.",
+    practicalNote: "Ask about EV policies and charger waitlists before you move or buy. Rules beat specs.",
   },
   {
     id: "house",
     title: "House with a garage or driveway",
-    summary: "Home base—Level 2 is the calm default once you commit.",
+    summary: "Home base: Level 2 is the calm default once you commit.",
     chargingFit:
       "Level 1 can buy time while you plan. Level 2 is what most owners install for predictable overnight fills and winter headroom.",
     dailyLife:
       "Pull in, plug in, walk away. Mornings start with a full “tank” without a side trip.",
-    practicalNote: "If you want 240V ready near delivery, line up an electrician quote early—permits take a beat.",
+    practicalNote: "If you want 240V ready near delivery, line up an electrician quote early. Permits often add a little time.",
   },
   {
     id: "long-commute",
     title: "Long commute",
-    summary: "High miles—overnight speed usually pays for itself in peace of mind.",
+    summary: "High miles: overnight speed usually pays for itself in peace of mind.",
     chargingFit:
-      "Level 2 is the comfort pick. Keep DC fast in your pocket for emergencies—not as your primary plan.",
+      "Level 2 is the comfort pick. Keep DC fast in your pocket for emergencies, not as your primary plan.",
     dailyLife:
       "Charging happens while you sleep, not between meetings. You stop thinking about “finding time” to charge.",
-    practicalNote: "Heat, hills, and speed trim range—leave a little buffer in your nightly routine.",
+    practicalNote: "Heat, hills, and speed trim range, so leave a little buffer in your nightly routine.",
   },
   {
     id: "short-commute",
     title: "Short commute + errands",
-    summary: "Light daily miles—Level 1 often buys breathing room to decide.",
+    summary: "Light daily miles: Level 1 often buys breathing room to decide.",
     chargingFit:
       "Level 1 may cover you for a while. Level 2 still wins if you want faster top-ups or bigger weekend swings.",
     dailyLife:
-      "Short hops mean the pack rarely feels empty; charging feels optional until it suddenly is not—plan one level up.",
+      "Short hops mean the pack rarely feels empty; charging feels optional until it suddenly is not, so plan one level up.",
     practicalNote: "Reassess before road-trip season if your weekend miles jump.",
   },
   {
@@ -63,7 +63,7 @@ const SCENARIOS: LifestyleScenario[] = [
       "Level 2 at home for the bulk of kWh, plus comfort with DC fast when you are covering distance.",
     dailyLife:
       "Weekdays look like any other owner; trip days you plan around short, predictable stops instead of range anxiety.",
-    practicalNote: "Pick one route planner or in-car flow you trust—you will use it more than a spec-sheet kW number.",
+    practicalNote: "Pick one route planner or in-car flow you trust. You will use it more than a spec-sheet kW number.",
   },
 ];
 

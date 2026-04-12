@@ -9,7 +9,7 @@ import {
 
 const FALLBACK_TRUST: DealerTrustHighlight[] = [
   { title: "Curated inventory", description: "Hand-picked EVs from leading brands, ready to drive." },
-  { title: "EV expertise", description: "We specialize in electric—from range to charging to incentives." },
+  { title: "EV expertise", description: "We specialize in electric vehicles, from range and charging to incentives." },
   { title: "Transparent buying", description: "No pressure. Clear pricing and straightforward process." },
   { title: "Right fit", description: "We help you find the EV that matches how you drive and live." },
 ];

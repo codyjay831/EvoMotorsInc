@@ -5,7 +5,7 @@ import { fullUrl, ogImageUrl, seoConfig } from "@/lib/seo-config";
 export const metadata: Metadata = {
   title: "EV Charging",
   description:
-    "Bay Area EV charging guide: Level 1 vs Level 2 vs fast charging, PG&E off-peak rates, home readiness, cost vs gas calculator, and myth-busting—Evo Motors.",
+    "Bay Area EV charging guide: Level 1 vs Level 2 vs fast charging, PG&E off-peak rates, home readiness, cost vs gas calculator, and myth-busting. Evo Motors.",
   alternates: { canonical: fullUrl("/ev-charging") },
   openGraph: {
     title: "EV Charging | " + seoConfig.siteName,

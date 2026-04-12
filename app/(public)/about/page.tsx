@@ -5,7 +5,7 @@ import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn about Evo Motors—our story, values, and commitment to electric mobility. Premium EVs and a straightforward buying experience.",
+    "Learn about Evo Motors, including our story, values, and commitment to electric mobility. Premium EVs and a straightforward buying experience.",
   alternates: { canonical: fullUrl("/about") },
   openGraph: {
     title: "About | " + seoConfig.siteName,

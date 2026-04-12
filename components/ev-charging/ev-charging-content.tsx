@@ -130,7 +130,7 @@ export function EvChargingContent() {
             </h1>
             <p className="mt-5 max-w-md text-base leading-relaxed text-white/90 sm:text-lg">
               Most driving is covered overnight at home. Public fast charging is
-              for road trips—not daily stress.
+              mostly for road trips, not everyday charging.
             </p>
           </div>
 
@@ -158,20 +158,20 @@ export function EvChargingContent() {
           </p>
           <CardGrid className="mt-6 max-w-5xl gap-3 sm:mt-8 sm:gap-4">
             <LevelCard title="Level 1" tag="120V outlet">
-              <p>Normal household plug. Slowest and simplest—works when the car sits for long stretches.</p>
+              <p>Normal household plug. Slowest and simplest, and it works when the car sits for long stretches.</p>
             </LevelCard>
             <LevelCard title="Level 2" tag="240V home">
               <p>Typical home setup. Overnight plug-in; most daily driving never needs a public stop.</p>
             </LevelCard>
             <LevelCard title="DC fast" tag="Public">
-              <p>Road-trip and quick top-ups. Handy when you are far from home—often a higher per-kWh cost.</p>
+              <p>Road-trip and quick top-ups. Handy when you are far from home, often at a higher per-kWh cost.</p>
             </LevelCard>
           </CardGrid>
           <Subheading className="mt-8 max-w-xl text-2xl font-semibold tracking-tight sm:mt-10 sm:text-[1.75rem] sm:leading-tight">
             Which one fits your lifestyle?
           </Subheading>
           <p className="mt-4 max-w-md text-[13px] leading-relaxed text-muted-foreground/90 sm:mt-5 sm:max-w-lg sm:text-[0.9375rem]">
-            Choose the situation closest to yours—we show one path at a time.
+            Choose the situation closest to yours. We show one path at a time.
           </p>
           <LifestyleChargingGuide className="mt-8 sm:mt-10" />
         </Section>
@@ -182,7 +182,7 @@ export function EvChargingContent() {
             The charging types behind the recommendations
           </Subheading>
           <p className="mt-4 max-w-xl text-[13px] leading-relaxed text-muted-foreground/90 sm:mt-5 sm:max-w-2xl sm:text-[0.9375rem]">
-            Quick labels for what you will hear in the showroom—home charging first, fast public charging when you are
+            Quick labels for what you will hear in the showroom: home charging first, fast public charging when you are
             on the move. The DOE commonly cites about{" "}
             <span className="font-medium text-foreground/95">5 miles of range per hour</span> on a regular 120V outlet;
             240V home charging is the usual upgrade; DC fast is for stops away from home.
@@ -190,11 +190,11 @@ export function EvChargingContent() {
           <p className="mt-6 text-xs leading-relaxed text-muted-foreground/70">
             Sources:{" "}
             <a href={external.doeHomeCharging} className="text-primary underline-offset-2 hover:underline" target="_blank" rel="noopener noreferrer">
-              DOE — charging at home
+              DOE: charging at home
             </a>
             {" · "}
             <a href={external.afdc} className="text-primary underline-offset-2 hover:underline" target="_blank" rel="noopener noreferrer">
-              AFDC — connectors & basics
+              AFDC: connectors and basics
             </a>
           </p>
         </Section>
@@ -206,7 +206,7 @@ export function EvChargingContent() {
               <strong className="text-foreground">Do I actually need anything installed at home?</strong> If you have
               a dedicated parking spot, a normal outlet you can reach safely, and modest daily miles, Level 1 might be
               enough to start. If you want predictable overnight fills or drive more, Level 2 is usually worth it. DC
-              fast charging does not replace home charging for daily life—it complements it.
+              fast charging does not replace home charging for daily life; it complements it.
             </p>
           </Prose>
         </Section>
@@ -217,12 +217,12 @@ export function EvChargingContent() {
             <p>
               <strong className="text-foreground">Standard outlet vs 240V:</strong> Level 1 uses a normal household
               circuit; long-term use should be checked for circuit suitability (DOE). Level 2 equipment typically uses
-              208/240V—like an electric dryer circuit—and usually needs a dedicated circuit installed by an electrician.
+              208/240V (similar to an electric dryer circuit) and usually needs a dedicated circuit installed by an electrician.
             </p>
             <p>
               <strong className="text-foreground">When panel capacity matters:</strong> Older homes or panels that are
               already full may need a review before adding a 240V circuit. Many installs are straightforward; some need
-              a panel upgrade. Either way, it is a known, solvable project—not a mystery.
+              a panel upgrade. Either way, it is a known, solvable project, not a mystery.
             </p>
             <p>
               <strong className="text-foreground">Ask an electrician:</strong> A short site visit beats guessing from
@@ -241,13 +241,13 @@ export function EvChargingContent() {
               Many Bay Area homes are on time-of-use pricing: electricity costs more during peak hours (often late
               afternoon and evening) and less overnight (and on some EV plans, during lower-demand midday hours too).
               PG&E highlights residential EV plans (such as EV2-A) where{" "}
-              <strong className="text-foreground">charging outside peak—often overnight—can cost much less</strong>{" "}
+              <strong className="text-foreground">charging outside peak, often overnight, can cost much less</strong>{" "}
               than charging while the grid is busiest. Always confirm the exact windows on your plan sheet or in the
               calculator below.
             </p>
             <p>
               Simple example: the same miles use the same kWh, but{" "}
-              <strong className="text-foreground">off-peak kWh can be noticeably cheaper</strong> than peak kWh—so
+              <strong className="text-foreground">off-peak kWh can be noticeably cheaper</strong> than peak kWh, so
               scheduling charging (or using a smart charger) can show up on your bill.
             </p>
           </Prose>
@@ -259,9 +259,9 @@ export function EvChargingContent() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                PG&E — EV savings calculator (rates)
+                PG&E: EV savings calculator (rates)
               </a>
-              <span className="text-muted-foreground"> — personalize EV2-A vs other plans</span>
+              <span className="text-muted-foreground"> (personalize EV2-A vs other plans)</span>
             </li>
             <li>
               <a
@@ -270,7 +270,7 @@ export function EvChargingContent() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                PG&E — electric vehicle rate plans
+                PG&E: electric vehicle rate plans
               </a>
               <span className="text-muted-foreground"> (official plan details)</span>
             </li>
@@ -281,7 +281,7 @@ export function EvChargingContent() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                PG&E — charging your electric vehicle at home
+                PG&E: charging your electric vehicle at home
               </a>
             </li>
           </ul>
@@ -291,7 +291,7 @@ export function EvChargingContent() {
           <Section spacing="tight">
             <Subheading className="max-w-xl">Monthly cost vs gas</Subheading>
             <p className="mt-4 max-w-xl text-[0.9375rem] leading-relaxed text-muted-foreground/90 sm:mt-5">
-              Plug in rough miles, where you charge, and a PG&E-style rate assumption. This is a conversation starter—not
+              Plug in rough miles, where you charge, and a PG&E-style rate assumption. This is a conversation starter, not
               tax or utility advice.
             </p>
             <div className="mt-8 sm:mt-10">
@@ -304,13 +304,13 @@ export function EvChargingContent() {
           <Subheading className="max-w-xl">Road trips and public charging</Subheading>
           <Prose className="mt-4 sm:mt-5">
             <p>
-              <strong className="text-foreground">“Can I drive to Tahoe?”</strong> For most modern EVs, yes—with a
+              <strong className="text-foreground">“Can I drive to Tahoe?”</strong> For most modern EVs, yes, with a
               little planning on where to fast-charge along the route. Home charging still covers the bulk of yearly
               miles; fast charging is for the long legs.
             </p>
             <p>
               <strong className="text-foreground">“What if I forget to charge?”</strong> You will use a public Level 2
-              or DC station, pay a bit more per kWh than at home, and learn your buffer. It happens—and it is why
+              or DC station, pay a bit more per kWh than at home, and learn your buffer. It happens, and it is why
               networks exist.
             </p>
             <p>
@@ -327,7 +327,7 @@ export function EvChargingContent() {
             <ul className="list-disc pl-5 space-y-2">
               <li>Plug in at home overnight (or whenever the car sits).</li>
               <li>Wake up with enough range for the day.</li>
-              <li>Use fast charging mostly on trips—not every grocery run.</li>
+              <li>Use fast charging mostly on trips, not every grocery run.</li>
               <li>Stop thinking about charging every single day once the routine clicks.</li>
             </ul>
           </Prose>
@@ -338,7 +338,7 @@ export function EvChargingContent() {
           <div className="mt-6 grid max-w-5xl gap-2.5 sm:grid-cols-2 sm:gap-3">
             {[
               { myth: "I need a fast charger at home.", truth: "Most people do not. Level 2 is the common home setup." },
-              { myth: "I will definitely need a panel upgrade.", truth: "Sometimes yes—often no. An electrician tells you quickly." },
+              { myth: "I will definitely need a panel upgrade.", truth: "Sometimes yes, often no. An electrician tells you quickly." },
               { myth: "I will live at public chargers.", truth: "Most charging happens at home; public fills in the edges." },
               { myth: "Off-peak does not matter.", truth: "On PG&E-style TOU plans it can matter a lot." },
               { myth: "Battery range vanishes overnight.", truth: "Real-world loss is nothing like the scary stories." },
@@ -364,7 +364,7 @@ export function EvChargingContent() {
             <FaqItem q="Is Level 1 ‘enough’ forever?">
               <p>
                 It can be enough for low miles and long plug-in windows. Many owners still move to Level 2 for speed
-                and peace of mind—especially in winter or with two EVs.
+                and peace of mind, especially in winter or with two EVs.
               </p>
             </FaqItem>
             <FaqItem q="Wall charger vs NEMA outlet?">
@@ -387,7 +387,7 @@ export function EvChargingContent() {
             </FaqItem>
             <FaqItem q="Why is public charging more expensive?">
               <p>
-                Stations pay for equipment, maintenance, and demand charges. You are buying convenience and speed—not
+                Stations pay for equipment, maintenance, and demand charges. You are buying convenience and speed, not
                 the same economics as your garage.
               </p>
             </FaqItem>
@@ -398,12 +398,12 @@ export function EvChargingContent() {
           <Subheading className="max-w-lg">Installation: keep it practical</Subheading>
           <Prose className="mt-4 sm:mt-5">
             <ul className="list-disc pl-5 space-y-2">
-              <li>Wall-mounted EVSE vs 240V outlet—both are common; pick with your electrician.</li>
+              <li>Wall-mounted EVSE vs 240V outlet: both are common; pick with your electrician.</li>
               <li>Indoor and outdoor installs both work when equipment is rated for the location.</li>
               <li>Permits and inspection may be required; good installers build that into the job.</li>
               <li>Smart chargers can align charging with off-peak windows on PG&E-style rates.</li>
               <li>
-                ENERGY STAR lists certified chargers with efficient standby use—handy when comparing models (
+                ENERGY STAR lists certified chargers with efficient standby use, handy when comparing models (
                 <a
                   href={external.energyStarEvse}
                   className="text-primary underline-offset-2 hover:underline"
@@ -416,7 +416,7 @@ export function EvChargingContent() {
               </li>
             </ul>
             <p>
-              We can connect you with a local installer when you are ready—ask us when you pick your vehicle.
+              We can connect you with a local installer when you are ready. Ask us when you pick your vehicle.
             </p>
           </Prose>
           <div className="mt-8 print:shadow-none sm:mt-10">
@@ -429,7 +429,7 @@ export function EvChargingContent() {
           <Prose className="mt-4 sm:mt-5">
             <p>
               Programs change often. Watch for utility rebates on chargers, panel-upgrade incentives, income-qualified
-              offers, and federal tax credits where they apply. We keep this section short on purpose—verify dates and
+              offers, and federal tax credits where they apply. We keep this section short on purpose, so verify dates and
               eligibility on official PG&E, state, and IRS pages before you buy.
             </p>
           </Prose>
@@ -443,7 +443,7 @@ export function EvChargingContent() {
             <p>
               We focus on PG&E-style examples because that is who most of our customers have at home. If your panel,
               rental rules, or commute are unusual,{" "}
-              <strong className="text-foreground">ask us before you buy</strong>—we would rather set expectations than
+              <strong className="text-foreground">ask us before you buy</strong>. We would rather set expectations than
               surprise you after delivery.
             </p>
           </Prose>
@@ -469,7 +469,7 @@ export function EvChargingContent() {
             <div className="flex flex-col justify-center rounded-2xl bg-primary/[0.07] p-6 ring-1 ring-inset ring-primary/20 sm:p-8">
               <h3 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">Ready to pick a car?</h3>
               <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
-                Browse inventory or tell us what you are looking for—we will factor charging into the recommendation.
+                Browse inventory or tell us what you are looking for. We will factor charging into the recommendation.
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
                 <Link

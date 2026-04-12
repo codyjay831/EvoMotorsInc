@@ -18,7 +18,7 @@ export const seoConfig = {
   /** Site name for titles and branding. */
   siteName: SITE.name,
   /** Default page title when no override. */
-  defaultTitle: `${SITE.name} – ${SITE.tagline}`,
+  defaultTitle: `${SITE.name} | ${SITE.tagline}`,
   /** Title template: %s is replaced by the page title. */
   titleTemplate: `%s | ${SITE.name}`,
   /** Default meta description. */

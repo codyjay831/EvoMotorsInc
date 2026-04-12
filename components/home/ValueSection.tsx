@@ -17,7 +17,7 @@ const VALUE_ITEMS: Array<{
   },
   {
     title: "EV Expertise",
-    description: "Range, charging, incentives — we guide you.",
+    description: "We guide you through range, charging, and incentives.",
     Icon: Zap,
   },
   {

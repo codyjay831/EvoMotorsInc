@@ -21,7 +21,7 @@ export function ReservationTrustPanel({ className }: ReservationTrustPanelProps)
           <p className="evo-card-title text-foreground">Hold this vehicle</p>
           <p className="evo-body-sm text-muted-foreground">
             Enter your details to reserve it. We&apos;ll hold the vehicle for you and contact you shortly to confirm. 
-            A refundable deposit may be required to secure the reservation—we&apos;ll explain the next steps when we reach out.
+            A refundable deposit may be required to secure the reservation. We&apos;ll explain the next steps when we reach out.
           </p>
         </div>
       </div>

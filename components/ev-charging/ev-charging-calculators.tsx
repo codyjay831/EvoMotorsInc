@@ -74,7 +74,7 @@ function MonthlyCostEstimator() {
       <div>
         <h2 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">Monthly cost vs gas</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
-          Rough estimate only—not a quote. Rates change; your real bill depends on your plan, season, and usage.
+          Rough estimate only, not a quote. Rates change; your real bill depends on your plan, season, and usage.
         </p>
       </div>
 
@@ -226,7 +226,7 @@ function ChargingTimeEstimator() {
         <h2 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">Charging time (rough)</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground/90 sm:text-sm">
           Level 1 uses ~5 miles of range per hour as a common rule of thumb (U.S. DOE). Level 2 and DC vary a lot by
-          car, charger, and battery state—treat this as a ballpark.
+          car, charger, and battery state. Treat this as a ballpark.
         </p>
       </div>
 
@@ -280,7 +280,7 @@ function ChargingTimeEstimator() {
         <p className="evo-muted text-xs mt-1">
           {level === "l1" && "Great for light daily drivers with time to spare overnight."}
           {level === "l2" && "What most owners rely on for everyday charging at home."}
-          {level === "dc" && "For trips and quick top-ups—not the typical full home solution."}
+          {level === "dc" && "For trips and quick top-ups, not the typical full home solution."}
         </p>
       </div>
     </div>

@@ -24,7 +24,7 @@ export function InventoryCta({ className }: InventoryCtaProps) {
           Don’t see what you want?
         </h2>
         <p className="evo-body text-muted-foreground mt-3">
-          Request a specific vehicle or get in touch—we’re here to help.
+          Request a specific vehicle or get in touch. We are here to help.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link href="/request-vehicle" className={glowButtonClass}>
