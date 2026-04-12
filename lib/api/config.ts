@@ -3,7 +3,7 @@
  * All client-side env vars must be prefixed with NEXT_PUBLIC_.
  *
  * Expected env vars:
- * - NEXT_PUBLIC_VEHICLIX_API_URL – Base URL for the Vehiclix storefront API (e.g. https://api.vehiclix.com).
+ * - NEXT_PUBLIC_VEHICLIX_API_URL – Base URL for the Vehiclix storefront API (e.g. https://api.vehiclix.app).
  *   Required in production. If unset, mock data is only allowed in non-production modes.
  * - NEXT_PUBLIC_DEALER_SLUG – Dealer identifier for API paths (e.g. evo-motors).
  *   Required in production.
