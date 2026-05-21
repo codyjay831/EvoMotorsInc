@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, Geist_Mono } from "next/font/google";
 import { seoConfig, fullUrl, ogImageUrl } from "@/lib/seo-config";
 import "./globals.css";
 import { OrganizationStructuredData } from "@/components/seo/organization-structured-data";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -54,10 +55,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col bg-background text-foreground`}
-      >
+    <html lang="en" className={`dark ${sora.variable} ${geistMono.variable} font-sans`}>
+      <body className="flex min-h-screen flex-col bg-background text-foreground">
         <OrganizationStructuredData />
         {children}
       </body>

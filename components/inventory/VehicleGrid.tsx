@@ -4,15 +4,17 @@ import { cn } from "@/lib/utils";
 
 type VehicleGridProps = {
   vehicles: VehicleSummary[];
+  /** Tighter layout for small-lot simple mode */
+  compact?: boolean;
   className?: string;
 };
 
-export function VehicleGrid({ vehicles, className }: VehicleGridProps) {
+export function VehicleGrid({ vehicles, compact = false, className }: VehicleGridProps) {
   if (vehicles.length === 0) return null;
 
   if (vehicles.length === 1) {
     return (
-      <div className={cn("mx-auto w-full max-w-xl", className)} role="list" aria-label="Vehicle listings">
+      <div className={cn("mx-auto w-full max-w-2xl", className)} role="list" aria-label="Vehicle listings">
         <div role="listitem">
           <VehicleCard vehicle={vehicles[0]} prioritizeImage />
         </div>
@@ -23,7 +25,9 @@ export function VehicleGrid({ vehicles, className }: VehicleGridProps) {
   return (
     <div
       className={cn(
-        "grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3",
+        compact
+          ? "mx-auto grid max-w-4xl gap-6 sm:grid-cols-2"
+          : "grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8",
         className
       )}
       role="list"

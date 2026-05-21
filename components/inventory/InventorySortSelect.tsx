@@ -30,12 +30,12 @@ export function InventorySortSelect({
           <input key={key} type="hidden" name={key} value={value} />
         ) : null
       )}
-      <label className="evo-muted text-xs font-medium uppercase tracking-wide">Sort</label>
+      <label className="evo-muted text-xs font-semibold uppercase tracking-wide text-foreground/75">Sort</label>
       <select
         name="sort"
         defaultValue={currentSort}
         onChange={handleSortChange}
-        className="h-9 min-w-44 rounded-lg border border-border bg-background px-3 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+        className="h-10 min-w-44 rounded-xl border border-border/80 bg-background/80 px-3 text-sm text-foreground transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         aria-label="Sort listings"
       >
         {Object.entries(sortLabels).map(([value, label]) => (

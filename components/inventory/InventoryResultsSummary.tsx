@@ -74,18 +74,18 @@ export function InventoryResultsSummary({
   return (
     <div
       className={cn(
-        "space-y-4 rounded-xl border border-border/80 bg-surface/40 p-4 sm:p-5",
+        "space-y-4 rounded-2xl border border-border/70 bg-surface/35 p-4 sm:p-5",
         className
       )}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="evo-muted">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <p className="evo-muted text-sm sm:text-base">
           {total === 0 ? (
             "No vehicles found"
           ) : (
             <>
-              Showing <span className="font-medium text-foreground">{start}–{end}</span> of{" "}
-              <span className="font-medium text-foreground">{total}</span>
+              Showing <span className="font-semibold text-foreground">{start}–{end}</span> of{" "}
+              <span className="font-semibold text-foreground">{total}</span> vehicles
             </>
           )}
         </p>
@@ -100,7 +100,7 @@ export function InventoryResultsSummary({
       <div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-3">
         {hasFilters ? (
           <>
-            <span className="evo-muted text-xs">Active:</span>
+            <span className="evo-muted text-xs font-medium uppercase tracking-wide">Active filters</span>
             {Object.entries(activeFilters).map(([key, value]) => {
               if (!value) return null;
               const label = filterLabels[key] ?? key;
@@ -110,7 +110,7 @@ export function InventoryResultsSummary({
                 <Link
                   key={key}
                   href={buildHref({ [key]: null, page: null })}
-                  className="inline-flex items-center rounded-md border border-border bg-surface/80 px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
+                  className="inline-flex items-center rounded-lg border border-border/80 bg-background/50 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
                 >
                   {label}: {display} <span className="ml-1" aria-hidden>×</span>
                 </Link>
@@ -118,7 +118,7 @@ export function InventoryResultsSummary({
             })}
             <Link
               href="/inventory"
-              className="evo-body-sm text-primary no-underline transition-colors hover:text-primary/90"
+              className="evo-body-sm rounded-md px-1 text-primary no-underline transition-colors hover:text-primary/85"
             >
               Clear all
             </Link>
@@ -139,39 +139,45 @@ export function InventoryResultsSummary({
               href={buildHref({ page: currentPage > 1 ? String(currentPage - 1) : String(currentPage) })}
               aria-disabled={currentPage <= 1}
               className={cn(
-                "inline-flex h-8 items-center rounded-md border border-border px-3 text-xs transition-colors",
+                "inline-flex h-8 items-center rounded-lg border border-border/80 bg-background/40 px-3 text-xs transition-colors",
                 currentPage <= 1
                   ? "pointer-events-none opacity-50"
-                  : "hover:border-primary/30 hover:bg-muted/70"
+                  : "hover:border-primary/30 hover:bg-muted/70 hover:text-foreground"
               )}
             >
               Prev
             </Link>
-            {visiblePages.map((pageNumber) => (
-              <Link
-                key={pageNumber}
-                href={buildHref({ page: String(pageNumber) })}
-                aria-current={pageNumber === currentPage ? "page" : undefined}
-                className={cn(
-                  "inline-flex h-8 min-w-8 items-center justify-center rounded-md border px-2 text-xs transition-colors",
-                  pageNumber === currentPage
-                    ? "border-primary bg-primary/20 text-foreground"
-                    : "border-border hover:border-primary/30 hover:bg-muted/70"
-                )}
-              >
-                {pageNumber}
-              </Link>
-            ))}
+            {visiblePages.map((pageNumber, index) =>
+              pageNumber === "ellipsis" ? (
+                <span key={`ellipsis-${index}`} className="inline-flex h-8 min-w-8 items-center justify-center text-xs text-muted-foreground">
+                  …
+                </span>
+              ) : (
+                <Link
+                  key={pageNumber}
+                  href={buildHref({ page: String(pageNumber) })}
+                  aria-current={pageNumber === currentPage ? "page" : undefined}
+                  className={cn(
+                    "inline-flex h-8 min-w-8 items-center justify-center rounded-lg border px-2 text-xs transition-colors",
+                    pageNumber === currentPage
+                      ? "border-primary bg-primary/18 text-foreground"
+                      : "border-border/80 bg-background/40 hover:border-primary/30 hover:bg-muted/70"
+                  )}
+                >
+                  {pageNumber}
+                </Link>
+              )
+            )}
             <Link
               href={buildHref({
                 page: currentPage < totalPages ? String(currentPage + 1) : String(currentPage),
               })}
               aria-disabled={currentPage >= totalPages}
               className={cn(
-                "inline-flex h-8 items-center rounded-md border border-border px-3 text-xs transition-colors",
+                "inline-flex h-8 items-center rounded-lg border border-border/80 bg-background/40 px-3 text-xs transition-colors",
                 currentPage >= totalPages
                   ? "pointer-events-none opacity-50"
-                  : "hover:border-primary/30 hover:bg-muted/70"
+                  : "hover:border-primary/30 hover:bg-muted/70 hover:text-foreground"
               )}
             >
               Next
@@ -183,13 +189,13 @@ export function InventoryResultsSummary({
   );
 }
 
-function getVisiblePages(currentPage: number, totalPages: number) {
-  if (totalPages <= 5) return Array.from({ length: totalPages }, (_, index) => index + 1);
+function getVisiblePages(currentPage: number, totalPages: number): Array<number | "ellipsis"> {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
 
-  if (currentPage <= 3) return [1, 2, 3, 4, totalPages];
-  if (currentPage >= totalPages - 2) {
-    return [1, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+  if (currentPage <= 4) return [1, 2, 3, 4, 5, "ellipsis", totalPages];
+  if (currentPage >= totalPages - 3) {
+    return [1, "ellipsis", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
   }
 
-  return [1, currentPage - 1, currentPage, currentPage + 1, totalPages];
+  return [1, "ellipsis", currentPage - 1, currentPage, currentPage + 1, "ellipsis", totalPages];
 }

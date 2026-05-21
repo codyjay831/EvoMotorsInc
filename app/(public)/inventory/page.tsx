@@ -12,6 +12,7 @@ import {
 } from "@/components/inventory";
 import { getInventory, getMakes } from "@/lib/api";
 import type { InventoryFilters, InventoryResponse } from "@/lib/api";
+import { isInventorySimpleMode } from "@/lib/inventory-ui-config";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 
 export const metadata: Metadata = {
@@ -91,44 +92,69 @@ export default async function InventoryPage({ searchParams }: PageProps) {
     page: filters.page ?? 1,
     limit: filters.limit ?? DEFAULT_LIMIT,
   };
-  const [inventory, makes] = await Promise.all([
-    getInventory(filters).catch(() => fallbackInventory),
-    getMakes(),
-  ]);
+
+  const inventory = await getInventory(filters).catch(() => fallbackInventory);
+  const simpleMode = isInventorySimpleMode(inventory.total);
+  const makes = simpleMode ? [] : await getMakes();
 
   const hasResults = inventory.vehicles.length > 0;
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
+  const showBottomCta = !(simpleMode && !hasResults);
 
   return (
-    <SiteContainer className="pb-10 sm:pb-12 lg:pb-16">
-      <Section spacing="tight" className="pb-6 sm:pb-8 lg:pb-10">
-        <InventoryHero />
-      </Section>
-
-      <Section spacing="tight" className="pt-0 sm:pt-0 lg:pt-0">
-        <div className="evo-content-width space-y-6 sm:space-y-8">
-          <InventoryHeader />
-          <Suspense fallback={<InventoryToolbarSkeleton />}>
-            <InventoryToolbar makes={makes} />
-          </Suspense>
-          <InventoryResultsSummary
-            total={inventory.total}
-            page={inventory.page}
-            limit={inventory.limit}
-            activeFilters={activeFilters}
-            currentSort={currentSort}
-            searchParams={params}
+    <SiteContainer className="pb-9 sm:pb-11 lg:pb-14">
+      <Section spacing="tight" className="pt-8 sm:pt-10">
+        <div className="space-y-8 sm:space-y-10">
+          <InventoryHero
+            simpleMode={simpleMode}
+            hasResults={hasResults}
+            hasActiveFilters={hasActiveFilters}
+            vehicleCount={inventory.total}
           />
+
+          {!simpleMode && (
+            <div className="evo-content-width space-y-5 sm:space-y-6">
+              <InventoryHeader />
+              <Suspense fallback={<InventoryToolbarSkeleton />}>
+                <InventoryToolbar makes={makes} />
+              </Suspense>
+              <InventoryResultsSummary
+                total={inventory.total}
+                page={inventory.page}
+                limit={inventory.limit}
+                activeFilters={activeFilters}
+                currentSort={currentSort}
+                searchParams={params}
+              />
+            </div>
+          )}
+
           {hasResults ? (
-            <VehicleGrid vehicles={inventory.vehicles} />
+            <div className="evo-content-width space-y-6">
+              {simpleMode && (
+                <p
+                  className="text-center text-sm font-medium tracking-tight text-muted-foreground"
+                  id="available-evs"
+                >
+                  Available now
+                </p>
+              )}
+              <div id={simpleMode ? undefined : "available-evs"}>
+                <VehicleGrid vehicles={inventory.vehicles} compact={simpleMode} />
+              </div>
+            </div>
           ) : (
-            <InventoryEmptyState hasActiveFilters={hasActiveFilters} />
+            !simpleMode && (
+              <InventoryEmptyState hasActiveFilters={hasActiveFilters} />
+            )
+          )}
+
+          {showBottomCta && (
+            <div className="evo-content-width">
+              <InventoryCta />
+            </div>
           )}
         </div>
-      </Section>
-
-      <Section spacing="tight" className="pt-10 sm:pt-12 lg:pt-14">
-        <InventoryCta />
       </Section>
     </SiteContainer>
   );
@@ -136,17 +162,21 @@ export default async function InventoryPage({ searchParams }: PageProps) {
 
 function InventoryToolbarSkeleton() {
   return (
-    <div className="rounded-xl border border-border bg-surface/50 p-4 sm:p-5" aria-hidden>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {Array.from({ length: 5 }).map((_, index) => (
+    <div className="rounded-2xl border border-border/70 bg-surface/40 p-4 sm:p-5 lg:p-6" aria-hidden>
+      <div className="space-y-3">
+        <div className="h-3 w-28 animate-pulse rounded bg-muted/70" />
+        <div className="h-11 w-full animate-pulse rounded-xl bg-muted/60" />
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, index) => (
           <div key={index} className="space-y-2">
             <div className="h-3 w-20 animate-pulse rounded bg-muted/70" />
-            <div className="h-10 w-full animate-pulse rounded-lg bg-muted/60" />
+            <div className="h-10 w-full animate-pulse rounded-xl bg-muted/60" />
           </div>
         ))}
       </div>
-      <div className="mt-4 flex justify-end">
-        <div className="h-9 w-28 animate-pulse rounded-lg bg-muted/60" />
+      <div className="mt-5 flex justify-start sm:justify-end">
+        <div className="h-10 w-32 animate-pulse rounded-xl bg-muted/60" />
       </div>
     </div>
   );

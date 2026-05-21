@@ -96,29 +96,29 @@
 /* ─── Evo Motors dark theme (default): deep black, electric teal ─── */
 .dark {
   /* Core */
-  --background: #000000;
-  --foreground: #ffffff;
-  --surface: oklch(0.09 0 0);
-  --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --border: oklch(1 0 0 / 10%);
+  --background: #07090b;
+  --foreground: oklch(0.97 0 0);
+  --surface: oklch(0.14 0 0);
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --border: oklch(1 0 0 / 12%);
   /* Primary teal (logo-inspired) */
   --primary: oklch(0.72 0.16 195);
   --primary-foreground: #000000;
   --glow: oklch(0.75 0.2 195);
   --glow-subtle: oklch(0.55 0.14 195 / 0.4);
   /* Secondary / accent */
-  --secondary: oklch(0.22 0 0);
+  --secondary: oklch(0.25 0 0);
   --secondary-foreground: oklch(0.98 0 0);
   --accent: oklch(0.55 0.14 195);
   --accent-foreground: #ffffff;
   /* Cards & overlays */
-  --card: oklch(0.11 0 0);
+  --card: oklch(0.15 0 0);
   --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.11 0 0);
+  --popover: oklch(0.15 0 0);
   --popover-foreground: oklch(0.98 0 0);
   /* Inputs & ring */
-  --input: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 14%);
   --ring: oklch(0.72 0.16 195);
   /* Semantic */
   --destructive: oklch(0.65 0.22 25);
@@ -147,8 +147,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
     @apply bg-background text-foreground antialiased;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -167,21 +168,33 @@
   .evo-section-heading {
     @apply text-2xl font-semibold tracking-tight sm:text-3xl;
     letter-spacing: -0.015em;
+    line-height: 1.2;
   }
   .evo-card-title {
     @apply text-lg font-semibold tracking-tight;
   }
   .evo-body {
-    @apply text-base leading-relaxed;
+    @apply text-base;
+    line-height: 1.65;
   }
   .evo-body-sm {
-    @apply text-sm leading-relaxed;
+    @apply text-sm;
+    line-height: 1.55;
   }
   .evo-muted {
     @apply text-sm text-muted-foreground;
   }
   .evo-eyebrow {
-    @apply text-xs font-medium uppercase tracking-widest text-muted-foreground;
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
+  }
+  .evo-brand-wordmark {
+    @apply text-sm font-semibold uppercase tracking-[0.16em];
+  }
+  .evo-inventory-panel {
+    @apply relative overflow-hidden rounded-2xl border border-border/55 bg-surface/30 px-6 py-10 sm:px-10 sm:py-12;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.03),
+      0 0 48px -16px var(--glow-subtle);
   }
   /* Layout / section utilities */
   .evo-section {
@@ -196,7 +209,7 @@
   /* Card surfaces */
   .evo-card-glow {
     @apply rounded-xl border border-border bg-surface/80 transition-all duration-200;
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.03), 0 0 24px -4px var(--glow-subtle);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.04), 0 0 24px -8px var(--glow-subtle);
   }
   .evo-card-glow:hover {
     @apply border-white/15;

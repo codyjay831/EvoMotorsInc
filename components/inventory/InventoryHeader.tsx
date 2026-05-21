@@ -8,14 +8,16 @@ export function InventoryHeader({ className }: InventoryHeaderProps) {
   return (
     <header
       className={cn(
-        "evo-content-width border-b border-border/80 pb-5 sm:pb-6",
+        "evo-content-width flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/60 bg-surface/35 px-4 py-3 sm:px-5",
         className
       )}
       aria-label="Page header"
     >
-      <p className="evo-eyebrow text-primary">Search inventory</p>
-      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-        Refine by make, budget, and model year to quickly get to vehicles that match what you actually want.
+      <p className="evo-body-sm font-medium text-foreground">
+        Start with search, then narrow by make, budget, and model year.
+      </p>
+      <p className="evo-muted text-xs sm:text-sm">
+        Filters and sort update your results without changing vehicle data.
       </p>
     </header>
   );
