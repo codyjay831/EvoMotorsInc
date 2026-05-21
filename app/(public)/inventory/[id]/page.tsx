@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/layout";
 import {
-  VehicleGallery,
+  VehiclePhotoGallery,
   VehicleHeader,
   VehiclePricingPanel,
+  VehicleMobileSummary,
+  VehicleMobileActions,
   VehicleHighlights,
   VehicleSpecsSection,
   VehicleDescriptionSection,
@@ -97,18 +99,17 @@ export default async function VehicleDetailPage({ params }: PageProps) {
     <>
       <VdpStructuredData vehicle={vehicle} vehicleId={id} />
       <Section spacing="tight">
-        <div className="evo-content-width space-y-8 lg:space-y-10">
+        <div className="evo-content-width space-y-5 sm:space-y-6 lg:space-y-10">
           <VehicleHeader vehicle={vehicle} />
+          <VehicleMobileSummary vehicle={vehicle} />
 
-          <div className="grid gap-8 lg:grid-cols-3 lg:gap-10">
-            <div className="lg:col-span-2 space-y-6">
-              <VehicleGallery
+          <div className="grid gap-5 sm:gap-6 lg:grid-cols-3 lg:gap-10">
+            <div className="space-y-5 sm:space-y-6 lg:col-span-2">
+              <VehiclePhotoGallery
                 imageUrls={imageUrls}
                 alt={vehicle.displayName ?? `${vehicle.year} ${vehicle.make} ${vehicle.model}`}
               />
-              <div className="block lg:hidden">
-                <VehiclePricingPanel vehicle={vehicle} vehicleId={id} />
-              </div>
+              <VehicleMobileActions vehicle={vehicle} vehicleId={id} />
               <VehicleHighlights vehicle={vehicle} />
             </div>
             <div className="hidden lg:block">
