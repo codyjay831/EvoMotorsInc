@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { Expand, Zap } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Expand, ImageOff, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type VehiclePhotoGalleryProps = {
@@ -10,23 +10,93 @@ type VehiclePhotoGalleryProps = {
   className?: string;
 };
 
+function normalizePhotos(urls: ReadonlyArray<string>): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of urls) {
+    if (typeof raw !== "string") continue;
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+    if (seen.has(trimmed)) continue;
+    seen.add(trimmed);
+    out.push(trimmed);
+  }
+  return out;
+}
+
+const MAIN_FRAME_CLASS =
+  "relative w-full overflow-hidden rounded-xl border border-border/60 bg-black/40 " +
+  "aspect-[4/3] max-h-[420px] sm:max-h-[460px] lg:max-h-none";
+
+function GalleryPlaceholder({
+  message,
+  className,
+  icon,
+}: {
+  message: string;
+  className?: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className={cn(MAIN_FRAME_CLASS, className)} aria-label="Vehicle image unavailable">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
+        {icon}
+        <span className="text-sm">{message}</span>
+      </div>
+    </div>
+  );
+}
+
 export function VehiclePhotoGallery({
   imageUrls,
   alt = "Vehicle",
   className,
 }: VehiclePhotoGalleryProps) {
-  const images = imageUrls.length > 0 ? imageUrls : [];
-  const [selected, setSelected] = useState(0);
+  const photos = useMemo(() => normalizePhotos(imageUrls), [imageUrls]);
+
+  const [failed, setFailed] = useState<ReadonlySet<string>>(() => new Set());
+  const validPhotos = useMemo(
+    () => photos.filter((url) => !failed.has(url)),
+    [photos, failed]
+  );
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  const current = images[selected];
-  const hasMultiple = images.length > 1;
+  const effectiveIndex =
+    validPhotos.length === 0
+      ? 0
+      : selectedIndex >= 0 && selectedIndex < validPhotos.length
+        ? selectedIndex
+        : 0;
+
+  const selectedPhoto: string | null = validPhotos[effectiveIndex] ?? null;
+  const hasMultiple = validPhotos.length > 1;
 
   const go = useCallback(
     (dir: 1 | -1) => {
-      setSelected((i) => (i + dir + images.length) % images.length);
+      if (validPhotos.length === 0) return;
+      setSelectedIndex((i) => {
+        const safeI = i >= 0 && i < validPhotos.length ? i : 0;
+        return (safeI + dir + validPhotos.length) % validPhotos.length;
+      });
     },
-    [images.length]
+    [validPhotos.length]
+  );
+
+  const handleImageError = useCallback(
+    (url: string) => {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("[VehiclePhotoGallery] Failed to load image:", url);
+      }
+      setFailed((prev) => {
+        if (prev.has(url)) return prev;
+        const next = new Set(prev);
+        next.add(url);
+        return next;
+      });
+    },
+    []
   );
 
   useEffect(() => {
@@ -40,30 +110,30 @@ export function VehiclePhotoGallery({
     return () => window.removeEventListener("keydown", onKey);
   }, [lightboxOpen, go]);
 
-  if (images.length === 0) {
+  if (photos.length === 0) {
     return (
-      <div
-        className={cn(
-          "flex h-[240px] w-full items-center justify-center rounded-xl border border-border/60 bg-surface/50 sm:h-[280px] lg:aspect-[4/3] lg:h-auto",
-          className
-        )}
-        aria-hidden
-      >
-        <Zap className="size-12 text-muted-foreground opacity-40" />
-      </div>
+      <GalleryPlaceholder
+        className={className}
+        message="No photos yet"
+        icon={<Zap className="size-10 opacity-40" aria-hidden />}
+      />
+    );
+  }
+
+  if (!selectedPhoto) {
+    return (
+      <GalleryPlaceholder
+        className={className}
+        message="Photo unavailable"
+        icon={<ImageOff className="size-10 opacity-50" aria-hidden />}
+      />
     );
   }
 
   return (
     <>
       <div className={cn("space-y-3", className)}>
-        <div
-          className={cn(
-            "relative overflow-hidden rounded-xl border border-border/60 bg-surface/50",
-            "h-[240px] w-full sm:h-[280px] lg:aspect-[4/3] lg:h-auto lg:max-h-none"
-          )}
-          aria-label="Main vehicle image"
-        >
+        <div className={MAIN_FRAME_CLASS} aria-label="Main vehicle image">
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
@@ -71,9 +141,13 @@ export function VehiclePhotoGallery({
             aria-label="Open full-screen gallery"
           >
             <img
-              src={current}
+              key={selectedPhoto}
+              src={selectedPhoto}
               alt={alt}
-              className="h-full w-full object-contain lg:object-cover"
+              loading="eager"
+              decoding="async"
+              onError={() => handleImageError(selectedPhoto)}
+              className="max-h-full max-w-full object-contain lg:h-full lg:w-full lg:max-h-none lg:max-w-none lg:object-cover"
               draggable={false}
             />
           </button>
@@ -83,7 +157,9 @@ export function VehiclePhotoGallery({
             aria-hidden
           >
             <Expand className="size-3.5" />
-            <span>{selected + 1}/{images.length}</span>
+            <span>
+              {effectiveIndex + 1}/{validPhotos.length}
+            </span>
           </div>
 
           {hasMultiple && (
@@ -124,22 +200,30 @@ export function VehiclePhotoGallery({
             role="tablist"
             aria-label="Image thumbnails"
           >
-            {images.map((url, i) => (
+            {validPhotos.map((url, i) => (
               <button
-                key={i}
+                key={url}
                 type="button"
-                onClick={() => setSelected(i)}
+                onClick={() => setSelectedIndex(i)}
                 role="tab"
-                aria-selected={i === selected}
-                aria-label={`Image ${i + 1} of ${images.length}`}
+                aria-selected={i === effectiveIndex}
+                aria-label={`Image ${i + 1} of ${validPhotos.length}`}
                 className={cn(
-                  "h-[3.75rem] w-[5.25rem] shrink-0 snap-start overflow-hidden rounded-lg border-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-16 sm:w-24",
-                  i === selected
+                  "h-[3.75rem] w-[5.25rem] shrink-0 snap-start overflow-hidden rounded-lg border-2 bg-black/40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-16 sm:w-24",
+                  i === effectiveIndex
                     ? "border-primary opacity-100 ring-2 ring-primary/25"
                     : "border-transparent opacity-70 hover:opacity-100"
                 )}
               >
-                <img src={url} alt="" className="h-full w-full object-cover" draggable={false} />
+                <img
+                  src={url}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  onError={() => handleImageError(url)}
+                  className="h-full w-full object-cover"
+                  draggable={false}
+                />
               </button>
             ))}
           </div>
@@ -161,8 +245,9 @@ export function VehiclePhotoGallery({
           />
           <div className="relative max-h-full max-w-4xl">
             <img
-              src={current}
+              src={selectedPhoto}
               alt={alt}
+              onError={() => handleImageError(selectedPhoto)}
               className="max-h-[90vh] w-auto object-contain"
             />
             {hasMultiple && (
