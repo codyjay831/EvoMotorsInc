@@ -113,6 +113,25 @@ function asRecordInv(v: unknown): Record<string, unknown> | null {
   return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : null;
 }
 
+function asNonEmptyString(v: unknown): string | undefined {
+  return typeof v === "string" && v.trim().length > 0 ? v : undefined;
+}
+
+function asStringArray(v: unknown): string[] | undefined {
+  if (!Array.isArray(v)) return undefined;
+  const values = v
+    .map((item) => asNonEmptyString(item))
+    .filter((item): item is string => item != null);
+  return values.length ? values : undefined;
+}
+
+function getImageUrlsFromCatalogItem(v: Record<string, unknown>): string[] | undefined {
+  const images = asStringArray(v.images) ?? [];
+  const imageUrls = asStringArray(v.imageUrls) ?? [];
+  if (!images.length && !imageUrls.length) return undefined;
+  return [...new Set([...images, ...imageUrls])];
+}
+
 function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
   const v = asRecordInv(raw);
   if (!v) return null;
@@ -150,17 +169,12 @@ function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
         ? Number(v.mileage)
         : undefined;
 
-  const imageUrls = Array.isArray(v.imageUrls)
-    ? v.imageUrls.filter((u): u is string => typeof u === "string")
-    : undefined;
+  const imageUrls = getImageUrlsFromCatalogItem(v);
   const firstImage =
-    typeof v.imageUrl === "string"
-      ? v.imageUrl
-      : typeof v.primaryImageUrl === "string"
-        ? v.primaryImageUrl
-        : typeof v.heroImage === "string"
-          ? v.heroImage
-          : imageUrls?.[0];
+    asNonEmptyString(v.imageUrl) ??
+    asNonEmptyString(v.primaryImageUrl) ??
+    asNonEmptyString(v.heroImage) ??
+    imageUrls?.[0];
 
   const conditionRaw = v.condition;
   const condition =
@@ -282,23 +296,14 @@ export async function getVehicle(id: string): Promise<VehicleDetail | null> {
   const trimmed = id.trim();
   if (!trimmed) return null;
   try {
-    const raw = await request<unknown>("/api/v1/public/catalog", {
+    const raw = await request<unknown>(`/api/v1/public/catalog/${encodeURIComponent(trimmed)}`, {
       params: {
         dealerSlug: apiConfig.dealerSlug,
-        id: trimmed,
       },
     });
     const top = asRecordInv(raw);
-    const data = top?.data;
-    const inner = asRecordInv(data) ?? top;
-    let items: unknown[] = [];
-    if (Array.isArray(raw)) items = raw;
-    else if (inner && Array.isArray(inner.vehicles)) items = inner.vehicles;
-    else if (inner && Array.isArray(inner.items)) items = inner.items;
-    else if (inner && Array.isArray(inner.results)) items = inner.results;
-    else if (inner && Array.isArray(inner.catalog)) items = inner.catalog;
-    const first = items[0];
-    return mapCatalogItemToVehicleDetail(first);
+    const candidate = top && "data" in top ? top.data : raw;
+    return mapCatalogItemToVehicleDetail(candidate);
   } catch {
     return null;
   }

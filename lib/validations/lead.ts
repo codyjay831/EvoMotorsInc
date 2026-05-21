@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { emptyNumericInputToUndefined } from "@/lib/utils/numbers";
 
 export const contactFormSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(100),
@@ -15,25 +16,31 @@ export const vehicleInquiryFormSchema = contactFormSchema.extend({
   tradeInInterest: z.boolean().optional(),
 });
 
-const optionalYear = z
-  .union([z.string(), z.number()])
-  .optional()
-  .transform((v) => {
-    if (v === "" || v === undefined) return undefined;
-    const n = Number(v);
-    return Number.isNaN(n) ? undefined : n;
-  })
-  .refine((n) => n === undefined || (n >= 2000 && n <= 2030), "Invalid year");
+const optionalYear = z.preprocess(
+  emptyNumericInputToUndefined,
+  z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform((v) => {
+      if (v === undefined) return undefined;
+      const n = Number(v);
+      return Number.isNaN(n) ? undefined : n;
+    })
+    .refine((n) => n === undefined || (n >= 2000 && n <= 2030), "Invalid year")
+);
 
-const optionalNonNegative = z
-  .union([z.string(), z.number()])
-  .optional()
-  .transform((v) => {
-    if (v === "" || v === undefined) return undefined;
-    const n = Number(v);
-    return Number.isNaN(n) ? undefined : n;
-  })
-  .refine((n) => n === undefined || n >= 0, "Must be 0 or more");
+const optionalNonNegative = z.preprocess(
+  emptyNumericInputToUndefined,
+  z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform((v) => {
+      if (v === undefined) return undefined;
+      const n = Number(v);
+      return Number.isNaN(n) ? undefined : n;
+    })
+    .refine((n) => n === undefined || n >= 0, "Must be 0 or more")
+);
 
 export const requestVehicleFormSchema = z.object({
   make: z.string().max(80).optional(),

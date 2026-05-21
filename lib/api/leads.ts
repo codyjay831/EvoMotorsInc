@@ -83,24 +83,61 @@ export async function submitVehicleRequest(
     return Promise.resolve({ ok: true, message: "Request submitted." });
   }
   const {
+    vehicleId,
     yearMin,
     yearMax,
     maxMileage,
     budgetMax,
-    ...rest
+    firstName,
+    lastName,
+    email,
+    phone,
+    message,
+    preferredTrim,
+    make,
+    model,
+    colorPreferences,
+    desiredFeatures,
+    timeline,
+    notes,
+    financingInterest,
+    tradeInInterest,
   } = payload;
+
   const body: Record<string, unknown> = {
     type: "vehicle_request",
-    ...rest,
+    firstName,
+    lastName,
+    email,
+    financingInterest: financingInterest ?? false,
+    tradeInInterest: tradeInInterest ?? false,
   };
+
+  if (phone?.trim()) body.phone = phone.trim();
+  if (make?.trim()) body.make = make.trim();
+  if (model?.trim()) body.model = model.trim();
+  if (preferredTrim?.trim()) body.trim = preferredTrim.trim();
+  if (colorPreferences?.trim()) body.colorPrefs = colorPreferences.trim();
+  if (desiredFeatures?.trim()) body.features = desiredFeatures.trim();
+  if (timeline?.trim()) body.timeline = timeline.trim();
+
+  const noteParts = [notes?.trim(), message?.trim()].filter(Boolean) as string[];
+  let noteText = noteParts.length > 0 ? noteParts.join("\n\n") : undefined;
+  if (vehicleId) {
+    const ref = `Referenced vehicle: ${vehicleId}`;
+    noteText = noteText ? `${noteText}\n\n${ref}` : ref;
+  }
+  if (noteText) body.notes = noteText;
+
   const yMin = toNumberOrUndefined(yearMin);
   const yMax = toNumberOrUndefined(yearMax);
   const mileage = toNumberOrUndefined(maxMileage);
   const budget = toNumberOrUndefined(budgetMax);
   if (yMin !== undefined) body.yearMin = yMin;
   if (yMax !== undefined) body.yearMax = yMax;
-  if (mileage !== undefined) body.maxMileage = mileage;
+  if (mileage !== undefined) body.mileageMax = mileage;
   if (budget !== undefined) body.budgetMax = budget;
+
   const out = await postLocalLead(body);
   return { ok: out.ok, message: out.message };
 }
