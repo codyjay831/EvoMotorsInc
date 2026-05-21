@@ -7,7 +7,7 @@ type MainContentProps = {
 
 export function MainContent({ children, className }: MainContentProps) {
   return (
-    <main className={cn("min-h-[50vh] flex-1", className)}>
+    <main className={cn("min-h-[50vh]", className)}>
       {children}
     </main>
   );

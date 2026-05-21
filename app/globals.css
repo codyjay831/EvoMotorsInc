@@ -18,7 +18,7 @@
   --color-destructive: var(--destructive);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -147,8 +147,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background font-sans text-foreground antialiased;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -186,9 +185,11 @@
   }
   .evo-eyebrow {
     @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
+    /* Match tracking so the first/last glyph isn't clipped inside overflow containers */
+    padding-inline: 0.14em;
   }
   .evo-brand-wordmark {
-    @apply text-sm font-semibold uppercase tracking-[0.16em];
+    @apply text-sm font-semibold tracking-tight;
   }
   .evo-inventory-panel {
     @apply relative overflow-hidden rounded-2xl border border-border/55 bg-surface/30 px-6 py-10 sm:px-10 sm:py-12;

@@ -56,7 +56,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark ${sora.variable} ${geistMono.variable} font-sans`}>
-      <body className="flex min-h-screen flex-col bg-background text-foreground">
+      <body className={`${sora.className} flex min-h-screen flex-col bg-background text-foreground`}>
         <OrganizationStructuredData />
         {children}
       </body>

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SITE } from "@/lib/site-config";
 
 /** Main nav links (logo/brand also links home). */
 const NAV_LINKS = [
@@ -48,11 +49,11 @@ export function Header() {
             />
             <span
               className={cn(
-                "evo-brand-wordmark transition-colors",
+                "font-sans text-sm font-semibold tracking-tight transition-colors",
                 isHome ? "text-white/95 group-hover:text-white" : "text-foreground group-hover:text-white/90"
               )}
             >
-              EVO MOTORS
+              {SITE.name}
             </span>
           </Link>
 

@@ -14,7 +14,14 @@ export function VehicleGrid({ vehicles, compact = false, className }: VehicleGri
 
   if (vehicles.length === 1) {
     return (
-      <div className={cn("mx-auto w-full max-w-2xl", className)} role="list" aria-label="Vehicle listings">
+      <div
+        className={cn(
+          compact ? "mx-auto w-full max-w-4xl md:mx-0 md:max-w-2xl" : "mx-auto w-full max-w-2xl",
+          className
+        )}
+        role="list"
+        aria-label="Vehicle listings"
+      >
         <div role="listitem">
           <VehicleCard vehicle={vehicles[0]} prioritizeImage />
         </div>
@@ -26,7 +33,7 @@ export function VehicleGrid({ vehicles, compact = false, className }: VehicleGri
     <div
       className={cn(
         compact
-          ? "mx-auto grid max-w-4xl gap-6 sm:grid-cols-2"
+          ? "mx-auto grid w-full max-w-4xl gap-6 sm:grid-cols-2 [&>*:last-child:nth-child(odd)]:sm:col-span-2 [&>*:last-child:nth-child(odd)]:sm:mx-auto [&>*:last-child:nth-child(odd)]:sm:max-w-[calc(50%-0.75rem)]"
           : "grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8",
         className
       )}

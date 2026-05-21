@@ -14,6 +14,7 @@ import { getInventory, getMakes } from "@/lib/api";
 import type { InventoryFilters, InventoryResponse } from "@/lib/api";
 import { isInventorySimpleMode } from "@/lib/inventory-ui-config";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Inventory",
@@ -99,12 +100,12 @@ export default async function InventoryPage({ searchParams }: PageProps) {
 
   const hasResults = inventory.vehicles.length > 0;
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
-  const showBottomCta = !(simpleMode && !hasResults);
+  const showBottomCta = true;
 
   return (
     <SiteContainer className="pb-9 sm:pb-11 lg:pb-14">
       <Section spacing="tight" className="pt-8 sm:pt-10">
-        <div className="space-y-8 sm:space-y-10">
+        <div className={cn("space-y-8", simpleMode && hasResults ? "sm:space-y-7" : "sm:space-y-10")}>
           <InventoryHero
             simpleMode={simpleMode}
             hasResults={hasResults}
@@ -130,16 +131,8 @@ export default async function InventoryPage({ searchParams }: PageProps) {
           )}
 
           {hasResults ? (
-            <div className="evo-content-width space-y-6">
-              {simpleMode && (
-                <p
-                  className="text-center text-sm font-medium tracking-tight text-muted-foreground"
-                  id="available-evs"
-                >
-                  Available now
-                </p>
-              )}
-              <div id={simpleMode ? undefined : "available-evs"}>
+            <div className="evo-content-width">
+              <div id="available-evs">
                 <VehicleGrid vehicles={inventory.vehicles} compact={simpleMode} />
               </div>
             </div>

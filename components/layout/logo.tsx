@@ -40,7 +40,7 @@ export function Logo({
         unoptimized
       />
       {!markOnly && (
-        <span className="evo-card-title tracking-tight">{SITE.name}</span>
+        <span className="evo-card-title font-sans tracking-tight">{SITE.name}</span>
       )}
     </Link>
   );
