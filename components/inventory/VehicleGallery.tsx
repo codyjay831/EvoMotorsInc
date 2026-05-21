@@ -58,7 +58,7 @@ export function VehicleGallery({
     <>
       <div className={cn("space-y-3", className)}>
         <div
-          className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-border bg-muted/30"
+          className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden rounded-xl border border-border bg-muted/30"
           aria-label="Main vehicle image"
         >
           <button
@@ -108,7 +108,7 @@ export function VehicleGallery({
                 aria-selected={i === selected}
                 aria-label={`Image ${i + 1}`}
                 className={cn(
-                  "h-16 w-24 shrink-0 overflow-hidden rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
+                  "h-14 w-20 sm:h-16 sm:w-24 shrink-0 overflow-hidden rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
                   i === selected ? "border-primary" : "border-transparent opacity-80 hover:opacity-100"
                 )}
               >

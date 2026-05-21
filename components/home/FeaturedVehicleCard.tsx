@@ -50,7 +50,7 @@ export function FeaturedVehicleCard({ vehicle, index }: FeaturedVehicleCardProps
         )}
       >
         {/* Image block: dominant visual */}
-        <div className="relative h-[200px] sm:h-[220px] overflow-hidden bg-muted/30">
+        <div className="relative h-[160px] sm:h-[220px] overflow-hidden bg-muted/30">
           {imageUrl ? (
             <Image
               src={imageUrl}
