@@ -69,23 +69,19 @@ export function RebatesCta({ triggerClassName }: RebatesCtaProps = {}) {
     }, TRANSITION_MS);
   }, []);
 
+  const openDialog = useCallback(() => {
+    setRevealed(false);
+    setOpen(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setRevealed(true));
+    });
+  }, []);
+
   useEffect(() => {
     return () => {
       if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     };
   }, []);
-
-  useEffect(() => {
-    if (!open) {
-      setRevealed(false);
-      return;
-    }
-    setRevealed(false);
-    const id = requestAnimationFrame(() => {
-      requestAnimationFrame(() => setRevealed(true));
-    });
-    return () => cancelAnimationFrame(id);
-  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -110,7 +106,7 @@ export function RebatesCta({ triggerClassName }: RebatesCtaProps = {}) {
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={openDialog}
         className={
           triggerClassName
             ? cn(triggerClassName)

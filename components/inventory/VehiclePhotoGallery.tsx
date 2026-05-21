@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { Expand, ImageOff, Zap } from "lucide-react";
 import { dedupePreserveOrder, normalizePhotoUrl } from "@/lib/vehicle-photos";
 import { cn } from "@/lib/utils";
@@ -18,11 +19,11 @@ function normalizePhotos(urls: ReadonlyArray<string>): string[] {
   return dedupePreserveOrder(normalized);
 }
 
-const GALLERY_WRAPPER_CLASS = "w-full max-w-full space-y-2.5 sm:space-y-3";
+const GALLERY_WRAPPER_CLASS = "w-full max-w-full space-y-2 sm:space-y-2.5";
 
 const MAIN_FRAME_CLASS =
   "relative w-full max-w-full overflow-hidden rounded-xl border border-border/60 bg-black/40 " +
-  "aspect-[4/3] max-h-[300px] sm:max-h-[320px] lg:max-h-none";
+  "aspect-[16/10] lg:aspect-[4/3]";
 
 function GalleryPlaceholder({
   message,
@@ -131,42 +132,39 @@ export function VehiclePhotoGallery({
     <>
       <div className={cn(GALLERY_WRAPPER_CLASS, className)}>
         <div className={MAIN_FRAME_CLASS} aria-label="Main vehicle image">
+          <Image
+            key={selectedPhoto}
+            src={selectedPhoto}
+            alt={alt}
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            onError={() => handleImageError(selectedPhoto)}
+            className="object-contain"
+            draggable={false}
+          />
+
+          <div
+            className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/55 px-2 py-1 text-xs text-white/90 backdrop-blur-sm"
+            aria-hidden
+          >
+            {effectiveIndex + 1}/{validPhotos.length}
+          </div>
+
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="absolute inset-0 flex min-h-0 min-w-0 items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-            aria-label="Open full-screen gallery"
+            className="absolute right-2 top-2 z-10 hidden rounded-md bg-black/55 p-1.5 text-white/90 backdrop-blur-sm transition-colors hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white lg:inline-flex"
+            aria-label="Expand gallery"
           >
-            <img
-              key={selectedPhoto}
-              src={selectedPhoto}
-              alt={alt}
-              loading="eager"
-              decoding="async"
-              onError={() => handleImageError(selectedPhoto)}
-              className="h-full w-full max-h-full max-w-full object-contain lg:object-cover"
-              draggable={false}
-            />
+            <Expand className="size-4" aria-hidden />
           </button>
-
-          <div
-            className="pointer-events-none absolute bottom-2 right-2 flex items-center gap-1 rounded-md bg-black/55 px-2 py-1 text-xs text-white/90 backdrop-blur-sm lg:hidden"
-            aria-hidden
-          >
-            <Expand className="size-3.5" />
-            <span>
-              {effectiveIndex + 1}/{validPhotos.length}
-            </span>
-          </div>
 
           {hasMultiple && (
             <>
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  go(-1);
-                }}
+                onClick={() => go(-1)}
                 className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-2 text-white transition-colors hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="Previous image"
               >
@@ -176,11 +174,8 @@ export function VehiclePhotoGallery({
               </button>
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  go(1);
-                }}
-                className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-2 text-white transition-colors hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                onClick={() => go(1)}
+                className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-2 text-white transition-colors hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white lg:right-12"
                 aria-label="Next image"
               >
                 <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -206,7 +201,7 @@ export function VehiclePhotoGallery({
                 aria-selected={i === effectiveIndex}
                 aria-label={`Image ${i + 1} of ${validPhotos.length}`}
                 className={cn(
-                  "h-14 w-[4.5rem] shrink-0 snap-start overflow-hidden rounded-lg border-2 bg-black/40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-16 sm:w-24",
+                  "h-12 w-16 shrink-0 snap-start overflow-hidden rounded-lg border-2 bg-black/40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-14 sm:w-20",
                   i === effectiveIndex
                     ? "border-primary opacity-100 ring-2 ring-primary/25"
                     : "border-transparent opacity-70 hover:opacity-100"
@@ -229,7 +224,7 @@ export function VehiclePhotoGallery({
 
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          className="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 p-4 lg:flex"
           role="dialog"
           aria-modal="true"
           aria-label="Image gallery"
@@ -241,6 +236,7 @@ export function VehiclePhotoGallery({
             aria-label="Close"
           />
           <div className="relative max-h-full max-w-4xl">
+            {/* eslint-disable-next-line @next/next/no-img-element -- desktop-only lightbox sizing */}
             <img
               src={selectedPhoto}
               alt={alt}

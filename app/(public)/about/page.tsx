@@ -39,8 +39,9 @@ export default function AboutPage() {
             </p>
             <p>
               When you talk to me about a vehicle, you&apos;re also talking to someone who installs
-              the charging and electrical side of it. I want to help people understand EVs and home
-              charging without the guesswork.
+              the charging and electrical side of it and knows energy management inside and out:
+              solar, batteries, and EV charging balanced for what actually works at home. I want to
+              help people understand EVs and home charging without the guesswork.
             </p>
           </div>
         </div>
