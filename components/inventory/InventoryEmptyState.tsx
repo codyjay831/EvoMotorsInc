@@ -18,7 +18,7 @@ export function InventoryEmptyState({
   return (
     <div
       className={cn(
-        "evo-content-width evo-content-narrow mx-auto rounded-2xl border border-border bg-surface/40 py-16 px-8 text-center",
+        "evo-content-narrow mx-auto rounded-2xl border border-border bg-surface/40 px-6 py-12 text-center sm:px-8 sm:py-14",
         className
       )}
     >

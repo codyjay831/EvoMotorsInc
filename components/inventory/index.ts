@@ -1,6 +1,8 @@
 export { InventoryHeader } from "./InventoryHeader";
+export { InventoryHero } from "./InventoryHero";
 export { InventoryToolbar } from "./InventoryToolbar";
 export { InventoryResultsSummary } from "./InventoryResultsSummary";
+export { InventorySortSelect } from "./InventorySortSelect";
 export { VehicleCard } from "./VehicleCard";
 export { VehicleGrid } from "./VehicleGrid";
 export { InventoryEmptyState } from "./InventoryEmptyState";
