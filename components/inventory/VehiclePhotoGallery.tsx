@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Expand, ImageOff, Zap } from "lucide-react";
+import { dedupePreserveOrder, normalizePhotoUrl } from "@/lib/vehicle-photos";
 import { cn } from "@/lib/utils";
 
 type VehiclePhotoGalleryProps = {
@@ -11,22 +12,17 @@ type VehiclePhotoGalleryProps = {
 };
 
 function normalizePhotos(urls: ReadonlyArray<string>): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const raw of urls) {
-    if (typeof raw !== "string") continue;
-    const trimmed = raw.trim();
-    if (!trimmed) continue;
-    if (seen.has(trimmed)) continue;
-    seen.add(trimmed);
-    out.push(trimmed);
-  }
-  return out;
+  const normalized = urls
+    .map((raw) => normalizePhotoUrl(raw))
+    .filter((url): url is string => url != null);
+  return dedupePreserveOrder(normalized);
 }
 
+const GALLERY_WRAPPER_CLASS = "w-full max-w-full space-y-2.5 sm:space-y-3";
+
 const MAIN_FRAME_CLASS =
-  "relative w-full overflow-hidden rounded-xl border border-border/60 bg-black/40 " +
-  "aspect-[4/3] max-h-[420px] sm:max-h-[460px] lg:max-h-none";
+  "relative w-full max-w-full overflow-hidden rounded-xl border border-border/60 bg-black/40 " +
+  "aspect-[4/3] max-h-[300px] sm:max-h-[320px] lg:max-h-none";
 
 function GalleryPlaceholder({
   message,
@@ -38,10 +34,12 @@ function GalleryPlaceholder({
   icon: React.ReactNode;
 }) {
   return (
-    <div className={cn(MAIN_FRAME_CLASS, className)} aria-label="Vehicle image unavailable">
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
-        {icon}
-        <span className="text-sm">{message}</span>
+    <div className={cn(GALLERY_WRAPPER_CLASS, className)}>
+      <div className={MAIN_FRAME_CLASS} aria-label="Vehicle image unavailable">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
+          {icon}
+          <span className="text-sm">{message}</span>
+        </div>
       </div>
     </div>
   );
@@ -70,7 +68,8 @@ export function VehiclePhotoGallery({
         ? selectedIndex
         : 0;
 
-  const selectedPhoto: string | null = validPhotos[effectiveIndex] ?? null;
+  const selectedPhoto: string | null =
+    validPhotos[effectiveIndex] ?? validPhotos[0] ?? null;
   const hasMultiple = validPhotos.length > 1;
 
   const go = useCallback(
@@ -84,20 +83,18 @@ export function VehiclePhotoGallery({
     [validPhotos.length]
   );
 
-  const handleImageError = useCallback(
-    (url: string) => {
-      if (process.env.NODE_ENV !== "production") {
-        console.warn("[VehiclePhotoGallery] Failed to load image:", url);
-      }
-      setFailed((prev) => {
-        if (prev.has(url)) return prev;
-        const next = new Set(prev);
-        next.add(url);
-        return next;
-      });
-    },
-    []
-  );
+  const handleImageError = useCallback((url: string) => {
+    if (!photos.includes(url)) return;
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[VehiclePhotoGallery] Failed to load image:", url);
+    }
+    setFailed((prev) => {
+      if (prev.has(url)) return prev;
+      const next = new Set(prev);
+      next.add(url);
+      return next;
+    });
+  }, [photos]);
 
   useEffect(() => {
     if (!lightboxOpen) return;
@@ -132,12 +129,12 @@ export function VehiclePhotoGallery({
 
   return (
     <>
-      <div className={cn("space-y-3", className)}>
+      <div className={cn(GALLERY_WRAPPER_CLASS, className)}>
         <div className={MAIN_FRAME_CLASS} aria-label="Main vehicle image">
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="absolute inset-0 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+            className="absolute inset-0 flex min-h-0 min-w-0 items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
             aria-label="Open full-screen gallery"
           >
             <img
@@ -147,13 +144,13 @@ export function VehiclePhotoGallery({
               loading="eager"
               decoding="async"
               onError={() => handleImageError(selectedPhoto)}
-              className="max-h-full max-w-full object-contain lg:h-full lg:w-full lg:max-h-none lg:max-w-none lg:object-cover"
+              className="h-full w-full max-h-full max-w-full object-contain lg:object-cover"
               draggable={false}
             />
           </button>
 
           <div
-            className="pointer-events-none absolute bottom-2.5 right-2.5 flex items-center gap-1 rounded-md bg-black/55 px-2 py-1 text-xs text-white/90 backdrop-blur-sm lg:hidden"
+            className="pointer-events-none absolute bottom-2 right-2 flex items-center gap-1 rounded-md bg-black/55 px-2 py-1 text-xs text-white/90 backdrop-blur-sm lg:hidden"
             aria-hidden
           >
             <Expand className="size-3.5" />
@@ -170,10 +167,10 @@ export function VehiclePhotoGallery({
                   e.stopPropagation();
                   go(-1);
                 }}
-                className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-2.5 text-white transition-colors hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-2 text-white transition-colors hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="Previous image"
               >
-                <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
@@ -183,10 +180,10 @@ export function VehiclePhotoGallery({
                   e.stopPropagation();
                   go(1);
                 }}
-                className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-2.5 text-white transition-colors hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/55 p-2 text-white transition-colors hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="Next image"
               >
-                <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
@@ -196,7 +193,7 @@ export function VehiclePhotoGallery({
 
         {hasMultiple && (
           <div
-            className="-mx-1 flex gap-2.5 overflow-x-auto px-1 pb-1 snap-x snap-mandatory"
+            className="flex gap-2 overflow-x-auto pb-0.5 snap-x snap-mandatory"
             role="tablist"
             aria-label="Image thumbnails"
           >
@@ -209,7 +206,7 @@ export function VehiclePhotoGallery({
                 aria-selected={i === effectiveIndex}
                 aria-label={`Image ${i + 1} of ${validPhotos.length}`}
                 className={cn(
-                  "h-[3.75rem] w-[5.25rem] shrink-0 snap-start overflow-hidden rounded-lg border-2 bg-black/40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-16 sm:w-24",
+                  "h-14 w-[4.5rem] shrink-0 snap-start overflow-hidden rounded-lg border-2 bg-black/40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-16 sm:w-24",
                   i === effectiveIndex
                     ? "border-primary opacity-100 ring-2 ring-primary/25"
                     : "border-transparent opacity-70 hover:opacity-100"

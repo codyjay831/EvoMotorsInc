@@ -15,6 +15,11 @@ import {
 import { getVehicle } from "@/lib/api";
 import { getPriceDisplay } from "@/lib/api/pricing";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
+import {
+  collectVehiclePhotoUrls,
+  getPrimaryVehiclePhoto,
+  toAbsoluteVehiclePhotoUrl,
+} from "@/lib/vehicle-photos";
 import { VdpStructuredData } from "@/components/seo/vdp-structured-data";
 import type { VehicleDetail } from "@/lib/api";
 
@@ -38,9 +43,9 @@ function vdpDescription(v: VehicleDetail): string {
 }
 
 function vdpOgImage(v: VehicleDetail): string {
-  const src = v.imageUrls?.[0] ?? v.imageUrl;
+  const src = getPrimaryVehiclePhoto(v);
   if (!src) return ogImageUrl(seoConfig.defaultOgImagePath);
-  return src.startsWith("http") ? src : fullUrl(src.startsWith("/") ? src : `/${src}`);
+  return toAbsoluteVehiclePhotoUrl(src);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -88,12 +93,7 @@ export default async function VehicleDetailPage({ params }: PageProps) {
     );
   }
 
-  const imageUrls =
-    vehicle.imageUrls?.length
-      ? vehicle.imageUrls
-      : vehicle.imageUrl
-        ? [vehicle.imageUrl]
-        : [];
+  const imageUrls = collectVehiclePhotoUrls(vehicle);
 
   return (
     <>
@@ -106,6 +106,7 @@ export default async function VehicleDetailPage({ params }: PageProps) {
           <div className="grid gap-5 sm:gap-6 lg:grid-cols-3 lg:gap-10">
             <div className="space-y-5 sm:space-y-6 lg:col-span-2">
               <VehiclePhotoGallery
+                key={id}
                 imageUrls={imageUrls}
                 alt={vehicle.displayName ?? `${vehicle.year} ${vehicle.make} ${vehicle.model}`}
               />

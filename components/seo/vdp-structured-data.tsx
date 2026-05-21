@@ -1,5 +1,6 @@
 import type { VehicleDetail } from "@/lib/api";
 import { fullUrl, seoConfig } from "@/lib/seo-config";
+import { getPrimaryVehiclePhoto, toAbsoluteVehiclePhotoUrl } from "@/lib/vehicle-photos";
 
 type Props = {
   vehicle: VehicleDetail;
@@ -13,9 +14,8 @@ export function VdpStructuredData({ vehicle, vehicleId }: Props) {
   const name =
     vehicle.displayName ?? `${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? ` ${vehicle.trim}` : ""}`;
   const vdpUrl = fullUrl(`/inventory/${vehicleId}`);
-  const image =
-    vehicle.imageUrls?.[0] ?? vehicle.imageUrl;
-  const imageUrl = image?.startsWith("http") ? image : image ? fullUrl(image.startsWith("/") ? image : `/${image}`) : undefined;
+  const image = getPrimaryVehiclePhoto(vehicle);
+  const imageUrl = image ? toAbsoluteVehiclePhotoUrl(image) : undefined;
 
   const vehicleJson = {
     "@context": "https://schema.org",

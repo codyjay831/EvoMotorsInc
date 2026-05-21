@@ -117,19 +117,46 @@ function asNonEmptyString(v: unknown): string | undefined {
   return typeof v === "string" && v.trim().length > 0 ? v : undefined;
 }
 
+function extractUrlFromImageItem(item: unknown): string | undefined {
+  if (typeof item === "string") return asNonEmptyString(item);
+  const rec = asRecordInv(item);
+  if (!rec) return undefined;
+  return (
+    asNonEmptyString(rec.url) ??
+    asNonEmptyString(rec.src) ??
+    asNonEmptyString(rec.href)
+  );
+}
+
 function asStringArray(v: unknown): string[] | undefined {
   if (!Array.isArray(v)) return undefined;
   const values = v
-    .map((item) => asNonEmptyString(item))
+    .map((item) => extractUrlFromImageItem(item))
     .filter((item): item is string => item != null);
   return values.length ? values : undefined;
 }
 
 function getImageUrlsFromCatalogItem(v: Record<string, unknown>): string[] | undefined {
+  const heroCandidates = [
+    asNonEmptyString(v.imageUrl),
+    asNonEmptyString(v.primaryImageUrl),
+    asNonEmptyString(v.heroImage),
+  ].filter((item): item is string => item != null);
+
   const images = asStringArray(v.images) ?? [];
   const imageUrls = asStringArray(v.imageUrls) ?? [];
-  if (!images.length && !imageUrls.length) return undefined;
-  return [...new Set([...images, ...imageUrls])];
+  const merged = [...heroCandidates, ...images, ...imageUrls];
+  if (!merged.length) return undefined;
+
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of merged) {
+    const trimmed = raw.trim();
+    if (!trimmed || seen.has(trimmed)) continue;
+    seen.add(trimmed);
+    out.push(trimmed);
+  }
+  return out.length ? out : undefined;
 }
 
 function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
@@ -170,11 +197,7 @@ function mapCatalogItemToVehicleSummary(raw: unknown): VehicleSummary | null {
         : undefined;
 
   const imageUrls = getImageUrlsFromCatalogItem(v);
-  const firstImage =
-    asNonEmptyString(v.imageUrl) ??
-    asNonEmptyString(v.primaryImageUrl) ??
-    asNonEmptyString(v.heroImage) ??
-    imageUrls?.[0];
+  const firstImage = imageUrls?.[0];
 
   const conditionRaw = v.condition;
   const condition =
