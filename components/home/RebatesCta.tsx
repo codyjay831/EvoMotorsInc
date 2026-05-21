@@ -58,6 +58,7 @@ export function RebatesCta({ triggerClassName }: RebatesCtaProps = {}) {
   const [open, setOpen] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogPanelRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const requestClose = useCallback(() => {
@@ -100,6 +101,29 @@ export function RebatesCta({ triggerClassName }: RebatesCtaProps = {}) {
   useEffect(() => {
     if (!open || !revealed) return;
     closeRef.current?.focus();
+
+    const panel = dialogPanelRef.current;
+    if (!panel) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const focusable = panel.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    panel.addEventListener("keydown", onKeyDown);
+    return () => panel.removeEventListener("keydown", onKeyDown);
   }, [open, revealed]);
 
   return (
@@ -135,6 +159,7 @@ export function RebatesCta({ triggerClassName }: RebatesCtaProps = {}) {
           />
 
           <div
+            ref={dialogPanelRef}
             className={cn(
               "relative z-[1] flex w-full flex-col overflow-hidden rounded-xl border border-white/10",
               "max-w-[min(17rem,92vw)] max-h-[min(88dvh,720px)]",

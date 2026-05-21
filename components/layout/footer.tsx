@@ -34,9 +34,9 @@ export function Footer() {
             <ul className="flex flex-col gap-2">
               {FOOTER_LINKS.map(({ href, label }) => (
                 <li key={href}>
-                <Link
-                  href={href}
-                  className={cn(
+                  <Link
+                    href={href}
+                    className={cn(
                       "evo-body-sm text-muted-foreground no-underline transition-colors duration-200 hover:text-foreground evo-focus-ring rounded-sm"
                     )}
                   >
@@ -51,6 +51,16 @@ export function Footer() {
             <p className="evo-eyebrow mb-4 text-foreground/80">Contact &amp; account</p>
             <ul className="flex flex-col gap-2">
               <li className="evo-body-sm text-muted-foreground">{PUBLIC_BUSINESS_INFO.contactName}</li>
+              {PUBLIC_BUSINESS_INFO.phone ? (
+                <li>
+                  <a
+                    href={`tel:${PUBLIC_BUSINESS_INFO.phoneTel || PUBLIC_BUSINESS_INFO.phone}`}
+                    className="evo-body-sm text-muted-foreground no-underline transition-colors duration-200 hover:text-foreground evo-focus-ring rounded-sm"
+                  >
+                    {PUBLIC_BUSINESS_INFO.phone}
+                  </a>
+                </li>
+              ) : null}
               <li>
                 <a
                   href={`mailto:${PUBLIC_BUSINESS_INFO.email}`}
@@ -61,6 +71,7 @@ export function Footer() {
               </li>
               <li className="evo-body-sm text-muted-foreground">{PUBLIC_BUSINESS_INFO.addressLine1}</li>
               <li className="evo-body-sm text-muted-foreground">{PUBLIC_BUSINESS_INFO.cityStateZip}</li>
+              <li className="evo-body-sm text-muted-foreground">{PUBLIC_BUSINESS_INFO.hoursDisplay}</li>
               <li className="evo-body-sm text-muted-foreground">{PUBLIC_BUSINESS_INFO.dealerLicenseDisplay}</li>
               <li>
                 <a
@@ -86,6 +97,12 @@ export function Footer() {
               className="evo-muted no-underline transition-colors duration-200 hover:text-foreground evo-focus-ring rounded-sm"
             >
               Contact us
+            </Link>
+            <Link
+              href="/privacy"
+              className="evo-muted no-underline transition-colors duration-200 hover:text-foreground evo-focus-ring rounded-sm"
+            >
+              Privacy
             </Link>
             <a
               href={buildLoginUrl()}

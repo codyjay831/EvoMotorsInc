@@ -1,7 +1,9 @@
-export { HomeHero } from "./HomeHero";
-export { HomeTrustHighlights } from "./HomeTrustHighlights";
 export { HomeFeaturedVehicles } from "./HomeFeaturedVehicles";
-export { HomeAboutTeaser } from "./HomeAboutTeaser";
+export { HomeFeaturedInventoryLoader } from "./HomeFeaturedInventoryLoader";
+export { FeaturedVehiclesSkeleton } from "./FeaturedVehiclesSkeleton";
 export { HomeCtaBand } from "./HomeCtaBand";
 export { HomeContactSummary } from "./HomeContactSummary";
-export { MobileHomeStickyInventoryCta } from "./MobileHomeStickyInventoryCta";
+export { HomeTrustRow } from "./HomeTrustRow";
+export { HomeLocalBlock } from "./HomeLocalBlock";
+export { FeaturedVehicleCard } from "./FeaturedVehicleCard";
+export { RebatesCta } from "./RebatesCta";

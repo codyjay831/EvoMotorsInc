@@ -3,14 +3,12 @@ import { Section, PageHeader, SiteContainer } from "@/components/layout";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 
 export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Meet Ronald, founder of Evo Motors. Over 15 years in electrical and green energy, from solar and battery storage to EV chargers and panel upgrades.",
+  title: seoConfig.aboutTitle,
+  description: seoConfig.aboutDescription,
   alternates: { canonical: fullUrl("/about") },
   openGraph: {
-    title: "About | " + seoConfig.siteName,
-    description:
-      "Electric vehicles and home charging guidance from someone who installs the electrical side for a living.",
+    title: seoConfig.aboutTitle,
+    description: seoConfig.aboutDescription,
     url: fullUrl("/about"),
     images: [{ url: ogImageUrl(seoConfig.defaultOgImagePath), width: 1200, height: 630, alt: seoConfig.siteName }],
   },

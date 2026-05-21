@@ -17,9 +17,8 @@ import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Inventory",
-  description:
-    "Browse our selection of new and used electric vehicles. Tesla, Rivian, Lucid, and more. Transparent pricing and expert guidance.",
+  title: seoConfig.inventoryTitle,
+  description: seoConfig.inventoryDescription,
   alternates: { canonical: fullUrl("/inventory") },
   openGraph: {
     title: "Inventory | " + seoConfig.siteName,

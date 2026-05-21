@@ -7,6 +7,18 @@ type Props = {
   vehicleId: string;
 };
 
+function offerAvailability(): string {
+  return "https://schema.org/InStock";
+}
+
+function offerItemCondition(vehicle: VehicleDetail): string | undefined {
+  if (vehicle.condition === "new") return "https://schema.org/NewCondition";
+  if (vehicle.condition === "used" || vehicle.condition === "certified") {
+    return "https://schema.org/UsedCondition";
+  }
+  return undefined;
+}
+
 /**
  * Vehicle + BreadcrumbList JSON-LD for VDP. Rendered only when vehicle exists.
  */
@@ -32,9 +44,21 @@ export function VdpStructuredData({ vehicle, vehicleId }: Props) {
     mileageFromOdometer: vehicle.mileage
       ? { "@type": "QuantitativeValue", value: vehicle.mileage, unitCode: "SMI" }
       : undefined,
-    vehicleCondition: vehicle.condition === "new" ? "https://schema.org/NewCondition" : vehicle.condition === "used" ? "https://schema.org/UsedCondition" : undefined,
+    vehicleCondition:
+      vehicle.condition === "new"
+        ? "https://schema.org/NewCondition"
+        : vehicle.condition === "used" || vehicle.condition === "certified"
+          ? "https://schema.org/UsedCondition"
+          : undefined,
     offers: vehicle.price
-      ? { "@type": "Offer", price: vehicle.price, priceCurrency: "USD" }
+      ? {
+          "@type": "Offer",
+          price: vehicle.price,
+          priceCurrency: "USD",
+          seller: { "@id": `${seoConfig.siteUrl}/#organization` },
+          availability: offerAvailability(),
+          itemCondition: offerItemCondition(vehicle),
+        }
       : undefined,
   };
 

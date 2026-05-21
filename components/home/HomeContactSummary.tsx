@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Phone, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PUBLIC_BUSINESS_INFO } from "@/lib/public-business-info";
 
@@ -17,6 +17,17 @@ export function HomeContactSummary({ className }: HomeContactSummaryProps) {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div className="space-y-4">
             <div className="evo-body text-foreground">{PUBLIC_BUSINESS_INFO.contactName}</div>
+            {PUBLIC_BUSINESS_INFO.phone ? (
+              <a
+                href={`tel:${PUBLIC_BUSINESS_INFO.phoneTel || PUBLIC_BUSINESS_INFO.phone}`}
+                className="flex items-center gap-3 evo-body text-foreground no-underline transition-colors duration-200 hover:text-primary evo-focus-ring rounded-md"
+              >
+                <span className="flex size-9 items-center justify-center rounded-lg bg-surface text-muted-foreground" aria-hidden>
+                  <Phone className="size-4" />
+                </span>
+                {PUBLIC_BUSINESS_INFO.phone}
+              </a>
+            ) : null}
             <a
               href={`mailto:${PUBLIC_BUSINESS_INFO.email}`}
               className="flex items-center gap-3 evo-body text-foreground no-underline transition-colors duration-200 hover:text-primary evo-focus-ring rounded-md"
@@ -35,6 +46,12 @@ export function HomeContactSummary({ className }: HomeContactSummaryProps) {
                 <div>{PUBLIC_BUSINESS_INFO.cityStateZip}</div>
                 <div className="mt-1">{PUBLIC_BUSINESS_INFO.dealerLicenseDisplay}</div>
               </div>
+            </div>
+            <div className="flex items-start gap-3 evo-body text-muted-foreground">
+              <span className="flex size-9 items-center justify-center rounded-lg bg-surface text-muted-foreground shrink-0" aria-hidden>
+                <Clock className="size-4" />
+              </span>
+              <div>{PUBLIC_BUSINESS_INFO.hoursDisplay}</div>
             </div>
           </div>
           <Link

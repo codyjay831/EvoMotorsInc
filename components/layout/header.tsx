@@ -32,6 +32,12 @@ export function Header() {
           : "sticky bg-background/85 supports-[backdrop-filter]:bg-background/75"
       )}
     >
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground evo-focus-ring"
+      >
+        Skip to main content
+      </a>
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 md:px-8 lg:px-10">
         <div className="flex h-[4.5rem] items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8">
           <Link
@@ -40,12 +46,13 @@ export function Header() {
             aria-label="Evo Motors home"
           >
             <Image
-              src="/branding/logo.png"
+              src={SITE.logoPath}
               alt=""
               width={34}
               height={34}
               className="object-contain transition-transform duration-200 group-hover:scale-[1.02]"
               priority
+              unoptimized
             />
             <span
               className={cn(
@@ -85,6 +92,14 @@ export function Header() {
           </nav>
 
           <div className="flex items-center justify-end gap-2">
+            {isHome ? (
+              <Link
+                href="/inventory"
+                className="hidden h-9 items-center rounded-full bg-primary px-4 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90 evo-focus-ring lg:inline-flex"
+              >
+                Browse Inventory
+              </Link>
+            ) : null}
             <Link
               href="/request-vehicle"
               className="hidden h-9 items-center rounded-full border border-primary/30 bg-primary/12 px-4 text-xs font-semibold uppercase tracking-[0.12em] text-primary transition-colors hover:bg-primary/20 evo-focus-ring md:inline-flex"

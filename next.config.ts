@@ -12,7 +12,18 @@ const nextConfig: NextConfig = {
       { pathname: "/hero/**" },
       { pathname: "/logo-transparent-2048.png" },
       { pathname: "/road-transition-4k.jpg" },
+      { pathname: "/og-default.png" },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.evomotorsinc.com" }],
+        destination: "https://evomotorsinc.com/:path*",
+        permanent: true,
+      },
+    ];
   },
 };
 

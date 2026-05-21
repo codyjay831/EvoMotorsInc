@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { EvChargingContent } from "@/components/ev-charging/ev-charging-content";
+import { EvChargingFaqStructuredData } from "@/components/seo/ev-charging-faq-structured-data";
 import { fullUrl, ogImageUrl, seoConfig } from "@/lib/seo-config";
 
 export const metadata: Metadata = {
@@ -24,5 +25,10 @@ export const metadata: Metadata = {
 };
 
 export default function EvChargingPage() {
-  return <EvChargingContent />;
+  return (
+    <>
+      <EvChargingFaqStructuredData />
+      <EvChargingContent />
+    </>
+  );
 }

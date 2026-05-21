@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description: "Reserve this vehicle with your details. We'll contact you shortly to confirm.",
     alternates: { canonical: fullUrl(`/inventory/${id}/reserve`) },
-    robots: vehicle ? undefined : { index: false, follow: true },
+    robots: { index: false, follow: true },
     openGraph: {
       title: `${title} | ${seoConfig.siteName}`,
       description: "Reserve this vehicle. We'll contact you to confirm.",

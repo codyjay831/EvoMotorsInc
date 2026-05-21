@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/auth-preview", "/data-preview", "/brand-preview"],
+        disallow: ["/auth-preview", "/data-preview", "/brand-preview", "/inventory/*/reserve"],
       },
     ],
     sitemap: fullUrl("/sitemap.xml"),
