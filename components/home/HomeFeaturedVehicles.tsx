@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { VehicleSummary } from "@/lib/api";
 import { FeaturedVehicleCard } from "./FeaturedVehicleCard";
+import { HomeSectionHeader } from "./HomeSectionHeader";
 import { cn } from "@/lib/utils";
 import { PUBLIC_BUSINESS_INFO } from "@/lib/public-business-info";
 
@@ -9,6 +10,15 @@ type HomeFeaturedVehiclesProps = {
   className?: string;
   loadError?: boolean;
 };
+
+const INVENTORY_PANEL =
+  "evo-home-section evo-home-panel py-10 sm:py-12 lg:py-14 px-6 sm:px-8";
+
+function getInventoryGridClass(count: number): string {
+  if (count === 1) return "grid grid-cols-1 gap-6 max-w-lg mx-auto";
+  if (count === 2) return "grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-7 max-w-4xl mx-auto";
+  return "grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8";
+}
 
 export function HomeFeaturedVehicles({
   vehicles,
@@ -21,15 +31,10 @@ export function HomeFeaturedVehicles({
     return (
       <section
         id="inventory"
-        className={cn(
-          "evo-content-width relative rounded-2xl sm:rounded-3xl",
-          "px-6 sm:px-8 lg:px-10",
-          "bg-[linear-gradient(180deg,rgba(5,5,5,0.98)_0%,#0a0a0a_50%,rgba(6,6,6,0.98)_100%)]",
-          className
-        )}
+        className={cn(INVENTORY_PANEL, className)}
         aria-label="Inventory unavailable"
       >
-        <div className="evo-content-narrow mx-auto rounded-2xl border border-border bg-surface/40 py-12 px-6 text-center">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-border bg-muted/30 py-12 px-6 text-center">
           <h2 className="evo-section-heading text-foreground">Inventory temporarily unavailable</h2>
           <p className="evo-body text-muted-foreground mt-4">
             We couldn&apos;t load vehicles right now. Please try again in a moment or contact us directly.
@@ -55,17 +60,8 @@ export function HomeFeaturedVehicles({
 
   if (list.length === 0) {
     return (
-      <section
-        id="inventory"
-        className={cn(
-          "evo-content-width relative rounded-2xl sm:rounded-3xl",
-          "px-6 sm:px-8 lg:px-10",
-          "bg-[linear-gradient(180deg,rgba(5,5,5,0.98)_0%,#0a0a0a_50%,rgba(6,6,6,0.98)_100%)]",
-          className
-        )}
-        aria-label="Inventory"
-      >
-        <div className="evo-content-narrow mx-auto rounded-2xl border border-border bg-surface/40 py-12 px-6 text-center">
+      <section id="inventory" className={cn(INVENTORY_PANEL, className)} aria-label="Inventory">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-border bg-muted/30 py-12 px-6 text-center">
           <h2 className="evo-section-heading text-foreground">{PUBLIC_BUSINESS_INFO.inventoryEmptyHeading}</h2>
           <p className="evo-body text-muted-foreground mt-4">{PUBLIC_BUSINESS_INFO.inventoryEmptyBody}</p>
           <a
@@ -80,34 +76,22 @@ export function HomeFeaturedVehicles({
   }
 
   return (
-    <section
-      id="inventory"
-      className={cn(
-        "evo-content-width relative rounded-2xl sm:rounded-3xl",
-        "px-6 sm:px-8 lg:px-10",
-        "bg-[linear-gradient(180deg,rgba(5,5,5,0.98)_0%,#0a0a0a_50%,rgba(6,6,6,0.98)_100%)]",
-        className
-      )}
-      aria-label="Available vehicles"
-    >
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12 sm:mb-14">
-        <div>
-          <h2 className="evo-section-heading text-foreground">
-            {list.length === 1 ? "1 EV available now" : `${list.length} EVs available now`}
-          </h2>
-          <p className="evo-body-sm text-muted-foreground mt-2">
-            Hand-picked EVs ready to drive today.
-          </p>
-        </div>
-        <Link
-          href="/inventory"
-          className="evo-body-sm font-medium text-primary no-underline transition-colors duration-200 hover:text-primary/90 shrink-0 evo-focus-ring rounded-sm"
-        >
-          View all inventory →
-        </Link>
-      </div>
+    <section id="inventory" className={cn(INVENTORY_PANEL, className)} aria-label="Available vehicles">
+      <HomeSectionHeader
+        eyebrow="Curated inventory"
+        title={list.length === 1 ? "1 EV available now" : `${list.length} EVs available now`}
+        description="Hand-picked used EVs available now. Small inventory, selected intentionally for quality and daily usability."
+        action={
+          <Link
+            href="/inventory"
+            className="inline-flex h-10 items-center justify-center rounded-lg border border-border bg-background/50 px-4 text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary/25 hover:bg-background evo-focus-ring shrink-0"
+          >
+            View full inventory →
+          </Link>
+        }
+      />
 
-      <div className="grid gap-8 sm:gap-10 lg:gap-12 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={getInventoryGridClass(list.length)}>
         {list.map((v, i) => (
           <FeaturedVehicleCard key={v.id} vehicle={v} index={i} />
         ))}

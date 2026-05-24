@@ -5,19 +5,18 @@ export function FeaturedVehiclesSkeleton({ className }: { className?: string }) 
     <section
       id="inventory"
       className={cn(
-        "evo-content-width relative rounded-2xl sm:rounded-3xl",
-        "px-6 sm:px-8 lg:px-10",
-        "bg-[linear-gradient(180deg,rgba(5,5,5,0.98)_0%,#0a0a0a_50%,rgba(6,6,6,0.98)_100%)]",
+        "evo-home-section evo-home-panel py-10 sm:py-12 lg:py-14 px-6 sm:px-8",
         className
       )}
       aria-label="Loading available vehicles"
       aria-busy="true"
     >
-      <div className="mb-12 sm:mb-14">
-        <div className="h-8 w-48 animate-pulse rounded-lg bg-muted/40" />
+      <div className="mb-6 sm:mb-8">
+        <div className="h-3 w-28 animate-pulse rounded bg-muted/30" />
+        <div className="mt-3 h-8 w-48 animate-pulse rounded-lg bg-muted/40" />
         <div className="mt-3 h-4 w-64 animate-pulse rounded bg-muted/30" />
       </div>
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 sm:gap-10 lg:gap-12">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:gap-7 lg:gap-8">
         {Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i}

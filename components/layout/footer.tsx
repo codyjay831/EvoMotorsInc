@@ -25,7 +25,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Logo size="md" className="mb-4" />
             <p className="evo-body-sm text-muted-foreground max-w-xs">
-              {SITE.tagline} Premium electric vehicles.
+              Used EVs, charging guidance, and local support in the East Bay.
             </p>
           </div>
 

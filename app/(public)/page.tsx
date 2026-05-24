@@ -2,14 +2,15 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Section, SiteContainer } from "@/components/layout";
 import {
+  HomeChargingFeature,
   HomeCtaBand,
-  HomeContactSummary,
   HomeFeaturedInventoryLoader,
   HomeLocalBlock,
+  HomeQuickActions,
   HomeTrustRow,
   FeaturedVehiclesSkeleton,
 } from "@/components/home";
-import { HeroStorySection, RoadStorySection } from "@/components/marketing";
+import { HeroStorySection } from "@/components/marketing";
 import { fullUrl, seoConfig, ogImageUrl } from "@/lib/seo-config";
 import { isHomepageV2Enabled } from "@/lib/homepage-v2";
 
@@ -33,10 +34,14 @@ function HomePageV2() {
       <HeroStorySection />
 
       <SiteContainer>
-        <Section spacing="default">
+        <Section spacing="afterHero">
           <Suspense fallback={<FeaturedVehiclesSkeleton />}>
             <HomeFeaturedInventoryLoader />
           </Suspense>
+        </Section>
+
+        <Section spacing="default">
+          <HomeQuickActions />
         </Section>
 
         <Section spacing="default">
@@ -44,19 +49,15 @@ function HomePageV2() {
         </Section>
 
         <Section spacing="default">
+          <HomeChargingFeature />
+        </Section>
+
+        <Section spacing="default">
           <HomeLocalBlock />
         </Section>
 
-        <Section spacing="default">
-          <RoadStorySection />
-        </Section>
-
-        <Section spacing="default">
+        <Section spacing="compact">
           <HomeCtaBand />
-        </Section>
-
-        <Section spacing="default">
-          <HomeContactSummary />
         </Section>
       </SiteContainer>
     </>
@@ -69,10 +70,13 @@ export default function HomePage() {
       <>
         <HeroStorySection />
         <SiteContainer>
-          <Section spacing="default">
+          <Section spacing="afterHero">
             <Suspense fallback={<FeaturedVehiclesSkeleton />}>
               <HomeFeaturedInventoryLoader />
             </Suspense>
+          </Section>
+          <Section spacing="default">
+            <HomeQuickActions />
           </Section>
         </SiteContainer>
       </>

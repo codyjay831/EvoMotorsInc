@@ -5,5 +5,8 @@ export { HomeCtaBand } from "./HomeCtaBand";
 export { HomeContactSummary } from "./HomeContactSummary";
 export { HomeTrustRow } from "./HomeTrustRow";
 export { HomeLocalBlock } from "./HomeLocalBlock";
+export { HomeQuickActions } from "./HomeQuickActions";
+export { HomeChargingFeature } from "./HomeChargingFeature";
+export { HomeSectionHeader } from "./HomeSectionHeader";
 export { FeaturedVehicleCard } from "./FeaturedVehicleCard";
 export { RebatesCta } from "./RebatesCta";
